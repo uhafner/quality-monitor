@@ -31,15 +31,13 @@
 
     <jib-maven-plugin.version>3.4.0</jib-maven-plugin.version>
     <testcontainers.version>1.19.3</testcontainers.version>
-
-    <jackson-databind.version>2.16.0</jackson-databind.version>
   </properties>
 
   <dependencies>
     <dependency>
       <groupId>edu.hm.hafner</groupId>
       <artifactId>autograding-github-action</artifactId>
-      <version>3.14.0-SNAPSHOT</version>
+      <version>3.14.0</version>
     </dependency>
     <dependency>
       <groupId>org.testcontainers</groupId>

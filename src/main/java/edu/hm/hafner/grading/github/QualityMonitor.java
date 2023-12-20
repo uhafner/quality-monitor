@@ -5,12 +5,13 @@ import java.io.PrintStream;
 import edu.hm.hafner.util.VisibleForTesting;
 
 /**
- * GitHub action entrypoint for the autograding action.
+ * GitHub action entrypoint for the quality monitor action.
  *
- * @author Tobias Effner
  * @author Ullrich Hafner
  */
 public class QualityMonitor extends GitHubAutoGradingRunner {
+    static final String QUALITY_MONITOR = "Quality Monitor";
+
     /**
      * Public entry point for the GitHub action in the docker container, simply calls the action.
      *
@@ -31,6 +32,11 @@ public class QualityMonitor extends GitHubAutoGradingRunner {
     @VisibleForTesting
     QualityMonitor(final PrintStream printStream) {
         super(printStream);
+    }
+
+    @Override
+    protected String getDisplayName() {
+        return QUALITY_MONITOR;
     }
 
     @Override
