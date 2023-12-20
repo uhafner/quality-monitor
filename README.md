@@ -158,7 +158,7 @@ Missed lines or branches as well as survived mutations will be shown as annotati
 ![Mutation coverage annotations](images/mutation-annotations.png)
 
 
-## Static analysis (e.g., number of warnings)
+## Static analysis
 
 ![Static analysis](images/analysis.png)
 
