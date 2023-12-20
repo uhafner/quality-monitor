@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>edu.hm.hafner</groupId>
+    <artifactId>codingstyle-pom</artifactId>
+    <version>3.40.0</version>
+    <relativePath/>
+  </parent>
+
+  <groupId>edu.hm.hafner</groupId>
+  <artifactId>quality-monitor</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <properties>
+    <module.name>${project.groupId}.autograding.github.action</module.name>
+    <docker-image-tag>${project.version}</docker-image-tag>
+
+    <java.version>17</java.version>
+
+    <jib-maven-plugin.version>3.4.0</jib-maven-plugin.version>
+    <testcontainers.version>1.19.3</testcontainers.version>
+
+    <jackson-databind.version>2.16.0</jackson-databind.version>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>edu.hm.hafner</groupId>
+      <artifactId>autograding-github-action</artifactId>
+      <version>3.14.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>${jackson-databind.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>testcontainers</artifactId>
+      <version>${testcontainers.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>${testcontainers.version}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <finalName>${project.artifactId}</finalName>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <configuration>
+          <argLine>@{argLine} --add-opens java.base/java.util=ALL-UNNAMED --add-opens java.base/java.lang=ALL-UNNAMED</argLine>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>com.google.cloud.tools</groupId>
+        <artifactId>jib-maven-plugin</artifactId>
+        <version>${jib-maven-plugin.version}</version>
+        <executions>
+          <execution>
+            <id>local-docker</id>
+            <phase>pre-integration-test</phase>
+            <goals>
+              <goal>dockerBuild</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>docker-io</id>
+            <phase>install</phase>
+            <goals>
+              <goal>build</goal>
+            </goals>
+            <configuration>
+              <to>
+                <image>docker.io/uhafner/quality-monitor:${docker-image-tag}</image>
+                <auth>
+                  <username>${env.DOCKER_IO_USERNAME}</username>
+                  <password>${env.DOCKER_IO_PASSWORD}</password>
+                </auth>
+              </to>
+            </configuration>
+          </execution>
+        </executions>
+        <configuration>
+          <to>
+            <image>docker.io/uhafner/quality-monitor:${docker-image-tag}</image>
+            <auth>
+              <username>${env.DOCKER_IO_USERNAME}</username>
+              <password>${env.DOCKER_IO_PASSWORD}</password>
+            </auth>
+          </to>
+          <from>
+            <image>maven:3.9.5-eclipse-temurin-21-alpine</image>
+          </from>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.revapi</groupId>
+        <artifactId>revapi-maven-plugin</artifactId>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>
