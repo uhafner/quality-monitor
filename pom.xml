@@ -16,8 +16,15 @@
   <version>1.0.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
+  <scm>
+    <connection>scm:git:https://github.com/uhafner/quality-monitor.git</connection>
+    <developerConnection>scm:git:git@github.com:uhafner/quality-monitor.git</developerConnection>
+    <url>https://github.com/uhafner/quality-monitor</url>
+    <tag>HEAD</tag>
+  </scm>
+
   <properties>
-    <module.name>${project.groupId}.autograding.github.action</module.name>
+    <module.name>${project.groupId}.quality.monitor</module.name>
     <docker-image-tag>${project.version}</docker-image-tag>
 
     <java.version>17</java.version>
@@ -35,14 +42,19 @@
       <version>3.14.0-SNAPSHOT</version>
     </dependency>
     <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-databind</artifactId>
-      <version>${jackson-databind.version}</version>
-    </dependency>
-    <dependency>
       <groupId>org.testcontainers</groupId>
       <artifactId>testcontainers</artifactId>
       <version>${testcontainers.version}</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>jackson-annotations</artifactId>
+          <groupId>com.fasterxml.jackson.core</groupId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.fasterxml.jackson.core</groupId>
+          <artifactId>jackson-annotations</artifactId>
+        </exclusion>
+      </exclusions>
       <scope>test</scope>
     </dependency>
     <dependency>
