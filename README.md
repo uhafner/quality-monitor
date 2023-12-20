@@ -1,12 +1,7 @@
 # Quality Monitor GitHub Action 
 
-[![GitHub Actions](https://github.com/uhafner/autograding-github-action/workflows/CD/badge.svg)](https://github.com/uhafner/autograding-github-action/actions/workflows/cd.yml)
-[![CodeQL](https://github.com/uhafner/autograding-github-action/workflows/CodeQL/badge.svg)](https://github.com/uhafner/autograding-github-action/actions/workflows/codeql.yml)
-[![Line Coverage](https://raw.githubusercontent.com/uhafner/autograding-github-action/main/badges/line-coverage.svg)](https://github.com/uhafner/autograding-github-action/actions/workflows/dogfood.yml)
-[![Branch Coverage](https://raw.githubusercontent.com/uhafner/autograding-github-action/main/badges/branch-coverage.svg)](https://github.com/uhafner/autograding-github-action/actions/workflows/dogfood.yml)
-[![Mutation Coverage](https://raw.githubusercontent.com/uhafner/autograding-github-action/main/badges/mutation-coverage.svg)](https://github.com/uhafner/autograding-github-action/actions/workflows/dogfood.yml)
-[![Style Warnings](https://raw.githubusercontent.com/uhafner/autograding-github-action/main/badges/style-warnings.svg)](https://github.com/uhafner/autograding-github-action/actions/workflows/dogfood.yml)
-[![Potential Bugs](https://raw.githubusercontent.com/uhafner/autograding-github-action/main/badges/bugs.svg)](https://github.com/uhafner/autograding-github-action/actions/workflows/dogfood.yml)
+[![GitHub Actions](https://github.com/uhafner/autograding-github-action/workflows/CD/badge.svg)](https://github.com/uhafner/quality-monitor/actions/workflows/cd.yml)
+[![CodeQL](https://github.com/uhafner/autograding-github-action/workflows/CodeQL/badge.svg)](https://github.com/uhafner/quality-monitor/actions/workflows/codeql.yml)
 
 This GitHub action monitors the quality of projects based on a configurable set of metrics and gives feedback on pull requests (or single commits) in GitHub. This action is a stand-alone version of my Jenkins [Warnings](https://github.com/jenkinsci/warnings-ng-plugin) and [Coverage](https://github.com/jenkinsci/coverage-plugin) plugins. It can be used in any GitHub project that uses GitHub Actions. A [similar action](https://github.com/uhafner/autograding-gitlab-action) is available for GitLab projects as well.
 
