@@ -5,7 +5,7 @@
 
 This GitHub action monitors the quality of projects based on a configurable set of metrics and gives feedback on pull requests (or single commits) in GitHub. This action is a stand-alone version of my Jenkins [Warnings](https://github.com/jenkinsci/warnings-ng-plugin) and [Coverage](https://github.com/jenkinsci/coverage-plugin) plugins. It can be used in any GitHub project that uses GitHub Actions. A [similar action](https://github.com/uhafner/autograding-gitlab-action) is available for GitLab projects as well.
 
-You can see the results of this action in an [example pull request](https://github.com/uhafner/autograding-github-action/pull/311) and the associated [GitHub Checks output](https://github.com/uhafner/autograding-github-action/runs/19411191545). Another real-live example is visible in the [pull request](https://github.com/uhafner/java2-assignment1/pull/31) and [checks result](https://github.com/uhafner/java2-assignment1/runs/19411468263) of a fake student project. 
+You can see the results of this action in an [example pull request](https://github.com/uhafner/codingstyle/pull/882) and the associated [GitHub Checks output](https://github.com/uhafner/codingstyle/runs/19832187476). 
 
 ![Pull request comment](images/pr-comment.png)
 
