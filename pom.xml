@@ -13,7 +13,7 @@
 
   <groupId>edu.hm.hafner</groupId>
   <artifactId>quality-monitor</artifactId>
-  <version>1.2.0-SNAPSHOT</version>
+  <version>1.2.0</version>
   <packaging>jar</packaging>
 
   <scm>
@@ -29,16 +29,65 @@
 
     <java.version>17</java.version>
 
-    <jib-maven-plugin.version>3.4.1</jib-maven-plugin.version>
+    <autograding-model.version>3.22.0</autograding-model.version>
+    <github-api.version>1.319</github-api.version>
     <testcontainers.version>1.19.6</testcontainers.version>
+
+    <jib-maven-plugin.version>3.4.1</jib-maven-plugin.version>
   </properties>
 
   <dependencies>
 
     <dependency>
       <groupId>edu.hm.hafner</groupId>
-      <artifactId>autograding-github-action</artifactId>
-      <version>3.14.0</version>
+      <artifactId>autograding-model</artifactId>
+      <version>${autograding-model.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>com.google.errorprone</groupId>
+          <artifactId>error_prone_annotations</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.github.spotbugs</groupId>
+          <artifactId>spotbugs-annotations</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.commons</groupId>
+          <artifactId>commons-lang3</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>commons-io</groupId>
+          <artifactId>commons-io</artifactId>
+        </exclusion>
+        <exclusion>
+          <artifactId>codingstyle</artifactId>
+          <groupId>edu.hm.hafner</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>streamex</artifactId>
+          <groupId>one.util</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>org.kohsuke</groupId>
+      <artifactId>github-api</artifactId>
+      <version>${github-api.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.apache.commons</groupId>
+          <artifactId>commons-lang3</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>commons-io</groupId>
+          <artifactId>commons-io</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.fasterxml.jackson.core</groupId>
+          <artifactId>jackson-databind</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
     <dependency>
