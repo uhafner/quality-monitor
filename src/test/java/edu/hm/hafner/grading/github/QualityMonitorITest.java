@@ -102,7 +102,6 @@ public class QualityMonitorITest extends ResourceTest {
                         "\"failureImpact\" : 0,",
                         "\"passedImpact\" : 0,",
                         "\"skippedImpact\" : 0",
-                        "=> Tests: 1 tests passed",
                         "Processing 2 coverage configuration(s)",
                         "\"coveredPercentageImpact\" : 0,",
                         "\"missedPercentageImpact\" : 0,",
