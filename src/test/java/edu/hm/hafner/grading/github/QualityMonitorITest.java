@@ -112,7 +112,7 @@ public class QualityMonitorITest extends ResourceTest {
                         "\"highImpact\" : 0,",
                         "\"lowImpact\" : 0",
                         "\"normalImpact\" : 0,",
-                        "=> Style: No warnings found",
+                        "=> Style: 2 warnings found (0 error, 0 high, 2 normal, 0 low)",
                         "=> Bugs: No warnings found"});
     }
 
