@@ -30,7 +30,7 @@
     <java.version>17</java.version>
 
     <autograding-model.version>3.25.0</autograding-model.version>
-    <github-api.version>1.319</github-api.version>
+    <github-api.version>1.321</github-api.version>
     <testcontainers.version>1.19.7</testcontainers.version>
 
     <jib-maven-plugin.version>3.4.1</jib-maven-plugin.version>
