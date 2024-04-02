@@ -33,7 +33,7 @@
     <github-api.version>1.321</github-api.version>
     <testcontainers.version>1.19.7</testcontainers.version>
 
-    <jib-maven-plugin.version>3.4.1</jib-maven-plugin.version>
+    <jib-maven-plugin.version>3.4.2</jib-maven-plugin.version>
   </properties>
 
   <dependencies>
