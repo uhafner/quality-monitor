@@ -56,7 +56,18 @@ jobs:
           pr-number: ${{ steps.pr.outputs.number }}
 ```
 
-# Configuration
+## Action Parameters
+
+This action can be configured using the following parameters (see example above):
+- ``github-token: ${{ secrets.GITHUB_TOKEN }}``: mandatory GitHub access token.
+- ``config: "{...}"``: optional configuration, see sections above for details, or consult the [autograding-model](https://github.com/uhafner/autograding-model) project for the exact implementation. If not specified, a [default configuration](https://raw.githubusercontent.com/uhafner/autograding-model/main/src/main/resources/default-no-score-config.json) will be used.
+- ``pr-number: ${{ steps.pr.outputs.number }}``: optional number of the pull request. If not set, then just the checks will be published but not a pull request comment.
+- ``checks-name: "Name of checks"``: optional name of GitHub checks (overwrites the default: "Quality Monitor").
+- ``skip-annotations: true``: Optional flag to skip the creation of annotations (for warnings and missed coverage).
+- ``max-warning-comments: <number>``: Optional parameter to limit the number of warning comments at specific lines. By default, all line comments are created.
+- ``max-coverage-comments: <number>``: Optional parameter to limit the number of coverage comments at specific lines. By default, all line comments are created.
+
+# Metrics Configuration
 
 The individual metrics can be configured by defining an appropriate `config` property (in JSON format) in your GitHub workflow:
 
@@ -203,16 +214,7 @@ This metric can be configured using a JSON object `analysis`, see the example be
 All warnings will be shown as annotations in the pull request:
 
 ![Warning annotations](images/analysis-annotations.png )
-
-## Action Parameters
-
-This action can be configured using the following parameters (see example above):
-- ``github-token: ${{ secrets.GITHUB_TOKEN }}``: mandatory GitHub access token.
-- ``config: "{...}"``: optional configuration, see sections above for details, or consult the [autograding-model](https://github.com/uhafner/autograding-model) project for the exact implementation. If not specified, a [default configuration](https://raw.githubusercontent.com/uhafner/autograding-model/main/src/main/resources/default-no-score-config.json) will be used.
-- ``pr-number: ${{ steps.pr.outputs.number }}``: optional number of the pull request. If not set, then just the checks will be published but not a pull request comment.
-- ``checks-name: "Name of checks"``: optional name of GitHub checks (overwrites the default: "Quality Monitor").
-- ``skip-annotations: true``: Optional flag to skip the creation of annotations (for warnings and missed coverage).
-
+    
 ## Pull Request Comments
 
 The action writes a summary of the results to the pull request as well. Since the action cannot identify the correct pull request on its own, you need to provide the pull request as an action argument. 

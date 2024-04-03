@@ -7,13 +7,13 @@
   <parent>
     <groupId>edu.hm.hafner</groupId>
     <artifactId>codingstyle-pom</artifactId>
-    <version>3.44.0</version>
+    <version>4.3.0</version>
     <relativePath/>
   </parent>
 
   <groupId>edu.hm.hafner</groupId>
   <artifactId>quality-monitor</artifactId>
-  <version>1.5.0</version>
+  <version>1.6.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <scm>
@@ -29,7 +29,7 @@
 
     <java.version>17</java.version>
 
-    <autograding-model.version>3.25.0</autograding-model.version>
+    <autograding-model.version>3.28.0</autograding-model.version>
     <github-api.version>1.321</github-api.version>
     <testcontainers.version>1.19.7</testcontainers.version>
 
@@ -143,15 +143,6 @@
             <goals>
               <goal>build</goal>
             </goals>
-            <configuration>
-              <to>
-                <image>docker.io/uhafner/quality-monitor:${docker-image-tag}</image>
-                <auth>
-                  <username>${env.DOCKER_IO_USERNAME}</username>
-                  <password>${env.DOCKER_IO_PASSWORD}</password>
-                </auth>
-              </to>
-            </configuration>
           </execution>
         </executions>
         <configuration>
@@ -163,7 +154,7 @@
             </auth>
           </to>
           <from>
-            <image>maven:3.9.5-eclipse-temurin-21-alpine</image>
+            <image>maven:3.9.6-eclipse-temurin-21-alpine</image>
           </from>
         </configuration>
       </plugin>
