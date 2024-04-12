@@ -16,7 +16,8 @@ import org.testcontainers.utility.MountableFile;
 import static org.assertj.core.api.Assertions.*;
 
 /**
- * Integration test for the grading action. Starts the container and checks if the grading runs as expected.
+ * Integration test for the quality monitor action.
+ * Starts the container and checks if the action runs as expected.
  *
  * @author Ullrich Hafner
  */
@@ -120,13 +121,16 @@ public class QualityMonitorDockerITest {
                     .contains(new String[] {
                             "Processing 1 test configuration(s)",
                             "-> Unittests Total: TESTS: 1 tests",
+                            "=> Unittests: 1 tests passed",
                             "=> JUnit: 1 tests passed",
                             "Processing 2 coverage configuration(s)",
                             "-> Line Coverage Total: LINE: 10.93% (33/302)",
+                            "=> Line Coverage: 11% (269 missed lines)",
                             "-> Branch Coverage Total: BRANCH: 9.52% (4/42)",
-                            "> JaCoCo: 10% coverage achieved",
+                            "=> Branch Coverage: 10% (38 missed branches)",
+                            "=> JaCoCo: 10% (307 missed items)",
                             "-> Mutation Coverage Total: MUTATION: 7.86% (11/140)",
-                            "=> PIT: 8% mutations killed",
+                            "=> PIT: 8% (129 survived mutations)",
                             "Processing 2 static analysis configuration(s)",
                             "-> CheckStyle Total: 1 warnings",
                             "-> PMD Total: 1 warnings",
@@ -154,9 +158,9 @@ public class QualityMonitorDockerITest {
                             "Processing 2 coverage configuration(s)",
                             "-> Line Coverage Total: LINE: 10.93% (33/302)",
                             "-> Branch Coverage Total: BRANCH: 9.52% (4/42)",
-                            "=> Code Coverage: 10% coverage achieved",
+                            "=> Code Coverage: 10%",
                             "-> Mutation Coverage Total: MUTATION: 7.86% (11/140)",
-                            "=> Mutation Coverage: 8% mutations killed",
+                            "=> Mutation Coverage: 8% ",
                             "Processing 2 static analysis configuration(s)",
                             "-> CheckStyle Total: 1 warnings",
                             "-> PMD Total: 1 warnings",
@@ -177,10 +181,10 @@ public class QualityMonitorDockerITest {
                             "Configuration error for 'Tests'?",
                             "=> Tests: 0 tests passed",
                             "Processing 2 coverage configuration(s)",
-                            "=> Code Coverage: 0% coverage achieved",
+                            "=> Code Coverage: 0%",
                             "Configuration error for 'Line Coverage'?",
                             "Configuration error for 'Branch Coverage'?",
-                            "=> Mutation Coverage: 0% mutations killed",
+                            "=> Mutation Coverage: 0%",
                             "Configuration error for 'Mutation Coverage'?",
                             "Processing 2 static analysis configuration(s)",
                             "Configuration error for 'CheckStyle'?",
@@ -195,7 +199,7 @@ public class QualityMonitorDockerITest {
     }
 
     private GenericContainer<?> createContainer() {
-        return new GenericContainer<>(DockerImageName.parse("uhafner/quality-monitor:1.7.0-SNAPSHOT"));
+        return new GenericContainer<>(DockerImageName.parse("uhafner/quality-monitor:1.7.0"));
     }
 
     private String readStandardOut(final GenericContainer<? extends GenericContainer<?>> container) throws TimeoutException {
