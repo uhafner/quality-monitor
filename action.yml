@@ -25,7 +25,7 @@ inputs:
     required: false
 runs:
   using: 'docker'
-  image: 'docker://uhafner/quality-monitor:1.7.0-SNAPSHOT'
+  image: 'docker://uhafner/quality-monitor:1.7.0'
   env:
     CONFIG: ${{ inputs.config }}
     CHECKS_NAME: ${{ inputs.checks-name }}
