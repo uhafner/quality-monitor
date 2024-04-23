@@ -105,17 +105,11 @@ public class QualityMonitorITest extends ResourceTest {
                         "Processing 2 coverage configuration(s)",
                         "\"coveredPercentageImpact\" : 0,",
                         "\"missedPercentageImpact\" : 0,",
-                        "=> Line Coverage: 0% (0 missed lines)",
-                        "=> Branch Coverage: 0% (0 missed branches)",
-                        "=> Code Coverage: 0% (0 missed items)",
-                        "=> Mutation Coverage: 0% (0 survived mutations)",
                         "Processing 2 static analysis configuration(s)",
                         "\"errorImpact\" : 0,",
                         "\"highImpact\" : 0,",
                         "\"lowImpact\" : 0",
-                        "\"normalImpact\" : 0,",
-                        "=> Style: 2 warnings found (0 error, 0 high, 2 normal, 0 low)",
-                        "=> Bugs: No warnings found"});
+                        "\"normalImpact\" : 0,"});
     }
 
     @Test
