@@ -134,9 +134,9 @@ public class QualityMonitorDockerITest {
                             "Processing 2 static analysis configuration(s)",
                             "-> CheckStyle Total: 1 warnings",
                             "-> PMD Total: 1 warnings",
-                            "=> Style: 2 warnings found (0 error, 0 high, 2 normal, 0 low)",
+                            "=> Style: 2 warnings (0 error, 0 high, 2 normal, 0 low)",
                             "-> SpotBugs Total: 1 warnings",
-                            "=> Bugs: 1 warning found (0 error, 0 high, 0 normal, 1 low)"});
+                            "=> Bugs: 1 warning (0 error, 0 high, 0 normal, 1 low)"});
 
             container.copyFileFromContainer("/github/workspace/metrics.env", LOCAL_METRICS_FILE);
             assertThat(Files.readString(Path.of(LOCAL_METRICS_FILE)))
@@ -164,9 +164,9 @@ public class QualityMonitorDockerITest {
                             "Processing 2 static analysis configuration(s)",
                             "-> CheckStyle Total: 1 warnings",
                             "-> PMD Total: 1 warnings",
-                            "=> Style: 2 warnings found (0 error, 0 high, 2 normal, 0 low)",
+                            "=> Style: 2 warnings (0 error, 0 high, 2 normal, 0 low)",
                             "-> SpotBugs Total: 1 warnings",
-                            "=> Bugs: 1 warning found (0 error, 0 high, 0 normal, 1 low)"});
+                            "=> Bugs: 1 warning (0 error, 0 high, 0 normal, 1 low)"});
         }
     }
 
@@ -192,9 +192,9 @@ public class QualityMonitorDockerITest {
                             "Configuration error for 'SpotBugs'?",
                             "-> CheckStyle Total: 0 warnings",
                             "-> PMD Total: 0 warnings",
-                            "=> Style: No warnings found",
+                            "=> Style: No warnings",
                             "-> SpotBugs Total: 0 warnings",
-                            "=> Bugs: No warnings found"});
+                            "=> Bugs: No warnings"});
         }
     }
 
