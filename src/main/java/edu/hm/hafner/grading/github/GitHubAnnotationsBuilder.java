@@ -31,10 +31,7 @@ class GitHubAnnotationsBuilder extends CommentBuilder {
         this.log = log;
 
         maxWarningComments = getIntegerEnvironment("MAX_WARNING_ANNOTATIONS");
-        log.logInfo(">>>> MAX_WARNING_ANNOTATIONS: %d", getMaxWarningComments());
-
         maxCoverageComments = getIntegerEnvironment("MAX_COVERAGE_ANNOTATIONS");
-        log.logInfo(">>>> MAX_COVERAGE_ANNOTATIONS: %d", getMaxCoverageComments());
     }
 
     @Override
@@ -48,6 +45,12 @@ class GitHubAnnotationsBuilder extends CommentBuilder {
     }
 
     private int getIntegerEnvironment(final String key) {
+        var value = getIntegerEnvironmentWithDefault(key);
+        log.logInfo(">>>> %s: %d", key, value);
+        return value;
+    }
+
+    private int getIntegerEnvironmentWithDefault(final String key) {
         var value = getEnv(key);
         try {
             return Integer.parseInt(value);
