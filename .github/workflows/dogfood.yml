@@ -1,0 +1,108 @@
+name: Eat your own dog food
+
+on:
+  workflow_run:
+    workflows: ["CD"]
+    types:
+      - completed
+
+jobs:
+  eat-your-own-dogfood:
+    name: Run Snapshot version of quality monitor
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+          check-latest: true
+          cache: 'maven'
+      - name: Set up Maven
+        uses: stCarolas/setup-maven@v5
+        with:
+          maven-version: 3.9.6
+      - name: Run Quality Monitor Snapshot on the current project
+        uses: uhafner/quality-monitor@main
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          checks-name: "Quality Monitor Snapshot Version"
+          config: >
+            {
+            "tests": {
+              "name": "Tests",
+              "tools": [
+                {
+                  "id": "test",
+                  "name": "Tests",
+                  "pattern": "**/target/*-reports/TEST*.xml"
+                }
+              ]
+            },
+            "analysis": [
+              {
+                "name": "Style",
+                "id": "style",
+                "tools": [
+                  {
+                    "id": "checkstyle",
+                    "pattern": "**/target/checkstyle-*/checkstyle-result.xml"
+                  },
+                  {
+                    "id": "pmd",
+                    "pattern": "**/target/pmd-*/pmd.xml"
+                  }
+                ]
+              },
+              {
+                "name": "Bugs",
+                "id": "bugs",
+                "icon": "bug",
+                "tools": [
+                  {
+                    "id": "spotbugs",
+                    "sourcePath": "src/main/java",
+                    "pattern": "**/target/spotbugsXml.xml"
+                  },
+                  {
+                    "id": "error-prone",
+                    "pattern": "**/maven.log"
+                  }
+                ]
+              }
+            ],
+            "coverage": [
+              {
+                "name": "Code Coverage",
+                "tools": [
+                  {
+                    "id": "jacoco",
+                    "name": "Line Coverage",
+                    "metric": "line",
+                    "sourcePath": "src/main/java",
+                    "pattern": "**/target/site/jacoco/jacoco.xml"
+                  },
+                  {
+                    "id": "jacoco",
+                    "name": "Branch Coverage",
+                    "metric": "branch",
+                    "sourcePath": "src/main/java",
+                    "pattern": "**/target/site/jacoco/jacoco.xml"
+                  }
+                ]
+              },
+              {
+                "name": "Mutation Coverage",
+                "tools": [
+                  {
+                    "id": "pit",
+                    "name": "Mutation Coverage",
+                    "metric": "mutation",
+                    "sourcePath": "src/main/java",
+                    "pattern": "**/target/pit-reports/mutations.xml"
+                  }
+                ]
+              }
+             ]
+            }
