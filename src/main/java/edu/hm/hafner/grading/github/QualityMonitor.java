@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.Date;
+import java.util.Locale;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -159,7 +160,8 @@ public class QualityMonitor extends AutoGradingRunner {
 
     String createEnvironmentVariables(final AggregatedScore score, final FilteredLog log) {
         var metrics = new StringBuilder();
-        score.getMetrics().forEach((metric, value) -> metrics.append(String.format("%s=%d%n", metric, value)));
+        score.getMetrics().forEach((metric, value) ->
+                metrics.append(String.format(Locale.ENGLISH, "%s=%d%n", metric, value)));
         log.logInfo("---------------");
         log.logInfo("Metrics Summary");
         log.logInfo("---------------");
