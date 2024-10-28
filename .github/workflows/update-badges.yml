@@ -62,18 +62,7 @@ jobs:
                     "pattern": "**/maven.log"
                   }
                 ]
-                },
-                {
-                  "name": "Vulnerabilities",
-                  "id": "vulnerabilities",
-                  "icon": "shield",
-                  "tools": [
-                    {
-                      "id": "owasp-dependency-check",
-                      "pattern": "**/target/dependency-check-report.json"                    
-                    }
-                  ]
-              }
+                }
             ],
             "coverage": [
               {
