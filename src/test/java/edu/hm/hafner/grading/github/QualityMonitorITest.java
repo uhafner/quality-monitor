@@ -87,7 +87,38 @@ public class QualityMonitorITest extends ResourceTest {
                       }
                     ]
               }
-              ]
+              ],
+              "metrics": [
+                      {
+                        "name": "Toplevel Metrics",
+                        "tools": [
+                          {
+                            "name": "Cyclomatic Complexity",
+                            "id": "metrics",
+                            "pattern": "**/src/**/metrics.xml",
+                            "metric": "CyclomaticComplexity"
+                          },
+                          {
+                            "name": "Cognitive Complexity",
+                            "id": "metrics",
+                            "pattern": "**/src/**/metrics.xml",
+                            "metric": "CognitiveComplexity"
+                          },
+                          {
+                            "name": "Non Commenting Source Statements",
+                            "id": "metrics",
+                            "pattern": "**/src/**/metrics.xml",
+                            "metric": "NCSS"
+                          },
+                          {
+                            "name": "N-Path Complexity",
+                            "id": "metrics",
+                            "pattern": "**/src/**/metrics.xml",
+                            "metric": "NPathComplexity"
+                          }
+                        ]
+                      }
+                    ]
             }
             """;
 
@@ -133,6 +164,10 @@ public class QualityMonitorITest extends ResourceTest {
                         "=> PMD: 41 warnings (normal: 41)",
                         "-> SpotBugs Total: 1 warnings",
                         "=> SpotBugs: 1 bug (low: 1)",
+                        "=> Cyclomatic Complexity: 355",
+                        "=> Cognitive Complexity: 172",
+                        "=> Non Commenting Source Statements: 1200",
+                        "=> N-Path Complexity: 432",
                         "mutation=8",
                         "bugs=1",
                         "tests=37",
@@ -141,7 +176,12 @@ public class QualityMonitorITest extends ResourceTest {
                         "style=60",
                         "spotbugs=1",
                         "checkstyle=19",
-                        "branch=10"});
+                        "branch=10",
+                        "ncss=1200",
+                        "npath-complexity=432",
+                        "cognitive-complexity=172",
+                        "cyclomatic-complexity=355"
+                });
     }
 
     private static final String CONFIGURATION_WRONG_PATHS = """

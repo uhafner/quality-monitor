@@ -1,0 +1,1339 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metrics version="7.5.0-metrics" timestamp="2024-10-17T09:01:14.294" source="PMD">
+<package name="edu.hm.hafner.util">
+<file name="/Users/hafner/git/warnings-ng-plugin-devenv/codingstyle/src/main/java/edu/hm/hafner/util/Ensure.java">
+<class name="Ensure">
+<metric name="NCSS" value="149"/>
+<method name="that" beginline="47" endline="47" begincolumn="36" endcolumn="40">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="that" beginline="64" endline="64" begincolumn="42" endcolumn="46">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="that" beginline="78" endline="78" begincolumn="37" endcolumn="41">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="that" beginline="91" endline="91" begincolumn="39" endcolumn="43">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="that" beginline="105" endline="105" begincolumn="34" endcolumn="38">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="that" beginline="118" endline="118" begincolumn="35" endcolumn="39">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="that" beginline="131" endline="131" begincolumn="38" endcolumn="42">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="thatStatementIsNeverReached" beginline="138" endline="138" begincolumn="24" endcolumn="51">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="thatStatementIsNeverReached" beginline="153" endline="153" begincolumn="24" endcolumn="51">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="throwException" beginline="170" endline="170" begincolumn="25" endcolumn="39">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="2"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="throwNullPointerException" beginline="187" endline="187" begincolumn="25" endcolumn="50">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="2"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="Ensure" beginline="191" endline="191" begincolumn="13" endcolumn="19">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="1"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+</class>
+<class name="IterableCondition">
+<metric name="NCSS" value="13"/>
+<method name="IterableCondition" beginline="205" endline="205" begincolumn="16" endcolumn="33">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="isNotEmpty" beginline="216" endline="216" begincolumn="21" endcolumn="31">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="isNotEmpty" beginline="235" endline="235" begincolumn="21" endcolumn="31">
+<metric name="CognitiveComplexity" value="7"/>
+<metric name="CyclomaticComplexity" value="4"/>
+<metric name="NCSS" value="8"/>
+<metric name="NPathComplexity" value="4"/>
+</method>
+</class>
+<class name="CollectionCondition">
+<metric name="NCSS" value="17"/>
+<method name="CollectionCondition" beginline="261" endline="261" begincolumn="16" endcolumn="35">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="getValue" beginline="266" endline="266" begincolumn="23" endcolumn="31">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="contains" beginline="279" endline="279" begincolumn="21" endcolumn="29">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="contains" beginline="299" endline="299" begincolumn="21" endcolumn="29">
+<metric name="CognitiveComplexity" value="1"/>
+<metric name="CyclomaticComplexity" value="2"/>
+<metric name="NCSS" value="4"/>
+<metric name="NPathComplexity" value="2"/>
+</method>
+<method name="doesNotContain" beginline="316" endline="316" begincolumn="21" endcolumn="35">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="doesNotContain" beginline="336" endline="336" begincolumn="21" endcolumn="35">
+<metric name="CognitiveComplexity" value="1"/>
+<metric name="CyclomaticComplexity" value="2"/>
+<metric name="NCSS" value="4"/>
+<metric name="NPathComplexity" value="2"/>
+</method>
+</class>
+<class name="ArrayCondition">
+<metric name="NCSS" value="13"/>
+<method name="ArrayCondition" beginline="356" endline="356" begincolumn="16" endcolumn="30">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="isNotEmpty" beginline="367" endline="367" begincolumn="21" endcolumn="31">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="isNotEmpty" beginline="386" endline="386" begincolumn="21" endcolumn="31">
+<metric name="CognitiveComplexity" value="7"/>
+<metric name="CyclomaticComplexity" value="4"/>
+<metric name="NCSS" value="8"/>
+<metric name="NPathComplexity" value="4"/>
+</method>
+</class>
+<class name="StringCondition">
+<metric name="NCSS" value="23"/>
+<method name="StringCondition" beginline="412" endline="412" begincolumn="16" endcolumn="31">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="isNotEmpty" beginline="422" endline="422" begincolumn="21" endcolumn="31">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="isNotEmpty" beginline="440" endline="440" begincolumn="21" endcolumn="31">
+<metric name="CognitiveComplexity" value="1"/>
+<metric name="CyclomaticComplexity" value="2"/>
+<metric name="NCSS" value="4"/>
+<metric name="NPathComplexity" value="2"/>
+</method>
+<method name="isNotBlank" beginline="454" endline="454" begincolumn="21" endcolumn="31">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="isNotBlank" beginline="472" endline="472" begincolumn="21" endcolumn="31">
+<metric name="CognitiveComplexity" value="1"/>
+<metric name="CyclomaticComplexity" value="2"/>
+<metric name="NCSS" value="4"/>
+<metric name="NPathComplexity" value="2"/>
+</method>
+<method name="isBlank" beginline="480" endline="480" begincolumn="25" endcolumn="32">
+<metric name="CognitiveComplexity" value="4"/>
+<metric name="CyclomaticComplexity" value="4"/>
+<metric name="NCSS" value="8"/>
+<metric name="NPathComplexity" value="6"/>
+</method>
+</class>
+<class name="ObjectCondition">
+<metric name="NCSS" value="39"/>
+<method name="ObjectCondition" beginline="512" endline="512" begincolumn="16" endcolumn="31">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="ObjectCondition" beginline="525" endline="525" begincolumn="16" endcolumn="31">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="3"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="isNotNull" beginline="536" endline="536" begincolumn="21" endcolumn="30">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="isNotNull" beginline="554" endline="554" begincolumn="21" endcolumn="30">
+<metric name="CognitiveComplexity" value="8"/>
+<metric name="CyclomaticComplexity" value="5"/>
+<metric name="NCSS" value="7"/>
+<metric name="NPathComplexity" value="5"/>
+</method>
+<method name="getValue" beginline="569" endline="569" begincolumn="11" endcolumn="19">
+<metric name="CognitiveComplexity" value="1"/>
+<metric name="CyclomaticComplexity" value="3"/>
+<metric name="NCSS" value="4"/>
+<metric name="NPathComplexity" value="2"/>
+</method>
+<method name="isNull" beginline="582" endline="582" begincolumn="21" endcolumn="27">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="isNull" beginline="600" endline="600" begincolumn="21" endcolumn="27">
+<metric name="CognitiveComplexity" value="1"/>
+<metric name="CyclomaticComplexity" value="2"/>
+<metric name="NCSS" value="3"/>
+<metric name="NPathComplexity" value="2"/>
+</method>
+<method name="isInstanceOf" beginline="617" endline="617" begincolumn="21" endcolumn="33">
+<metric name="CognitiveComplexity" value="3"/>
+<metric name="CyclomaticComplexity" value="3"/>
+<metric name="NCSS" value="9"/>
+<metric name="NPathComplexity" value="3"/>
+</method>
+<method name="isInstanceOf" beginline="648" endline="648" begincolumn="21" endcolumn="33">
+<metric name="CognitiveComplexity" value="1"/>
+<metric name="CyclomaticComplexity" value="2"/>
+<metric name="NCSS" value="4"/>
+<metric name="NPathComplexity" value="2"/>
+</method>
+</class>
+<class name="BooleanCondition">
+<metric name="NCSS" value="14"/>
+<method name="BooleanCondition" beginline="670" endline="670" begincolumn="16" endcolumn="32">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="isFalse" beginline="688" endline="688" begincolumn="21" endcolumn="28">
+<metric name="CognitiveComplexity" value="1"/>
+<metric name="CyclomaticComplexity" value="2"/>
+<metric name="NCSS" value="3"/>
+<metric name="NPathComplexity" value="2"/>
+</method>
+<method name="isFalse" beginline="700" endline="700" begincolumn="21" endcolumn="28">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="isTrue" beginline="718" endline="718" begincolumn="21" endcolumn="27">
+<metric name="CognitiveComplexity" value="1"/>
+<metric name="CyclomaticComplexity" value="2"/>
+<metric name="NCSS" value="3"/>
+<metric name="NPathComplexity" value="2"/>
+</method>
+<method name="isTrue" beginline="730" endline="730" begincolumn="21" endcolumn="27">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+</class>
+<class name="ExceptionCondition">
+<metric name="NCSS" value="6"/>
+<method name="ExceptionCondition" beginline="748" endline="748" begincolumn="16" endcolumn="34">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="isNeverThrown" beginline="766" endline="766" begincolumn="21" endcolumn="34">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="2"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+</class>
+</file>
+<file name="/Users/hafner/git/warnings-ng-plugin-devenv/codingstyle/src/main/java/edu/hm/hafner/util/FilteredLog.java">
+<class name="FilteredLog">
+<metric name="NCSS" value="83"/>
+<method name="FilteredLog" beginline="42" endline="42" begincolumn="12" endcolumn="23">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="FilteredLog" beginline="52" endline="52" begincolumn="12" endcolumn="23">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="FilteredLog" beginline="64" endline="64" begincolumn="12" endcolumn="23">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="3"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="readResolve" beginline="74" endline="74" begincolumn="22" endcolumn="33">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="3"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="logInfo" beginline="86" endline="86" begincolumn="17" endcolumn="24">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="5"/>
+<metric name="NPathComplexity" value="2"/>
+</method>
+<method name="logInfo" beginline="107" endline="107" begincolumn="17" endcolumn="24">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="logError" beginline="117" endline="117" begincolumn="17" endcolumn="25">
+<metric name="CognitiveComplexity" value="4"/>
+<metric name="CyclomaticComplexity" value="4"/>
+<metric name="NCSS" value="9"/>
+<metric name="NPathComplexity" value="5"/>
+</method>
+<method name="logError" beginline="144" endline="144" begincolumn="17" endcolumn="25">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="logException" beginline="161" endline="161" begincolumn="17" endcolumn="29">
+<metric name="CognitiveComplexity" value="1"/>
+<metric name="CyclomaticComplexity" value="2"/>
+<metric name="NCSS" value="7"/>
+<metric name="NPathComplexity" value="3"/>
+</method>
+<method name="size" beginline="180" endline="180" begincolumn="16" endcolumn="20">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="logSummary" beginline="191" endline="191" begincolumn="17" endcolumn="27">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="1"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="getInfoMessages" beginline="200" endline="200" begincolumn="25" endcolumn="40">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="5"/>
+<metric name="NPathComplexity" value="2"/>
+</method>
+<method name="getErrorMessages" beginline="215" endline="215" begincolumn="25" endcolumn="41">
+<metric name="CognitiveComplexity" value="2"/>
+<metric name="CyclomaticComplexity" value="3"/>
+<metric name="NCSS" value="11"/>
+<metric name="NPathComplexity" value="5"/>
+</method>
+<method name="hasErrors" beginline="238" endline="238" begincolumn="20" endcolumn="29">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="5"/>
+<metric name="NPathComplexity" value="2"/>
+</method>
+<method name="merge" beginline="254" endline="254" begincolumn="17" endcolumn="22">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="6"/>
+<metric name="NPathComplexity" value="2"/>
+</method>
+<method name="equals" beginline="267" endline="267" begincolumn="20" endcolumn="26">
+<metric name="CognitiveComplexity" value="4"/>
+<metric name="CyclomaticComplexity" value="4"/>
+<metric name="NCSS" value="7"/>
+<metric name="NPathComplexity" value="30"/>
+</method>
+<method name="hashCode" beginline="284" endline="284" begincolumn="16" endcolumn="24">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+</class>
+</file>
+<file name="/Users/hafner/git/warnings-ng-plugin-devenv/codingstyle/src/main/java/edu/hm/hafner/util/Generated.java">
+<class name="Generated">
+<metric name="NCSS" value="2"/>
+<method name="value" beginline="24" endline="24" begincolumn="14" endcolumn="19">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="1"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+</class>
+</file>
+<file name="/Users/hafner/git/warnings-ng-plugin-devenv/codingstyle/src/main/java/edu/hm/hafner/util/LineRange.java">
+<class name="LineRange">
+<metric name="NCSS" value="41"/>
+<method name="LineRange" beginline="26" endline="26" begincolumn="12" endcolumn="21">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="LineRange" beginline="38" endline="38" begincolumn="12" endcolumn="21">
+<metric name="CognitiveComplexity" value="3"/>
+<metric name="CyclomaticComplexity" value="3"/>
+<metric name="NCSS" value="11"/>
+<metric name="NPathComplexity" value="3"/>
+</method>
+<method name="getStart" beginline="58" endline="58" begincolumn="16" endcolumn="24">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="getEnd" beginline="67" endline="67" begincolumn="16" endcolumn="22">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="getLines" beginline="76" endline="76" begincolumn="34" endcolumn="42">
+<metric name="CognitiveComplexity" value="1"/>
+<metric name="CyclomaticComplexity" value="2"/>
+<metric name="NCSS" value="5"/>
+<metric name="NPathComplexity" value="2"/>
+</method>
+<method name="contains" beginline="90" endline="90" begincolumn="20" endcolumn="28">
+<metric name="CognitiveComplexity" value="1"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="2"/>
+</method>
+<method name="isSingleLine" beginline="99" endline="99" begincolumn="20" endcolumn="32">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="equals" beginline="105" endline="105" begincolumn="20" endcolumn="26">
+<metric name="CognitiveComplexity" value="4"/>
+<metric name="CyclomaticComplexity" value="4"/>
+<metric name="NCSS" value="7"/>
+<metric name="NPathComplexity" value="12"/>
+</method>
+<method name="hashCode" beginline="119" endline="119" begincolumn="16" endcolumn="24">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="toString" beginline="124" endline="124" begincolumn="19" endcolumn="27">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+</class>
+</file>
+<file name="/Users/hafner/git/warnings-ng-plugin-devenv/codingstyle/src/main/java/edu/hm/hafner/util/LineRangeList.java">
+<class name="LineRangeList">
+<metric name="NCSS" value="163"/>
+<method name="LineRangeList" beginline="50" endline="50" begincolumn="12" endcolumn="25">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="LineRangeList" beginline="60" endline="60" begincolumn="12" endcolumn="25">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="4"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="LineRangeList" beginline="73" endline="73" begincolumn="12" endcolumn="25">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="3"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="LineRangeList" beginline="85" endline="85" begincolumn="12" endcolumn="25">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="3"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="addAll" beginline="92" endline="92" begincolumn="26" endcolumn="32">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="addAll" beginline="113" endline="113" begincolumn="26" endcolumn="32">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="ensure" beginline="126" endline="126" begincolumn="18" endcolumn="24">
+<metric name="CognitiveComplexity" value="1"/>
+<metric name="CyclomaticComplexity" value="2"/>
+<metric name="NCSS" value="5"/>
+<metric name="NPathComplexity" value="2"/>
+</method>
+<method name="contains" beginline="135" endline="135" begincolumn="20" endcolumn="28">
+<metric name="CognitiveComplexity" value="6"/>
+<metric name="CyclomaticComplexity" value="4"/>
+<metric name="NCSS" value="7"/>
+<metric name="NPathComplexity" value="4"/>
+</method>
+<method name="get" beginline="149" endline="149" begincolumn="22" endcolumn="25">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="size" beginline="154" endline="154" begincolumn="16" endcolumn="20">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="set" beginline="159" endline="159" begincolumn="22" endcolumn="25">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="add" beginline="164" endline="164" begincolumn="17" endcolumn="20">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="add" beginline="169" endline="169" begincolumn="26" endcolumn="29">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="3"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="remove" beginline="175" endline="175" begincolumn="22" endcolumn="28">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="clear" beginline="180" endline="180" begincolumn="17" endcolumn="22">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="iterator" beginline="186" endline="186" begincolumn="32" endcolumn="40">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="listIterator" beginline="192" endline="192" begincolumn="36" endcolumn="48">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="listIterator" beginline="198" endline="198" begincolumn="36" endcolumn="48">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="trim" beginline="205" endline="205" begincolumn="17" endcolumn="21">
+<metric name="CognitiveComplexity" value="1"/>
+<metric name="CyclomaticComplexity" value="2"/>
+<metric name="NCSS" value="5"/>
+<metric name="NPathComplexity" value="2"/>
+</method>
+</class>
+<class name="Cursor">
+<metric name="NCSS" value="103"/>
+<method name="Cursor" beginline="219" endline="219" begincolumn="9" endcolumn="15">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="Cursor" beginline="223" endline="223" begincolumn="9" endcolumn="15">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="prev" beginline="230" endline="230" begincolumn="22" endcolumn="26">
+<metric name="CognitiveComplexity" value="3"/>
+<metric name="CyclomaticComplexity" value="5"/>
+<metric name="NCSS" value="5"/>
+<metric name="NPathComplexity" value="6"/>
+</method>
+<method name="next" beginline="245" endline="245" begincolumn="26" endcolumn="30">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="4"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="previous" beginline="252" endline="252" begincolumn="26" endcolumn="34">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="4"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="remove" beginline="262" endline="262" begincolumn="21" endcolumn="27">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="4"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="hasNext" beginline="269" endline="269" begincolumn="24" endcolumn="31">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="hasPrevious" beginline="274" endline="274" begincolumn="24" endcolumn="35">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="read" beginline="284" endline="284" begincolumn="21" endcolumn="25">
+<metric name="CognitiveComplexity" value="2"/>
+<metric name="CyclomaticComplexity" value="4"/>
+<metric name="NCSS" value="8"/>
+<metric name="NPathComplexity" value="4"/>
+</method>
+<method name="write" beginline="297" endline="297" begincolumn="22" endcolumn="27">
+<metric name="CognitiveComplexity" value="3"/>
+<metric name="CyclomaticComplexity" value="3"/>
+<metric name="NCSS" value="7"/>
+<metric name="NPathComplexity" value="3"/>
+</method>
+<method name="write" beginline="307" endline="307" begincolumn="22" endcolumn="27">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="3"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="compare" beginline="320" endline="320" begincolumn="24" endcolumn="31">
+<metric name="CognitiveComplexity" value="1"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="4"/>
+<metric name="NPathComplexity" value="2"/>
+</method>
+<method name="skip" beginline="335" endline="335" begincolumn="24" endcolumn="28">
+<metric name="CognitiveComplexity" value="1"/>
+<metric name="CyclomaticComplexity" value="2"/>
+<metric name="NCSS" value="6"/>
+<metric name="NPathComplexity" value="2"/>
+</method>
+<method name="count" beginline="349" endline="349" begincolumn="21" endcolumn="26">
+<metric name="CognitiveComplexity" value="1"/>
+<metric name="CyclomaticComplexity" value="2"/>
+<metric name="NCSS" value="7"/>
+<metric name="NPathComplexity" value="2"/>
+</method>
+<method name="nextIndex" beginline="360" endline="360" begincolumn="20" endcolumn="29">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="2"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="previousIndex" beginline="365" endline="365" begincolumn="20" endcolumn="33">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="2"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="copy" beginline="369" endline="369" begincolumn="23" endcolumn="27">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="adjust" beginline="373" endline="373" begincolumn="22" endcolumn="28">
+<metric name="CognitiveComplexity" value="2"/>
+<metric name="CyclomaticComplexity" value="2"/>
+<metric name="NCSS" value="7"/>
+<metric name="NPathComplexity" value="2"/>
+</method>
+<method name="rewrite" beginline="392" endline="392" begincolumn="26" endcolumn="33">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="8"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="set" beginline="403" endline="403" begincolumn="21" endcolumn="24">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="add" beginline="411" endline="411" begincolumn="21" endcolumn="24">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="4"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="delete" beginline="422" endline="422" begincolumn="26" endcolumn="32">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="5"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="sizeOf" beginline="429" endline="429" begincolumn="21" endcolumn="27">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="sizeOf" beginline="441" endline="441" begincolumn="21" endcolumn="27">
+<metric name="CognitiveComplexity" value="1"/>
+<metric name="CyclomaticComplexity" value="2"/>
+<metric name="NCSS" value="7"/>
+<metric name="NPathComplexity" value="2"/>
+</method>
+</class>
+</file>
+<file name="/Users/hafner/git/warnings-ng-plugin-devenv/codingstyle/src/main/java/edu/hm/hafner/util/LookaheadStream.java">
+<class name="LookaheadStream">
+<metric name="NCSS" value="42"/>
+<method name="LookaheadStream" beginline="31" endline="31" begincolumn="12" endcolumn="27">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="LookaheadStream" beginline="43" endline="43" begincolumn="12" endcolumn="27">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="4"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="getFileName" beginline="49" endline="49" begincolumn="19" endcolumn="30">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="close" beginline="54" endline="54" begincolumn="17" endcolumn="22">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="hasNext" beginline="64" endline="64" begincolumn="20" endcolumn="27">
+<metric name="CognitiveComplexity" value="1"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="2"/>
+</method>
+<method name="hasNext" beginline="76" endline="76" begincolumn="20" endcolumn="27">
+<metric name="CognitiveComplexity" value="3"/>
+<metric name="CyclomaticComplexity" value="3"/>
+<metric name="NCSS" value="6"/>
+<metric name="NPathComplexity" value="3"/>
+</method>
+<method name="peekNext" beginline="95" endline="95" begincolumn="19" endcolumn="27">
+<metric name="CognitiveComplexity" value="1"/>
+<metric name="CyclomaticComplexity" value="2"/>
+<metric name="NCSS" value="4"/>
+<metric name="NPathComplexity" value="2"/>
+</method>
+<method name="fillLookahead" beginline="102" endline="102" begincolumn="18" endcolumn="31">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="3"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="next" beginline="114" endline="114" begincolumn="19" endcolumn="23">
+<metric name="CognitiveComplexity" value="1"/>
+<metric name="CyclomaticComplexity" value="2"/>
+<metric name="NCSS" value="6"/>
+<metric name="NPathComplexity" value="2"/>
+</method>
+<method name="getLine" beginline="129" endline="129" begincolumn="16" endcolumn="23">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="toString" beginline="134" endline="134" begincolumn="19" endcolumn="27">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+</class>
+</file>
+<file name="/Users/hafner/git/warnings-ng-plugin-devenv/codingstyle/src/main/java/edu/hm/hafner/util/PathUtil.java">
+<class name="PathUtil">
+<metric name="NCSS" value="65"/>
+<method name="exists" beginline="42" endline="42" begincolumn="20" endcolumn="26">
+<metric name="CognitiveComplexity" value="1"/>
+<metric name="CyclomaticComplexity" value="2"/>
+<metric name="NCSS" value="4"/>
+<metric name="NPathComplexity" value="2"/>
+</method>
+<method name="exists" beginline="68" endline="68" begincolumn="20" endcolumn="26">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="getAbsolutePath" beginline="83" endline="83" begincolumn="19" endcolumn="34">
+<metric name="CognitiveComplexity" value="1"/>
+<metric name="CyclomaticComplexity" value="2"/>
+<metric name="NCSS" value="4"/>
+<metric name="NPathComplexity" value="2"/>
+</method>
+<method name="getAbsolutePath" beginline="103" endline="103" begincolumn="19" endcolumn="34">
+<metric name="CognitiveComplexity" value="1"/>
+<metric name="CyclomaticComplexity" value="2"/>
+<metric name="NCSS" value="4"/>
+<metric name="NPathComplexity" value="2"/>
+</method>
+<method name="getRelativePath" beginline="126" endline="126" begincolumn="19" endcolumn="34">
+<metric name="CognitiveComplexity" value="1"/>
+<metric name="CyclomaticComplexity" value="2"/>
+<metric name="NCSS" value="4"/>
+<metric name="NPathComplexity" value="2"/>
+</method>
+<method name="getRelativePath" beginline="149" endline="149" begincolumn="19" endcolumn="34">
+<metric name="CognitiveComplexity" value="1"/>
+<metric name="CyclomaticComplexity" value="2"/>
+<metric name="NCSS" value="4"/>
+<metric name="NPathComplexity" value="2"/>
+</method>
+<method name="getRelativePath" beginline="172" endline="172" begincolumn="19" endcolumn="34">
+<metric name="CognitiveComplexity" value="2"/>
+<metric name="CyclomaticComplexity" value="3"/>
+<metric name="NCSS" value="7"/>
+<metric name="NPathComplexity" value="3"/>
+</method>
+<method name="getRelativePath" beginline="197" endline="197" begincolumn="19" endcolumn="34">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="getRelativePath" beginline="212" endline="212" begincolumn="19" endcolumn="34">
+<metric name="CognitiveComplexity" value="1"/>
+<metric name="CyclomaticComplexity" value="2"/>
+<metric name="NCSS" value="4"/>
+<metric name="NPathComplexity" value="2"/>
+</method>
+<method name="createAbsolutePath" beginline="232" endline="232" begincolumn="19" endcolumn="37">
+<metric name="CognitiveComplexity" value="6"/>
+<metric name="CyclomaticComplexity" value="6"/>
+<metric name="NCSS" value="13"/>
+<metric name="NPathComplexity" value="18"/>
+</method>
+<method name="isAbsolute" beginline="263" endline="263" begincolumn="20" endcolumn="30">
+<metric name="CognitiveComplexity" value="2"/>
+<metric name="CyclomaticComplexity" value="3"/>
+<metric name="NCSS" value="6"/>
+<metric name="NPathComplexity" value="3"/>
+</method>
+<method name="normalize" beginline="276" endline="276" begincolumn="18" endcolumn="27">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="makeUnixPath" beginline="280" endline="280" begincolumn="20" endcolumn="32">
+<metric name="CognitiveComplexity" value="1"/>
+<metric name="CyclomaticComplexity" value="2"/>
+<metric name="NCSS" value="5"/>
+<metric name="NPathComplexity" value="2"/>
+</method>
+</class>
+</file>
+<file name="/Users/hafner/git/warnings-ng-plugin-devenv/codingstyle/src/main/java/edu/hm/hafner/util/PrefixLogger.java">
+<class name="PrefixLogger">
+<metric name="NCSS" value="15"/>
+<method name="PrefixLogger" beginline="25" endline="25" begincolumn="12" endcolumn="24">
+<metric name="CognitiveComplexity" value="2"/>
+<metric name="CyclomaticComplexity" value="2"/>
+<metric name="NCSS" value="6"/>
+<metric name="NPathComplexity" value="2"/>
+</method>
+<method name="log" beginline="46" endline="46" begincolumn="17" endcolumn="20">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="logEachLine" beginline="56" endline="56" begincolumn="17" endcolumn="28">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="print" beginline="60" endline="60" begincolumn="18" endcolumn="23">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+</class>
+</file>
+<file name="/Users/hafner/git/warnings-ng-plugin-devenv/codingstyle/src/main/java/edu/hm/hafner/util/ResourceExtractor.java">
+<class name="ResourceExtractor">
+<metric name="NCSS" value="81"/>
+<method name="ResourceExtractor" beginline="37" endline="37" begincolumn="12" endcolumn="29">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="ResourceExtractor" beginline="42" endline="42" begincolumn="5" endcolumn="22">
+<metric name="CognitiveComplexity" value="5"/>
+<metric name="CyclomaticComplexity" value="8"/>
+<metric name="NCSS" value="17"/>
+<metric name="NPathComplexity" value="16"/>
+</method>
+<method name="getResourcePath" beginline="66" endline="66" begincolumn="19" endcolumn="34">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="isReadingFromJarFile" beginline="70" endline="70" begincolumn="20" endcolumn="40">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="extract" beginline="84" endline="84" begincolumn="17" endcolumn="24">
+<metric name="CognitiveComplexity" value="1"/>
+<metric name="CyclomaticComplexity" value="3"/>
+<metric name="NCSS" value="6"/>
+<metric name="NPathComplexity" value="2"/>
+</method>
+</class>
+<class name="Extractor">
+<metric name="NCSS" value="7"/>
+<method name="Extractor" beginline="100" endline="100" begincolumn="9" endcolumn="18">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="getEntryPoint" beginline="104" endline="104" begincolumn="14" endcolumn="27">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="extractFiles" beginline="108" endline="108" begincolumn="23" endcolumn="35">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="1"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+</class>
+<class name="FolderExtractor">
+<metric name="NCSS" value="14"/>
+<method name="FolderExtractor" beginline="115" endline="115" begincolumn="9" endcolumn="24">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="extractFiles" beginline="120" endline="120" begincolumn="21" endcolumn="33">
+<metric name="CognitiveComplexity" value="2"/>
+<metric name="CyclomaticComplexity" value="4"/>
+<metric name="NCSS" value="7"/>
+<metric name="NPathComplexity" value="3"/>
+</method>
+<method name="copy" beginline="133" endline="133" begincolumn="22" endcolumn="26">
+<metric name="CognitiveComplexity" value="1"/>
+<metric name="CyclomaticComplexity" value="3"/>
+<metric name="NCSS" value="4"/>
+<metric name="NPathComplexity" value="2"/>
+</method>
+</class>
+<class name="JarExtractor">
+<metric name="NCSS" value="27"/>
+<method name="JarExtractor" beginline="147" endline="147" begincolumn="9" endcolumn="21">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="extractFiles" beginline="152" endline="152" begincolumn="21" endcolumn="33">
+<metric name="CognitiveComplexity" value="5"/>
+<metric name="CyclomaticComplexity" value="7"/>
+<metric name="NCSS" value="14"/>
+<metric name="NPathComplexity" value="10"/>
+</method>
+<method name="copy" beginline="173" endline="173" begincolumn="22" endcolumn="26">
+<metric name="CognitiveComplexity" value="2"/>
+<metric name="CyclomaticComplexity" value="4"/>
+<metric name="NCSS" value="10"/>
+<metric name="NPathComplexity" value="8"/>
+</method>
+</class>
+</file>
+<file name="/Users/hafner/git/warnings-ng-plugin-devenv/codingstyle/src/main/java/edu/hm/hafner/util/SecureXmlParserFactory.java">
+<class name="SecureXmlParserFactory">
+<metric name="NCSS" value="110"/>
+<method name="createDocumentBuilder" beginline="85" endline="85" begincolumn="28" endcolumn="49">
+<metric name="CognitiveComplexity" value="1"/>
+<metric name="CyclomaticComplexity" value="3"/>
+<metric name="NCSS" value="10"/>
+<metric name="NPathComplexity" value="2"/>
+</method>
+<method name="createDocumentBuilderFactory" beginline="102" endline="102" begincolumn="28" endcolumn="56">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="setFeatures" beginline="106" endline="106" begincolumn="18" endcolumn="29">
+<metric name="CognitiveComplexity" value="2"/>
+<metric name="CyclomaticComplexity" value="3"/>
+<metric name="NCSS" value="5"/>
+<metric name="NPathComplexity" value="4"/>
+</method>
+<method name="setFeature" beginline="115" endline="115" begincolumn="18" endcolumn="28">
+<metric name="CognitiveComplexity" value="1"/>
+<metric name="CyclomaticComplexity" value="2"/>
+<metric name="NCSS" value="3"/>
+<metric name="NPathComplexity" value="2"/>
+</method>
+<method name="clearAttributes" beginline="124" endline="124" begincolumn="18" endcolumn="33">
+<metric name="CognitiveComplexity" value="3"/>
+<metric name="CyclomaticComplexity" value="3"/>
+<metric name="NCSS" value="4"/>
+<metric name="NPathComplexity" value="3"/>
+</method>
+<method name="clearAttributes" beginline="135" endline="135" begincolumn="18" endcolumn="33">
+<metric name="CognitiveComplexity" value="3"/>
+<metric name="CyclomaticComplexity" value="3"/>
+<metric name="NCSS" value="4"/>
+<metric name="NPathComplexity" value="3"/>
+</method>
+<method name="createSaxParser" beginline="151" endline="151" begincolumn="22" endcolumn="37">
+<metric name="CognitiveComplexity" value="1"/>
+<metric name="CyclomaticComplexity" value="3"/>
+<metric name="NCSS" value="8"/>
+<metric name="NPathComplexity" value="2"/>
+</method>
+<method name="createSaxParserFactory" beginline="166" endline="166" begincolumn="22" endcolumn="44">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="secureParser" beginline="176" endline="176" begincolumn="18" endcolumn="30">
+<metric name="CognitiveComplexity" value="3"/>
+<metric name="CyclomaticComplexity" value="3"/>
+<metric name="NCSS" value="4"/>
+<metric name="NPathComplexity" value="3"/>
+</method>
+<method name="configureSaxParserFactory" beginline="193" endline="193" begincolumn="17" endcolumn="42">
+<metric name="CognitiveComplexity" value="6"/>
+<metric name="CyclomaticComplexity" value="5"/>
+<metric name="NCSS" value="9"/>
+<metric name="NPathComplexity" value="9"/>
+</method>
+<method name="createXmlStreamReader" beginline="224" endline="224" begincolumn="28" endcolumn="49">
+<metric name="CognitiveComplexity" value="1"/>
+<metric name="CyclomaticComplexity" value="3"/>
+<metric name="NCSS" value="4"/>
+<metric name="NPathComplexity" value="2"/>
+</method>
+<method name="createXmlEventReader" beginline="242" endline="242" begincolumn="27" endcolumn="47">
+<metric name="CognitiveComplexity" value="1"/>
+<metric name="CyclomaticComplexity" value="3"/>
+<metric name="NCSS" value="4"/>
+<metric name="NPathComplexity" value="2"/>
+</method>
+<method name="createSecureInputFactory" beginline="251" endline="251" begincolumn="29" endcolumn="53">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="5"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="createXmlInputFactory" beginline="259" endline="259" begincolumn="21" endcolumn="42">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="parse" beginline="278" endline="278" begincolumn="17" endcolumn="22">
+<metric name="CognitiveComplexity" value="1"/>
+<metric name="CyclomaticComplexity" value="3"/>
+<metric name="NCSS" value="4"/>
+<metric name="NPathComplexity" value="2"/>
+</method>
+<method name="readDocument" beginline="300" endline="300" begincolumn="21" endcolumn="33">
+<metric name="CognitiveComplexity" value="1"/>
+<metric name="CyclomaticComplexity" value="3"/>
+<metric name="NCSS" value="4"/>
+<metric name="NPathComplexity" value="2"/>
+</method>
+<method name="createInputSource" beginline="309" endline="309" begincolumn="25" endcolumn="42">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="3"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="createTransformer" beginline="321" endline="321" begincolumn="24" endcolumn="41">
+<metric name="CognitiveComplexity" value="1"/>
+<metric name="CyclomaticComplexity" value="3"/>
+<metric name="NCSS" value="6"/>
+<metric name="NPathComplexity" value="2"/>
+</method>
+<method name="createTransformerFactory" beginline="336" endline="336" begincolumn="24" endcolumn="48">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+</class>
+<class name="ParsingException">
+<metric name="NCSS" value="10"/>
+<method name="ParsingException" beginline="352" endline="352" begincolumn="16" endcolumn="32">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="ParsingException" beginline="370" endline="370" begincolumn="16" endcolumn="32">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="ParsingException" beginline="390" endline="390" begincolumn="16" endcolumn="32">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="createMessage" beginline="394" endline="394" begincolumn="31" endcolumn="44">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+</class>
+</file>
+<file name="/Users/hafner/git/warnings-ng-plugin-devenv/codingstyle/src/main/java/edu/hm/hafner/util/TreeString.java">
+<class name="TreeString">
+<metric name="NCSS" value="57"/>
+<method name="TreeString" beginline="33" endline="33" begincolumn="5" endcolumn="15">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="TreeString" beginline="46" endline="46" begincolumn="5" endcolumn="15">
+<metric name="CognitiveComplexity" value="1"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="4"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="getLabel" beginline="54" endline="54" begincolumn="12" endcolumn="20">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="split" beginline="70" endline="70" begincolumn="16" endcolumn="21">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="8"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="getParent" beginline="85" endline="85" begincolumn="16" endcolumn="25">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="depth" beginline="95" endline="95" begincolumn="17" endcolumn="22">
+<metric name="CognitiveComplexity" value="1"/>
+<metric name="CyclomaticComplexity" value="2"/>
+<metric name="NCSS" value="5"/>
+<metric name="NPathComplexity" value="2"/>
+</method>
+<method name="equals" beginline="104" endline="104" begincolumn="20" endcolumn="26">
+<metric name="CognitiveComplexity" value="3"/>
+<metric name="CyclomaticComplexity" value="4"/>
+<metric name="NCSS" value="6"/>
+<metric name="NPathComplexity" value="6"/>
+</method>
+<method name="hashCode" beginline="115" endline="115" begincolumn="16" endcolumn="24">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="toString" beginline="123" endline="123" begincolumn="19" endcolumn="27">
+<metric name="CognitiveComplexity" value="2"/>
+<metric name="CyclomaticComplexity" value="3"/>
+<metric name="NCSS" value="11"/>
+<metric name="NPathComplexity" value="4"/>
+</method>
+<method name="dedup" beginline="146" endline="146" begincolumn="10" endcolumn="15">
+<metric name="CognitiveComplexity" value="2"/>
+<metric name="CyclomaticComplexity" value="2"/>
+<metric name="NCSS" value="7"/>
+<metric name="NPathComplexity" value="2"/>
+</method>
+<method name="isBlank" beginline="157" endline="157" begincolumn="20" endcolumn="27">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="valueOf" beginline="170" endline="170" begincolumn="30" endcolumn="37">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+</class>
+</file>
+<file name="/Users/hafner/git/warnings-ng-plugin-devenv/codingstyle/src/main/java/edu/hm/hafner/util/TreeStringBuilder.java">
+<class name="TreeStringBuilder">
+<metric name="NCSS" value="58"/>
+<method name="intern" beginline="32" endline="32" begincolumn="23" endcolumn="29">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="intern" beginline="44" endline="44" begincolumn="23" endcolumn="29">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="dedup" beginline="51" endline="51" begincolumn="17" endcolumn="22">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="getRoot" beginline="58" endline="58" begincolumn="11" endcolumn="18">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+</class>
+<class name="Child">
+<metric name="NCSS" value="47"/>
+<method name="Child" beginline="70" endline="70" begincolumn="9" endcolumn="14">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="intern" beginline="82" endline="82" begincolumn="22" endcolumn="28">
+<metric name="CognitiveComplexity" value="11"/>
+<metric name="CyclomaticComplexity" value="6"/>
+<metric name="NCSS" value="21"/>
+<metric name="NPathComplexity" value="16"/>
+</method>
+<method name="makeWritable" beginline="121" endline="121" begincolumn="22" endcolumn="34">
+<metric name="CognitiveComplexity" value="1"/>
+<metric name="CyclomaticComplexity" value="2"/>
+<metric name="NCSS" value="3"/>
+<metric name="NPathComplexity" value="2"/>
+</method>
+<method name="split" beginline="136" endline="136" begincolumn="23" endcolumn="28">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="6"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+<method name="commonPrefix" beginline="156" endline="156" begincolumn="21" endcolumn="33">
+<metric name="CognitiveComplexity" value="3"/>
+<metric name="CyclomaticComplexity" value="3"/>
+<metric name="NCSS" value="6"/>
+<metric name="NPathComplexity" value="3"/>
+</method>
+<method name="dedup" beginline="173" endline="173" begincolumn="22" endcolumn="27">
+<metric name="CognitiveComplexity" value="2"/>
+<metric name="CyclomaticComplexity" value="2"/>
+<metric name="NCSS" value="4"/>
+<metric name="NPathComplexity" value="2"/>
+</method>
+<method name="getNode" beginline="180" endline="180" begincolumn="20" endcolumn="27">
+<metric name="CognitiveComplexity" value="0"/>
+<metric name="CyclomaticComplexity" value="1"/>
+<metric name="NCSS" value="2"/>
+<metric name="NPathComplexity" value="1"/>
+</method>
+</class>
+</file>
+<file name="/Users/hafner/git/warnings-ng-plugin-devenv/codingstyle/src/main/java/edu/hm/hafner/util/VisibleForTesting.java">
+<class name="VisibleForTesting">
+<metric name="NCSS" value="1"/>
+</class>
+</file>
+</package>
+</metrics>

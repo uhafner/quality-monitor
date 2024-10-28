@@ -7,7 +7,7 @@
   <parent>
     <groupId>edu.hm.hafner</groupId>
     <artifactId>codingstyle-pom</artifactId>
-    <version>4.16.0</version>
+    <version>5.2.0</version>
     <relativePath/>
   </parent>
 
@@ -27,9 +27,7 @@
     <module.name>${project.groupId}.quality.monitor</module.name>
     <docker-image-tag>${project.version}</docker-image-tag>
 
-    <java.version>17</java.version>
-
-    <autograding-model.version>3.36.0</autograding-model.version>
+    <autograding-model.version>4.0.0</autograding-model.version>
     <testcontainers.version>1.20.2</testcontainers.version>
     <github-api.version>1.326</github-api.version>
 
