@@ -240,7 +240,7 @@ public class QualityMonitorDockerITest {
     }
 
     private GenericContainer<?> createContainer() {
-        return new GenericContainer<>(DockerImageName.parse("uhafner/quality-monitor:1.14.0-SnAPSHOT"));
+        return new GenericContainer<>(DockerImageName.parse("uhafner/quality-monitor:1.14.0"));
     }
 
     private String readStandardOut(final GenericContainer<? extends GenericContainer<?>> container)
