@@ -1,13 +1,13 @@
 package edu.hm.hafner.grading.github;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-import java.nio.charset.StandardCharsets;
-
 import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
 
 import edu.hm.hafner.util.ResourceTest;
+
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -23,8 +23,8 @@ public class QualityMonitorITest extends ResourceTest {
                 "name": "JUnit",
                 "tools": [
                   {
-                    "id": "test",
-                    "name": "Unittests",
+                    "id": "junit",
+                    "name": "JUnit Tests",
                     "pattern": "**/src/**/TEST*.xml"
                   }
                 ]
@@ -105,16 +105,34 @@ public class QualityMonitorITest extends ResourceTest {
                             "metric": "CognitiveComplexity"
                           },
                           {
+                            "name": "N-Path Complexity",
+                            "id": "metrics",
+                            "pattern": "**/src/**/metrics.xml",
+                            "metric": "NPathComplexity"
+                          },
+                          {
                             "name": "Non Commenting Source Statements",
                             "id": "metrics",
                             "pattern": "**/src/**/metrics.xml",
                             "metric": "NCSS"
                           },
                           {
-                            "name": "N-Path Complexity",
+                            "name": "Lines of Code",
                             "id": "metrics",
                             "pattern": "**/src/**/metrics.xml",
-                            "metric": "NPathComplexity"
+                            "metric": "LOC"
+                          },
+                          {
+                            "name": "Class cohesion",
+                            "id": "metrics",
+                            "pattern": "**/src/**/metrics.xml",
+                            "metric": "COHESION"
+                          },
+                          {
+                            "name": "Weight of a class",
+                            "id": "metrics",
+                            "pattern": "**/metrics/pmd.xml",
+                            "metric": "WEIGHT_OF_CLASS"
                           }
                         ]
                       }
@@ -158,11 +176,11 @@ public class QualityMonitorITest extends ResourceTest {
                         "-> Mutation Coverage Total: MUTATION: 7.86% (11/140)",
                         "=> PIT: 8%",
                         "Processing 2 static analysis configuration(s)",
-                        "-> CheckStyle Total: 19 warnings",
+                        "-> CheckStyle (checkstyle): 19 warnings (normal: 19)",
                         "=> CheckStyle: 19 warnings (normal: 19)",
-                        "-> PMD Total: 41 warnings",
+                        "-> PMD (pmd): 41 warnings (normal: 41)",
                         "=> PMD: 41 warnings (normal: 41)",
-                        "-> SpotBugs Total: 1 warnings",
+                        "-> SpotBugs (spotbugs): 1 bug (low: 1)",
                         "=> SpotBugs: 1 bug (low: 1)",
                         "=> Cyclomatic Complexity: 355",
                         "=> Cognitive Complexity: 172",
@@ -189,7 +207,7 @@ public class QualityMonitorITest extends ResourceTest {
               "tests": {
                 "tools": [
                   {
-                    "id": "test",
+                    "id": "junit",
                     "name": "Unittests",
                     "pattern": "**/does-not-exist/TEST*.xml"
                   }
@@ -284,7 +302,7 @@ public class QualityMonitorITest extends ResourceTest {
         assertThat(runAutoGrading())
                 .contains(new String[] {
                         "Processing 1 test configuration(s)",
-                        "-> Unittests Total: TESTS: 0 tests",
+                        "=> JUnit Score: 100 of 100",
                         "Configuration error for 'Unittests'?",
                         "JUnit Score: 100 of 100",
                         "Processing 2 coverage configuration(s)",
@@ -297,10 +315,10 @@ public class QualityMonitorITest extends ResourceTest {
                         "Configuration error for 'CheckStyle'?",
                         "Configuration error for 'PMD'?",
                         "Configuration error for 'SpotBugs'?",
-                        "-> CheckStyle Total: 0 warnings",
-                        "-> PMD Total: 0 warnings",
+                        "-> CheckStyle (checkstyle): No warnings",
+                        "-> PMD (pmd): No warnings",
                         "=> Style Score: 0 of 100",
-                        "-> SpotBugs Total: 0 warnings",
+                        "-> SpotBugs (spotbugs): No warnings",
                         "=> Bugs Score: 100 of 100",
                         "Autograding score - 200 of 500"});
     }
