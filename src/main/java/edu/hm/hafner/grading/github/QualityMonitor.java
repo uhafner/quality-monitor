@@ -1,13 +1,5 @@
 package edu.hm.hafner.grading.github;
 
-import java.io.IOException;
-import java.io.PrintStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.time.Instant;
-import java.util.Date;
-import java.util.Locale;
-
 import org.apache.commons.lang3.StringUtils;
 
 import edu.hm.hafner.grading.AggregatedScore;
@@ -15,6 +7,14 @@ import edu.hm.hafner.grading.AutoGradingRunner;
 import edu.hm.hafner.grading.GradingReport;
 import edu.hm.hafner.util.FilteredLog;
 import edu.hm.hafner.util.VisibleForTesting;
+
+import java.io.IOException;
+import java.io.PrintStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.time.Instant;
+import java.util.Date;
+import java.util.Locale;
 
 import org.kohsuke.github.GHCheckRun;
 import org.kohsuke.github.GHCheckRun.Conclusion;
@@ -69,11 +69,13 @@ public class QualityMonitor extends AutoGradingRunner {
         var errors = createErrorMessageMarkdown(log);
 
         var results = new GradingReport();
+
+        var showHeaders = StringUtils.isNotBlank(getEnv("SHOW_HEADERS", log));
         addComment(score,
                 results.getTextSummary(score, getChecksName()),
                 results.getMarkdownDetails(score, getChecksName()) + errors,
                 results.getSubScoreDetails(score) + errors,
-                results.getMarkdownSummary(score, getChecksName()) + errors,
+                results.getMarkdownSummary(score, getChecksName(), showHeaders) + errors,
                 errors.isBlank() ? Conclusion.SUCCESS : Conclusion.FAILURE, log);
 
         try {
