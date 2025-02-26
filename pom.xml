@@ -13,7 +13,7 @@
 
   <groupId>edu.hm.hafner</groupId>
   <artifactId>quality-monitor</artifactId>
-  <version>2.0.0-SNAPSHOT-1</version>
+  <version>2.0.0</version>
   <packaging>jar</packaging>
 
   <scm>
@@ -27,7 +27,7 @@
     <module.name>${project.groupId}.quality.monitor</module.name>
     <docker-image-tag>${project.version}</docker-image-tag>
 
-    <autograding-model.version>5.2.0</autograding-model.version>
+    <autograding-model.version>5.3.0</autograding-model.version>
     <testcontainers.version>1.20.5</testcontainers.version>
     <github-api.version>1.327</github-api.version>
 
