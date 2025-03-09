@@ -1,17 +1,17 @@
 package edu.hm.hafner.grading.github;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-
 import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.output.ToStringConsumer;
 import org.testcontainers.containers.output.WaitingConsumer;
 import org.testcontainers.utility.DockerImageName;
 import org.testcontainers.utility.MountableFile;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -27,7 +27,7 @@ public class QualityMonitorDockerITest {
                    "name": "JUnit",
                    "tools": [
                      {
-                       "id": "test",
+                       "id": "junit",
                        "name": "Unittests",
                        "pattern": "**/target/*-reports/TEST*.xml"
                      }
@@ -156,7 +156,7 @@ public class QualityMonitorDockerITest {
                     .contains(metrics)
                     .contains(new String[] {
                             "Processing 1 test configuration(s)",
-                            "-> Unittests Total: TESTS: 1 tests",
+                            "-> Unittests Total: TESTS: 1",
                             "=> Unittests: 1 tests passed",
                             "=> JUnit: 1 tests passed",
                             "Processing 2 coverage configuration(s)",
@@ -168,11 +168,11 @@ public class QualityMonitorDockerITest {
                             "-> Mutation Coverage Total: MUTATION: 7.86% (11/140)",
                             "=> PIT: 8% (129 survived mutations)",
                             "Processing 2 static analysis configuration(s)",
-                            "-> CheckStyle Total: 1 warnings",
-                            "-> PMD Total: 1 warnings",
+                            "-> CheckStyle (checkstyle): 1 warning (normal: 1)",
+                            "-> PMD (pmd): 1 warning (normal: 1)",
                             "=> Style: 2 warnings (normal: 2)",
-                            "-> SpotBugs Total: 1 warnings",
-                            "=> Bugs: 1 warning (low: 1)",
+                            "-> SpotBugs (spotbugs): 1 bug (low: 1)",
+                            "=> Bugs: 1 bug (low: 1)",
                             "=> Cyclomatic Complexity: 355",
                             "=> Cognitive Complexity: 172",
                             "=> Non Commenting Source Statements: 1200",
@@ -194,7 +194,7 @@ public class QualityMonitorDockerITest {
                             "No configuration provided (environment variable CONFIG not set), using default configuration")
                     .contains(new String[] {
                             "Processing 1 test configuration(s)",
-                            "-> Tests Total: TESTS: 1 tests",
+                            "-> JUnit Tests Total: TESTS: 1",
                             "=> Tests: 1 tests passed",
                             "Processing 2 coverage configuration(s)",
                             "-> Line Coverage Total: LINE: 10.93% (33/302)",
@@ -203,11 +203,11 @@ public class QualityMonitorDockerITest {
                             "-> Mutation Coverage Total: MUTATION: 7.86% (11/140)",
                             "=> Mutation Coverage: 8% ",
                             "Processing 2 static analysis configuration(s)",
-                            "-> CheckStyle Total: 1 warnings",
-                            "-> PMD Total: 1 warnings",
+                            "-> CheckStyle (checkstyle): 1 warning (normal: 1)",
+                            "-> PMD (pmd): 1 warning (normal: 1)",
                             "=> Style: 2 warnings (normal: 2)",
-                            "-> SpotBugs Total: 1 warnings",
-                            "=> Bugs: 1 warning (low: 1)"});
+                            "-> SpotBugs (spotbugs): 1 bug (low: 1)",
+                            "=> Bugs: 1 bug (low: 1)"});
         }
     }
 
@@ -218,8 +218,8 @@ public class QualityMonitorDockerITest {
             assertThat(readStandardOut(container))
                     .contains(new String[] {
                             "Processing 1 test configuration(s)",
-                            "-> Tests Total: TESTS: 0 tests",
-                            "Configuration error for 'Tests'?",
+                            "=> JUnit Tests: 0 tests passed",
+                            "Configuration error for 'JUnit Tests'?",
                             "=> Tests: 0 tests passed",
                             "Processing 2 coverage configuration(s)",
                             "=> Code Coverage: 0%",
@@ -231,16 +231,16 @@ public class QualityMonitorDockerITest {
                             "Configuration error for 'CheckStyle'?",
                             "Configuration error for 'PMD'?",
                             "Configuration error for 'SpotBugs'?",
-                            "-> CheckStyle Total: 0 warnings",
-                            "-> PMD Total: 0 warnings",
+                            "-> CheckStyle (checkstyle): No warnings",
+                            "-> PMD (pmd): No warnings",
                             "=> Style: No warnings",
-                            "-> SpotBugs Total: 0 warnings",
+                            "-> SpotBugs (spotbugs): No warnings",
                             "=> Bugs: No warnings"});
         }
     }
 
     private GenericContainer<?> createContainer() {
-        return new GenericContainer<>(DockerImageName.parse("uhafner/quality-monitor:1.15.0-SNAPSHOT"));
+        return new GenericContainer<>(DockerImageName.parse("uhafner/quality-monitor:2.1.0"));
     }
 
     private String readStandardOut(final GenericContainer<? extends GenericContainer<?>> container)
@@ -263,7 +263,7 @@ public class QualityMonitorDockerITest {
                 .withCopyFileToContainer(read("junit/TEST-edu.hm.hafner.grading.AutoGradingActionTest.xml"),
                         WS + "surefire-reports/TEST-Aufgabe3Test.xml")
                 .withCopyFileToContainer(read("pit/mutations.xml"), WS + "pit-reports/mutations.xml")
-                .withCopyFileToContainer(read("pmd/pmd.xml"), WS + "pmd.xml")
+                .withCopyFileToContainer(read("pmd/pmd.xml"), WS + "pmd-java/pmd.xml")
                 .withCopyFileToContainer(read("spotbugs/spotbugsXml.xml"), WS + "spotbugsXml.xml")
                 .withCopyFileToContainer(read("metrics/metrics.xml"), WS + "metrics.xml")
                 .start();
