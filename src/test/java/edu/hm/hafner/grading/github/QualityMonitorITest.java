@@ -20,11 +20,9 @@ public class QualityMonitorITest extends ResourceTest {
     private static final String CONFIGURATION = """
             {
               "tests": {
-                "name": "JUnit",
                 "tools": [
                   {
                     "id": "junit",
-                    "name": "JUnit Tests",
                     "pattern": "**/src/**/TEST*.xml"
                   }
                 ]
@@ -36,12 +34,10 @@ public class QualityMonitorITest extends ResourceTest {
                   "tools": [
                     {
                       "id": "checkstyle",
-                      "name": "CheckStyle",
                       "pattern": "**/src/**/checkstyle*.xml"
                     },
                     {
                       "id": "pmd",
-                      "name": "PMD",
                       "pattern": "**/src/**/pmd*.xml"
                     }
                   ]
@@ -52,7 +48,6 @@ public class QualityMonitorITest extends ResourceTest {
                   "tools": [
                     {
                       "id": "spotbugs",
-                      "name": "SpotBugs",
                       "pattern": "**/src/**/spotbugs*.xml"
                     }
                   ]
@@ -64,13 +59,11 @@ public class QualityMonitorITest extends ResourceTest {
                   "tools": [
                       {
                         "id": "jacoco",
-                        "name": "Line Coverage",
                         "metric": "line",
                         "pattern": "**/src/**/jacoco.xml"
                       },
                       {
                         "id": "jacoco",
-                        "name": "Branch Coverage",
                         "metric": "branch",
                         "pattern": "**/src/**/jacoco.xml"
                       }
@@ -81,7 +74,6 @@ public class QualityMonitorITest extends ResourceTest {
                   "tools": [
                       {
                         "id": "pit",
-                        "name": "Mutation Coverage",
                         "metric": "mutation",
                         "pattern": "**/src/**/mutations.xml"
                       }
@@ -93,43 +85,36 @@ public class QualityMonitorITest extends ResourceTest {
                         "name": "Toplevel Metrics",
                         "tools": [
                           {
-                            "name": "Cyclomatic Complexity",
                             "id": "metrics",
                             "pattern": "**/src/**/metrics.xml",
                             "metric": "CyclomaticComplexity"
                           },
                           {
-                            "name": "Cognitive Complexity",
                             "id": "metrics",
                             "pattern": "**/src/**/metrics.xml",
                             "metric": "CognitiveComplexity"
                           },
                           {
-                            "name": "N-Path Complexity",
                             "id": "metrics",
                             "pattern": "**/src/**/metrics.xml",
                             "metric": "NPathComplexity"
                           },
                           {
-                            "name": "Non Commenting Source Statements",
                             "id": "metrics",
                             "pattern": "**/src/**/metrics.xml",
                             "metric": "NCSS"
                           },
                           {
-                            "name": "Lines of Code",
                             "id": "metrics",
                             "pattern": "**/src/**/metrics.xml",
                             "metric": "LOC"
                           },
                           {
-                            "name": "Class cohesion",
                             "id": "metrics",
                             "pattern": "**/src/**/metrics.xml",
                             "metric": "COHESION"
                           },
                           {
-                            "name": "Weight of a class",
                             "id": "metrics",
                             "pattern": "**/metrics/pmd.xml",
                             "metric": "WEIGHT_OF_CLASS"
@@ -168,7 +153,7 @@ public class QualityMonitorITest extends ResourceTest {
                 .contains("Obtaining configuration from environment variable CONFIG")
                 .contains(new String[] {
                         "Processing 1 test configuration(s)",
-                        "=> JUnit: 13 tests failed, 24 passed",
+                        "=> Tests: 13 tests failed, 24 passed",
                         "Processing 2 coverage configuration(s)",
                         "-> Line Coverage Total: LINE: 10.93% (33/302)",
                         "-> Branch Coverage Total: BRANCH: 9.52% (4/42)",
