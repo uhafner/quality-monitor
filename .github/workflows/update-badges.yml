@@ -27,7 +27,7 @@ jobs:
       - name: Build and test with Maven
         run: mvn -V --color always -ntp clean verify -Pci -Ppit -Pdepgraph | tee maven.log
       - name: Run Quality Monitor
-        uses: uhafner/quality-monitor@v1
+        uses: uhafner/quality-monitor@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           config: >
@@ -56,13 +56,13 @@ jobs:
                     "id": "spotbugs",
                     "sourcePath": "src/main/java",
                     "pattern": "**/target/spotbugsXml.xml"
-                  },
-                  {
-                    "id": "error-prone",
-                    "pattern": "**/maven.log"
+                    },
+                    {
+                      "id": "error-prone",
+                      "pattern": "**/maven.log"
                   }
                 ]
-                }
+              }
             ],
             "coverage": [
               {
@@ -70,33 +70,36 @@ jobs:
                 "tools": [
                   {
                     "id": "jacoco",
-                    "name": "Line Coverage",
                     "metric": "line",
                     "sourcePath": "src/main/java",
                     "pattern": "**/target/site/jacoco/jacoco.xml"
                   },
                   {
                     "id": "jacoco",
-                    "name": "Branch Coverage",
                     "metric": "branch",
                     "sourcePath": "src/main/java",
                     "pattern": "**/target/site/jacoco/jacoco.xml"
                   }
                 ]
-              },
-              {
-                "name": "Mutation Coverage",
-                "tools": [
-                  {
-                    "id": "pit",
-                    "name": "Mutation Coverage",
-                    "metric": "mutation",
-                    "sourcePath": "src/main/java",
-                    "pattern": "**/target/pit-reports/mutations.xml"
-                  }
-                ]
+                },
+                {
+                  "name": "Mutation Coverage",
+                  "tools": [
+                    {
+                      "id": "pit",
+                      "metric": "mutation",
+                      "sourcePath": "src/main/java",
+                      "pattern": "**/target/pit-reports/mutations.xml"
+                    },
+                    {
+                      "id": "pit",
+                      "metric": "test-strength",
+                      "sourcePath": "src/main/java",
+                      "pattern": "**/target/pit-reports/mutations.xml"
+                    }
+                  ]
               }
-             ]
+            ]
             }
       - name: Write metrics to GitHub output
         id: metrics
