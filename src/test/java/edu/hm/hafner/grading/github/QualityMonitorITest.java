@@ -291,10 +291,10 @@ public class QualityMonitorITest extends ResourceTest {
                         "Configuration error for 'Unittests'?",
                         "JUnit Score: 100 of 100",
                         "Processing 2 coverage configuration(s)",
-                        "=> JaCoCo Score: 0 of 100",
+                        "=> JaCoCo Score: 100 of 100",
                         "Configuration error for 'Line Coverage'?",
                         "Configuration error for 'Branch Coverage'?",
-                        "=> PIT Score: 0 of 100",
+                        "=> PIT Score: 100 of 100",
                         "Configuration error for 'Mutation Coverage'?",
                         "Processing 2 static analysis configuration(s)",
                         "Configuration error for 'CheckStyle'?",
@@ -305,7 +305,7 @@ public class QualityMonitorITest extends ResourceTest {
                         "=> Style Score: 0 of 100",
                         "-> SpotBugs (spotbugs): No warnings",
                         "=> Bugs Score: 100 of 100",
-                        "Autograding score - 200 of 500"});
+                        "Autograding score - 400 of 500"});
     }
 
     private String runAutoGrading() {
