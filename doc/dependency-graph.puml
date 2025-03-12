@@ -29,7 +29,7 @@ rectangle "jcip-annotations\n\n1.0-1" as com_github_stephenc_jcip_jcip_annotatio
 rectangle "dom4j\n\n2.1.4" as org_dom4j_dom4j_jar
 rectangle "gson\n\n2.12.1" as com_google_code_gson_gson_jar
 rectangle "pmd-core\n\n7.10.0" as net_sourceforge_pmd_pmd_core_jar
-rectangle "slf4j-api\n\n2.0.16" as org_slf4j_slf4j_api_jar
+rectangle "slf4j-api\n\n2.0.17" as org_slf4j_slf4j_api_jar
 rectangle "antlr4-runtime\n\n4.9.3" as org_antlr_antlr4_runtime_jar
 rectangle "checker-qual\n\n3.48.3" as org_checkerframework_checker_qual_jar
 rectangle "pcollections\n\n4.0.2" as org_pcollections_pcollections_jar
@@ -41,15 +41,15 @@ rectangle "accessors-smart\n\n2.5.2" as net_minidev_accessors_smart_jar
 rectangle "asm\n\n3.3.1" as asm_asm_jar
 rectangle "xmlresolver\n\n5.2.2" as org_xmlresolver_xmlresolver_jar
 rectangle "xmlresolver\ndata\n5.2.2" as org_xmlresolver_xmlresolver_jar_data
-rectangle "autograding-model\n\n5.4.0" as edu_hm_hafner_autograding_model_jar
-rectangle "coverage-model\n\n0.53.0" as edu_hm_hafner_coverage_model_jar
+rectangle "autograding-model\n\n6.0.0" as edu_hm_hafner_autograding_model_jar
+rectangle "coverage-model\n\n0.53.1" as edu_hm_hafner_coverage_model_jar
 rectangle "commons-math3\n\n3.6.1" as org_apache_commons_commons_math3_jar
 rectangle "jackson-databind\n\n2.18.3" as com_fasterxml_jackson_core_jackson_databind_jar
 rectangle "jackson-annotations\n\n2.18.3" as com_fasterxml_jackson_core_jackson_annotations_jar
 rectangle "jackson-core\n\n2.18.3" as com_fasterxml_jackson_core_jackson_core_jar
 rectangle "quality-monitor\n\n2.2.0-SNAPSHOT" as edu_hm_hafner_quality_monitor_jar
 rectangle "github-api\n\n1.327" as org_kohsuke_github_api_jar
-rectangle "codingstyle\n\n5.7.0" as edu_hm_hafner_codingstyle_jar
+rectangle "codingstyle\n\n5.8.0" as edu_hm_hafner_codingstyle_jar
 rectangle "spotbugs-annotations\n\n4.9.1" as com_github_spotbugs_spotbugs_annotations_jar
 rectangle "error_prone_annotations\n\n2.36.0" as com_google_errorprone_error_prone_annotations_jar
 rectangle "commons-lang3\n\n3.17.0" as org_apache_commons_commons_lang3_jar
