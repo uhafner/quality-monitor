@@ -34,7 +34,7 @@ jobs:
               "name": "Tests",
               "tools": [
                 {
-                  "id": "test",
+                  "id": "junit",
                   "name": "Tests",
                   "pattern": "**/target/*-reports/TEST*.xml"
                 }
