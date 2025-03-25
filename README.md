@@ -59,7 +59,8 @@ jobs:
 ## Action Parameters
 
 This action can be configured using the following parameters (see example above):
-- ``github-token: ${{ secrets.GITHUB_TOKEN }}``: mandatory GitHub access token.
+- ``github-token: ${{ secrets.GITHUB_TOKEN }}``: optional parameter: GitHub access token. Defaults to ``${{ secrets.GITHUB_TOKEN }}``.
+- ``github-api-url: ${{ github.api_url }}``: optional parameter: GitHub API URL when different that what is given by default. Defaults to ``${{ github.api_url }}``.
 - ``config: "{...}"``: optional configuration, see sections above for details, or consult the [autograding-model](https://github.com/uhafner/autograding-model) project for the exact implementation. If not specified, a [default configuration](https://raw.githubusercontent.com/uhafner/autograding-model/main/src/main/resources/default-no-score-config.json) will be used.
 - ``pr-number: ${{ steps.pr.outputs.number }}``: optional number of the pull request. If not set, then just the checks will be published but not a pull request comment.
 - ``checks-name: "Name of checks"``: optional name of GitHub checks (overwrites the default: "Quality Monitor").
@@ -76,7 +77,6 @@ The individual metrics can be configured by defining an appropriate `config` pro
   - name: Run Quality Monitor
     uses: uhafner/quality-monitor@v1
     with:
-      github-token: ${{ secrets.GITHUB_TOKEN }}
       pr-number: ${{ steps.pr.outputs.number }}
       config: > # Override default configuration: just evaluate the test results
         {
@@ -227,7 +227,6 @@ The action writes a summary of the results to the pull request as well. Since th
       - name: Run Quality Monitor
         uses: uhafner/quality-monitor@v1
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
           pr-number: ${{ steps.pr.outputs.number }}
           checks-name: "Quality Monitor GitHub Action"
           config: {...}
@@ -254,7 +253,6 @@ The results of the action can be used to create various badges that show the cur
   - name: Run Quality Monitor
     uses: uhafner/quality-monitor@v1
     with:
-      github-token: ${{ secrets.GITHUB_TOKEN }}
       pr-number: ${{ steps.pr.outputs.number }}
   - name: Write metrics to GitHub output
     id: metrics
