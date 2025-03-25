@@ -52,14 +52,13 @@ jobs:
       - name: Run Quality Monitor
         uses: uhafner/quality-monitor@v1
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
           pr-number: ${{ steps.pr.outputs.number }}
 ```
 
 ## Action Parameters
 
 This action can be configured using the following parameters (see example above):
-- ``github-token: ${{ secrets.GITHUB_TOKEN }}``: optional parameter: GitHub access token. Defaults to ``${{ secrets.GITHUB_TOKEN }}``.
+- ``github-token: ${{ secrets.GITHUB_TOKEN }}``: optional parameter: GitHub access token. Defaults to ``${{ github.token}}``.
 - ``github-api-url: ${{ github.api_url }}``: optional parameter: GitHub API URL when different that what is given by default. Defaults to ``${{ github.api_url }}``.
 - ``config: "{...}"``: optional configuration, see sections above for details, or consult the [autograding-model](https://github.com/uhafner/autograding-model) project for the exact implementation. If not specified, a [default configuration](https://raw.githubusercontent.com/uhafner/autograding-model/main/src/main/resources/default-no-score-config.json) will be used.
 - ``pr-number: ${{ steps.pr.outputs.number }}``: optional number of the pull request. If not set, then just the checks will be published but not a pull request comment.
@@ -305,6 +304,5 @@ The results of the action can be used to create various badges that show the cur
     uses: ad-m/github-push-action@master
     if: ${{ success() }}
     with:
-      github_token: ${{ secrets.GITHUB_TOKEN }}
       branch: main
 ```
