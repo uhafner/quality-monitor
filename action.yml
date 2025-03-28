@@ -13,7 +13,12 @@ inputs:
     required: false
   github-token:
     description: "GitHub authentication token (GITHUB_TOKEN)"
-    required: true
+    required: false
+    default: ${{github.token}}
+  github-api-url:
+    description: "GitHub API URL (GITHUB_API_URL)"
+    required: false
+    default: ${{github.api_url}}
   skip-annotations:
     description: "Skip the creation of annotations (for warnings and missed coverage) if not empty"
     required: false
@@ -30,10 +35,12 @@ runs:
   using: 'docker'
   image: 'docker://uhafner/quality-monitor:2.5.0-SNAPSHOT'
   env:
+  env:
     CONFIG: ${{ inputs.config }}
     CHECKS_NAME: ${{ inputs.checks-name }}
     PR_NUMBER: ${{ inputs.pr-number }}
     GITHUB_TOKEN: ${{ inputs.github-token }}
+    GITHUB_API_URL: ${{ inputs.github-api-url }}
     SKIP_ANNOTATIONS: ${{ inputs.skip-annotations }}
     SHOW_HEADERS: ${{ inputs.show-headers }}
     MAX_WARNING_ANNOTATIONS: ${{ inputs.max-warning-annotations }}

@@ -108,16 +108,24 @@ public class QualityMonitor extends AutoGradingRunner {
 
                 return;
             }
+
             String oAuthToken = getEnv("GITHUB_TOKEN", log);
             if (oAuthToken.isBlank()) {
                 log.logError("No valid GITHUB_TOKEN found - skipping");
-
                 return;
             }
 
+            String apiUrl = getEnv("GITHUB_API_URL", log);
+
             String sha = getEnv("GITHUB_SHA", log);
 
-            GitHub github = new GitHubBuilder().withAppInstallationToken(oAuthToken).build();
+            GitHubBuilder githubBuilder = new GitHubBuilder()
+                    .withAppInstallationToken(oAuthToken);
+            if (!apiUrl.isBlank()) {
+                githubBuilder.withEndpoint(apiUrl);
+            }
+            GitHub github = githubBuilder.build();
+
             GHCheckRunBuilder check = github.getRepository(repository)
                     .createCheckRun(getChecksName(), sha)
                     .withStatus(Status.COMPLETED)
