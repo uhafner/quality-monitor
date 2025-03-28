@@ -35,7 +35,6 @@ runs:
   using: 'docker'
   image: 'docker://uhafner/quality-monitor:2.6.0-SNAPSHOT'
   env:
-  env:
     CONFIG: ${{ inputs.config }}
     CHECKS_NAME: ${{ inputs.checks-name }}
     PR_NUMBER: ${{ inputs.pr-number }}
