@@ -23,6 +23,7 @@ import org.kohsuke.github.GHCheckRunBuilder;
 import org.kohsuke.github.GHCheckRunBuilder.Output;
 import org.kohsuke.github.GitHub;
 import org.kohsuke.github.GitHubBuilder;
+import org.kohsuke.github.HttpException;
 
 /**
  * GitHub action entrypoint for the quality monitor action.
@@ -143,13 +144,11 @@ public class QualityMonitor extends AutoGradingRunner {
 
             check.add(output);
 
-            GHCheckRun run = check.create();
-            log.logInfo("Successfully created check " + run);
+            var checksResult = createChecksRun(log, check);
 
             var prNumber = getEnv("PR_NUMBER", log);
             if (!prNumber.isBlank()) { // optional PR comment
-                var footer = "Created by %s. More details are shown in the [GitHub Checks Result](%s)."
-                        .formatted(getVersionLink(log), run.getDetailsUrl().toString());
+                var footer = "Created by %s.%s".formatted(getVersionLink(log), checksResult);
                 github.getRepository(repository)
                         .getPullRequest(Integer.parseInt(prNumber))
                         .comment(prSummary + "\n\n" + footer + "\n");
@@ -157,8 +156,33 @@ public class QualityMonitor extends AutoGradingRunner {
             }
         }
         catch (IOException exception) {
-            log.logException(exception, "Could not create check");
+            logException(log, exception, "Could create GitHub comments");
         }
+    }
+
+    private String createChecksRun(final FilteredLog log, final GHCheckRunBuilder check) {
+        try {
+            GHCheckRun run = check.create();
+            log.logInfo("Successfully created check " + run);
+
+            return "More details are shown in the [GitHub Checks Result](%s).".formatted(run.getDetailsUrl().toString());
+        }
+        catch (IOException exception) {
+            logException(log, exception, "Could not create check");
+
+            return "A detailed GitHub Checks Result could not be created, see error log.";
+        }
+    }
+
+    private void logException(final FilteredLog log, final IOException exception, final String message) {
+        String errorMessage;
+        if (exception instanceof HttpException responseException) {
+            errorMessage = responseException.getResponseMessage();
+        }
+        else {
+            errorMessage = exception.getMessage();
+        }
+        log.logError("%s: %s", message, errorMessage);
     }
 
     private String getVersionLink(final FilteredLog log) {
