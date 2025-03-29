@@ -182,7 +182,7 @@ public class QualityMonitor extends AutoGradingRunner {
         else {
             errorMessage = exception.getMessage();
         }
-        log.logError("%s: %s", message, errorMessage);
+        log.logError("%s: %s", message, StringUtils.defaultIfBlank(errorMessage, "no error message available"));
     }
 
     private String getVersionLink(final FilteredLog log) {
