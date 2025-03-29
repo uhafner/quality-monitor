@@ -148,7 +148,7 @@ public class QualityMonitor extends AutoGradingRunner {
 
             var prNumber = getEnv("PR_NUMBER", log);
             if (!prNumber.isBlank()) { // optional PR comment
-                var footer = "Created by %s.%s".formatted(getVersionLink(log), checksResult);
+                var footer = "Created by %s. %s".formatted(getVersionLink(log), checksResult);
                 github.getRepository(repository)
                         .getPullRequest(Integer.parseInt(prNumber))
                         .comment(prSummary + "\n\n" + footer + "\n");
@@ -177,7 +177,7 @@ public class QualityMonitor extends AutoGradingRunner {
     private void logException(final FilteredLog log, final IOException exception, final String message) {
         String errorMessage;
         if (exception instanceof HttpException responseException) {
-            errorMessage = responseException.getResponseMessage();
+            errorMessage = StringUtils.defaultIfBlank(responseException.getResponseMessage(), exception.getMessage());
         }
         else {
             errorMessage = exception.getMessage();
