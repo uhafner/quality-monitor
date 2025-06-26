@@ -2,6 +2,12 @@ package edu.hm.hafner.grading.github;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.MapperFeature;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+
 import edu.hm.hafner.grading.AggregatedScore;
 import edu.hm.hafner.grading.AutoGradingRunner;
 import edu.hm.hafner.grading.GradingReport;
@@ -143,6 +149,18 @@ public class QualityMonitor extends AutoGradingRunner {
             }
 
             check.add(output);
+
+            if (!getEnv("ENABLE_LOGGING", log).isEmpty()) {
+                var mapper = JsonMapper.builder().configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS, true).build()
+                        .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+                        .configure(SerializationFeature.INDENT_OUTPUT, true);
+                try {
+                    log.logInfo("Output JSON parameters:%n%s", mapper.writeValueAsString(output));
+                }
+                catch (JsonProcessingException exception) {
+                    // ignore
+                }
+            }
 
             var checksResult = createChecksRun(log, check);
 

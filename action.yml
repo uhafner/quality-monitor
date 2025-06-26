@@ -25,6 +25,9 @@ inputs:
   show-headers:
     description: "Show headers for each subsection in the summary (if not set, headers are hidden)"
     required: false
+  enable-logging:
+    description: "If set, then logging of the Checks Output JSON parameters is enabled. By default, logging is disabled."
+    required: false
   max-warning-annotations:
     description: "Limit the number of warning annotations at specific lines. By default, all annotations are created."
     required: false
@@ -42,6 +45,7 @@ runs:
     GITHUB_API_URL: ${{ inputs.github-api-url }}
     SKIP_ANNOTATIONS: ${{ inputs.skip-annotations }}
     SHOW_HEADERS: ${{ inputs.show-headers }}
+    ENABLE_LOGGING: ${{ inputs.enable-logging }}
     MAX_WARNING_ANNOTATIONS: ${{ inputs.max-warning-annotations }}
     MAX_COVERAGE_ANNOTATIONS: ${{ inputs.max-coverage-annotations }}
 
