@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import edu.hm.hafner.grading.AggregatedScore;
-import edu.hm.hafner.grading.AggregatedScoreExtensions;
 import edu.hm.hafner.grading.AutoGradingRunner;
 import edu.hm.hafner.grading.GradingReport;
 import edu.hm.hafner.qualitygate.QualityGate;
