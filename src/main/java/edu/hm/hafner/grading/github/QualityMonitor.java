@@ -2,15 +2,12 @@ package edu.hm.hafner.grading.github;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import edu.hm.hafner.grading.AggregatedScore;
-import edu.hm.hafner.grading.AggregatedScoreExtensions;
 import edu.hm.hafner.grading.AutoGradingRunner;
 import edu.hm.hafner.grading.GradingReport;
-import edu.hm.hafner.qualitygate.QualityGate;
-import edu.hm.hafner.qualitygate.QualityGateResult;
+import edu.hm.hafner.grading.QualityGatesConfiguration;
+import edu.hm.hafner.grading.QualityGate;
+import edu.hm.hafner.grading.QualityGateResult;
 import edu.hm.hafner.util.FilteredLog;
 import edu.hm.hafner.util.VisibleForTesting;
 
@@ -18,9 +15,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.text.Normalizer;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -81,20 +76,20 @@ public class QualityMonitor extends AutoGradingRunner {
         var results = new GradingReport();
 
         // Parse and evaluate quality gates
-        var qualityGates = parseQualityGates(log);
+        var qualityGates = QualityGatesConfiguration.parseFromEnvironment("QUALITY_GATES", log);
         var qualityGateResult = evaluateQualityGates(score, qualityGates, log);
         
         // Determine conclusion based on quality gates and errors
         var conclusion = determineConclusion(errors, qualityGateResult, log);
         
         // Add quality gate details to the output
-        var qualityGateDetails = createQualityGateMarkdown(qualityGateResult, log);
+        var qualityGateDetails = qualityGateResult.createMarkdownSummary();
 
         var showHeaders = StringUtils.isNotBlank(getEnv("SHOW_HEADERS", log));
         addComment(score,
                 results.getTextSummary(score, getChecksName()),
                 results.getMarkdownDetails(score, getChecksName()) + errors + qualityGateDetails,
-                results.getSubScoreDetails(score) + errors + qualityGateDetails,
+                results.getSubScoreDetails(score).toString() + errors + qualityGateDetails,
                 results.getMarkdownSummary(score, getChecksName(), showHeaders) + errors + qualityGateDetails,
                 conclusion, log);
 
@@ -238,117 +233,6 @@ public class QualityMonitor extends AutoGradingRunner {
     }
 
     /**
-     * Parses quality gates from JSON following Jenkins coverage plugin format.
-     * JSON format: { "qualityGates": [{ "metric": "line", "threshold": 80.0, "criticality": "FAILURE", "baseline": "PROJECT" }] }
-     *
-     * @param log the logger
-     * @return the list of quality gates
-     */
-    private List<QualityGate> parseQualityGates(final FilteredLog log) {
-        var qualityGates = new ArrayList<QualityGate>();
-        
-        String qualityGatesJson = getEnv("QUALITY_GATES", log);
-        if (StringUtils.isBlank(qualityGatesJson)) {
-            log.logInfo("No quality gates configuration provided");
-            return qualityGates;
-        }
-
-        log.logInfo("Parsing quality gates from JSON configuration");
-        
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            JsonNode rootNode = mapper.readTree(qualityGatesJson);
-            JsonNode qualityGatesNode = rootNode.path("qualityGates");
-            
-            if (!qualityGatesNode.isArray()) {
-                log.logError("Quality gates configuration must contain a 'qualityGates' array");
-                return qualityGates;
-            }
-            
-            for (JsonNode gateNode : qualityGatesNode) {
-                parseQualityGateFromJson(qualityGates, gateNode, log);
-            }
-            
-        } catch (Exception exception) {
-            log.logException(exception, "Error parsing quality gates JSON configuration");
-        }
-
-        log.logInfo("Parsed %d quality gate(s) from JSON configuration", qualityGates.size());
-        return qualityGates;
-    }
-    
-    /**
-     * Parses a single quality gate from JSON node following Jenkins format.
-     *
-     * @param qualityGates the list to add the gate to
-     * @param gateNode the JSON node containing the gate configuration
-     * @param log the logger
-     */
-    private void parseQualityGateFromJson(final List<QualityGate> qualityGates, final JsonNode gateNode, 
-            final FilteredLog log) {
-        
-        String metric = gateNode.path("metric").asText();
-        double threshold = gateNode.path("threshold").asDouble(0.0);
-        String criticalityStr = gateNode.path("criticality").asText("UNSTABLE");
-        String baseline = gateNode.path("baseline").asText("PROJECT");
-
-        // TODO: add support for merging JSON block to override default quality gate config
-        if (StringUtils.isBlank(metric)) {
-            log.logError("Quality gate missing required 'metric' field, skipping");
-            return;
-        }
-        
-        if (threshold <= 0.0) {
-            log.logError("Quality gate for metric '%s' has invalid threshold %f, skipping", metric, threshold);
-            return;
-        }
-        
-        // Only support coverage metrics for now
-        if (!isSupportedCoverageMetric(metric)) {
-            log.logError("Quality gate metric '%s' is not supported (only coverage metrics: line, branch, instruction, mutation), skipping", metric);
-            return;
-        }
-        
-        var criticality = parseCriticality(criticalityStr, log);
-
-        // Currently only support >= threshold for coverage metrics
-        var operator = QualityGate.Operator.GREATER_THAN_OR_EQUAL;
-        
-        // Create display name
-        String gateName = String.format("%s Coverage", StringUtils.capitalize(metric));
-        
-        var gate = new QualityGate(gateName, metric, threshold, operator, criticality, true);
-        qualityGates.add(gate);
-        
-        log.logInfo("Added quality gate: %s >= %.1f%% (%s, baseline: %s)", 
-                gateName.toLowerCase(Locale.ROOT), threshold, criticality, baseline);
-    }
-    
-    /**
-     * Checks if the metric is a supported coverage metric.
-     *
-     * @param metric the metric name
-     * @return true if supported, false otherwise
-     */
-    private boolean isSupportedCoverageMetric(final String metric) {
-        return "line".equals(metric) || "branch".equals(metric) || 
-               "instruction".equals(metric) || "mutation".equals(metric);
-    }
-
-    /**
-     * Parses criticality from string.
-     */
-    private QualityGate.Criticality parseCriticality(final String criticalityStr, final FilteredLog log) {
-        try {
-            return QualityGate.Criticality.valueOf(criticalityStr.toUpperCase(Locale.ROOT));
-        }
-        catch (IllegalArgumentException exception) {
-            log.logError("Unknown criticality '%s', using UNSTABLE", criticalityStr);
-            return QualityGate.Criticality.UNSTABLE;
-        }
-    }
-
-    /**
      * Evaluates quality gates against the aggregated score.
      *
      * @param score the aggregated score
@@ -364,7 +248,7 @@ public class QualityMonitor extends AutoGradingRunner {
 
         log.logInfo("Evaluating %d quality gate(s)", qualityGates.size());
         
-        var result = AggregatedScoreExtensions.evaluateQualityGates(score, qualityGates);
+        var result = QualityGateResult.evaluate(score.getMetrics(), qualityGates);
         
         log.logInfo("Quality gates evaluation completed: %s", result.getOverallStatus());
         log.logInfo("  Passed: %d, Failed: %d", result.getSuccessCount(), result.getFailureCount());
@@ -410,60 +294,6 @@ public class QualityMonitor extends AutoGradingRunner {
     }
 
     /**
-     * Creates markdown content for quality gate results.
-     *
-     * @param result the quality gate result
-     * @param log the logger
-     * @return the markdown content
-     */
-    private String createQualityGateMarkdown(final QualityGateResult result, final FilteredLog log) {
-        if (result.getEvaluations().isEmpty()) {
-            return "";
-        }
-
-        var markdown = new StringBuilder();
-        markdown.append("\n\n## 🚦 Quality Gates\n\n");
-        
-        var status = result.getOverallStatus();
-        String statusIcon;
-        switch (status) {
-            case SUCCESS:
-                statusIcon = "✅";
-                break;
-            case UNSTABLE:
-                statusIcon = "⚠️";
-                break;
-            case FAILURE:
-                statusIcon = "❌";
-                break;
-            default:
-                statusIcon = "❓";
-                break;
-        }
-        
-        markdown.append(String.format("**Overall Status:** %s %s\n\n", statusIcon, status));
-        markdown.append(String.format("**Summary:** %d total, %d passed, %d failed\n\n", 
-                result.getEvaluations().size(), result.getSuccessCount(), result.getFailureCount()));
-
-        if (result.getFailureCount() > 0) {
-            markdown.append("### Failed Gates\n\n");
-            for (var evaluation : result.getFailedEvaluations()) {
-                markdown.append(String.format("- %s\n", evaluation.getMessage()));
-            }
-            markdown.append("\n");
-        }
-
-        if (result.getSuccessCount() > 0) {
-            markdown.append("### Passed Gates\n\n");
-            for (var evaluation : result.getSuccessfulEvaluations()) {
-                markdown.append(String.format("- %s\n", evaluation.getMessage()));
-            }
-        }
-
-        return markdown.toString();
-    }
-
-    /**
      * Creates a title based on the metrics.
      *
      * @param score the aggregated score
@@ -472,7 +302,7 @@ public class QualityMonitor extends AutoGradingRunner {
      */
     private String createMetricsBasedTitle(final AggregatedScore score, final FilteredLog log) {
         // Get the requested metric to show in title (default: "line")
-        var titleMetric = getEnv("COVERAGE_TITLE_METRIC", log).toLowerCase(Locale.ROOT);
+        var titleMetric = getEnv("TITLE_METRIC", log).toLowerCase(Locale.ENGLISH);
         if (titleMetric.isBlank()) {
             titleMetric = "line";
         }

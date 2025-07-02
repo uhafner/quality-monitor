@@ -31,7 +31,7 @@ inputs:
   max-coverage-annotations:
     description: "Limit the number of coverage annotations at specific lines. By default, all annotations are created."
     required: false
-  coverage-title-metric:
+  title-metric:
     description: "Which metric to show in the GitHub check title (options: line, branch, instruction, mutation, style-issues, none)"
     required: false
   quality-gates:
@@ -51,7 +51,7 @@ runs:
     SHOW_HEADERS: ${{ inputs.show-headers }}
     MAX_WARNING_ANNOTATIONS: ${{ inputs.max-warning-annotations }}
     MAX_COVERAGE_ANNOTATIONS: ${{ inputs.max-coverage-annotations }}
-    COVERAGE_TITLE_METRIC: ${{ inputs.coverage-title-metric }}
+    TITLE_METRIC: ${{ inputs.title-metric }}
     QUALITY_GATES: ${{ inputs.quality-gates }}
 
 branding:
