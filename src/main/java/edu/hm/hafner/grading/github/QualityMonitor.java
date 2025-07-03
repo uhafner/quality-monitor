@@ -77,7 +77,7 @@ public class QualityMonitor extends AutoGradingRunner {
 
         // Parse and evaluate quality gates
         var qualityGates = QualityGatesConfiguration.parseFromEnvironment("QUALITY_GATES", log);
-        var qualityGateResult = evaluateQualityGates(score, qualityGates, log);
+        var qualityGateResult = QualityGateResult.evaluate(score.getMetrics(), qualityGates, log);
         
         // Determine conclusion based on quality gates and errors
         var conclusion = determineConclusion(errors, qualityGateResult, log);
@@ -230,38 +230,6 @@ public class QualityMonitor extends AutoGradingRunner {
         String value = StringUtils.defaultString(System.getenv(key));
         log.logInfo(">>>> " + key + ": " + value);
         return value;
-    }
-
-    /**
-     * Evaluates quality gates against the aggregated score.
-     *
-     * @param score the aggregated score
-     * @param qualityGates the quality gates to evaluate
-     * @param log the logger
-     * @return the evaluation result
-     */
-    private QualityGateResult evaluateQualityGates(final AggregatedScore score, 
-            final List<QualityGate> qualityGates, final FilteredLog log) {
-        if (qualityGates.isEmpty()) {
-            return new QualityGateResult();
-        }
-
-        log.logInfo("Evaluating %d quality gate(s)", qualityGates.size());
-        
-        var result = QualityGateResult.evaluate(score.getMetrics(), qualityGates);
-        
-        log.logInfo("Quality gates evaluation completed: %s", result.getOverallStatus());
-        log.logInfo("  Passed: %d, Failed: %d", result.getSuccessCount(), result.getFailureCount());
-        
-        for (var evaluation : result.getEvaluations()) {
-            if (evaluation.isPassed()) {
-                log.logInfo("  ✅ %s", evaluation.getMessage());
-            } else {
-                log.logError("  ❌ %s", evaluation.getMessage());
-            }
-        }
-        
-        return result;
     }
 
     /**
