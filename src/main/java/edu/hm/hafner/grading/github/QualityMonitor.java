@@ -5,6 +5,8 @@ import org.apache.commons.lang3.StringUtils;
 import edu.hm.hafner.grading.AggregatedScore;
 import edu.hm.hafner.grading.AutoGradingRunner;
 import edu.hm.hafner.grading.GradingReport;
+import edu.hm.hafner.grading.QualityGatesConfiguration;
+import edu.hm.hafner.grading.QualityGateResult;
 import edu.hm.hafner.util.FilteredLog;
 import edu.hm.hafner.util.VisibleForTesting;
 
@@ -14,6 +16,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import org.kohsuke.github.GHCheckRun;
@@ -71,13 +74,23 @@ public class QualityMonitor extends AutoGradingRunner {
 
         var results = new GradingReport();
 
+        // Parse and evaluate quality gates
+        var qualityGates = QualityGatesConfiguration.parseFromEnvironment("QUALITY_GATES", log);
+        var qualityGateResult = QualityGateResult.evaluate(score.getMetrics(), qualityGates, log);
+        
+        // Determine conclusion based on quality gates and errors
+        var conclusion = determineConclusion(errors, qualityGateResult, log);
+        
+        // Add quality gate details to the output
+        var qualityGateDetails = qualityGateResult.createMarkdownSummary();
+
         var showHeaders = StringUtils.isNotBlank(getEnv("SHOW_HEADERS", log));
         addComment(score,
                 results.getTextSummary(score, getChecksName()),
-                results.getMarkdownDetails(score, getChecksName()) + errors,
-                results.getSubScoreDetails(score) + errors,
-                results.getMarkdownSummary(score, getChecksName(), showHeaders) + errors,
-                errors.isBlank() ? Conclusion.SUCCESS : Conclusion.FAILURE, log);
+                results.getMarkdownDetails(score, getChecksName()) + errors + qualityGateDetails,
+                results.getSubScoreDetails(score).toString() + errors + qualityGateDetails,
+                results.getMarkdownSummary(score, getChecksName(), showHeaders) + errors + qualityGateDetails,
+                conclusion, log);
 
         try {
             var environmentVariables = createEnvironmentVariables(score, log);
@@ -128,7 +141,7 @@ public class QualityMonitor extends AutoGradingRunner {
             GitHub github = githubBuilder.build();
 
             GHCheckRunBuilder check = github.getRepository(repository)
-                    .createCheckRun(getChecksName(), sha)
+                    .createCheckRun(createMetricsBasedTitle(score, log), sha)
                     .withStatus(Status.COMPLETED)
                     .withStartedAt(Date.from(Instant.now()))
                     .withConclusion(conclusion);
@@ -216,5 +229,101 @@ public class QualityMonitor extends AutoGradingRunner {
         String value = StringUtils.defaultString(System.getenv(key));
         log.logInfo(">>>> " + key + ": " + value);
         return value;
+    }
+
+    /**
+     * Determines the GitHub check conclusion based on errors and quality gate results.
+     *
+     * @param errors the error messages
+     * @param qualityGateResult the quality gate evaluation result
+     * @param log the logger
+     * @return the conclusion
+     */
+    private Conclusion determineConclusion(final String errors, final QualityGateResult qualityGateResult, 
+            final FilteredLog log) {
+        if (!errors.isBlank()) {
+            log.logInfo("Setting conclusion to FAILURE due to errors");
+            return Conclusion.FAILURE;
+        }
+
+        var status = qualityGateResult.getOverallStatus();
+        switch (status) {
+            case FAILURE:
+                log.logInfo("Setting conclusion to FAILURE due to quality gate failures");
+                return Conclusion.FAILURE;
+            case UNSTABLE:
+                log.logInfo("Setting conclusion to NEUTRAL due to quality gate warnings");
+                return Conclusion.NEUTRAL;
+            default:
+                log.logInfo("Setting conclusion to SUCCESS - all quality gates passed");
+                return Conclusion.SUCCESS;
+        }
+    }
+
+    /**
+     * Creates a title based on the metrics.
+     *
+     * @param score the aggregated score
+     * @param log the logger
+     * @return the title
+     */
+    private String createMetricsBasedTitle(final AggregatedScore score, final FilteredLog log) {
+        // Get the requested metric to show in title (default: "line")
+        var titleMetric = getEnv("TITLE_METRIC", log).toLowerCase(Locale.ENGLISH);
+        if (titleMetric.isBlank()) {
+            titleMetric = "line";
+        }
+        
+        // If user wants no metric in title
+        if ("none".equals(titleMetric)) {
+            return getChecksName();
+        }
+        
+        var metrics = score.getMetrics();
+        
+        // Show the requested metric
+        switch (titleMetric) {
+            case "line":
+                var lineCoverage = metrics.get("line");
+                if (lineCoverage != null) {
+                    return String.format("%s - Line Coverage: %d%%", getChecksName(), lineCoverage);
+                }
+                break;
+                
+            case "branch":
+                var branchCoverage = metrics.get("branch");
+                if (branchCoverage != null) {
+                    return String.format("%s - Branch Coverage: %d%%", getChecksName(), branchCoverage);
+                }
+                break;
+                
+            case "instruction":
+                var instructionCoverage = metrics.get("instruction");
+                if (instructionCoverage != null) {
+                    return String.format("%s - Instruction Coverage: %d%%", getChecksName(), instructionCoverage);
+                }
+                break;
+                
+            case "mutation":
+                var mutationCoverage = metrics.get("mutation");
+                if (mutationCoverage != null) {
+                    return String.format("%s - Mutation Coverage: %d%%", getChecksName(), mutationCoverage);
+                }
+                break;
+                
+            case "style-issues":
+                var checkstyle = metrics.getOrDefault("checkstyle", 0);
+                var pmd = metrics.getOrDefault("pmd", 0);
+                var totalIssues = checkstyle + pmd;
+                return String.format("%s - %d Style Issues", getChecksName(), totalIssues);
+        }
+        
+        // Default to line coverage
+        var lineCoverage = metrics.get("line");
+        if (lineCoverage != null) {
+            return String.format("%s - Line Coverage: %d%%", getChecksName(), lineCoverage);
+        }
+        
+        return getChecksName();
     }
 }
