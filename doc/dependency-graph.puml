@@ -41,7 +41,7 @@ rectangle "accessors-smart\n\n2.5.2" as net_minidev_accessors_smart_jar
 rectangle "asm\n\n3.3.1" as asm_asm_jar
 rectangle "xmlresolver\n\n5.3.3" as org_xmlresolver_xmlresolver_jar
 rectangle "xmlresolver\ndata\n5.3.3" as org_xmlresolver_xmlresolver_jar_data
-rectangle "autograding-model\n\n6.5.0" as edu_hm_hafner_autograding_model_jar
+rectangle "autograding-model\n\n7.0.0" as edu_hm_hafner_autograding_model_jar
 rectangle "coverage-model\n\n0.55.0" as edu_hm_hafner_coverage_model_jar
 rectangle "commons-math3\n\n3.6.1" as org_apache_commons_commons_math3_jar
 rectangle "jackson-databind\n\n2.19.1" as com_fasterxml_jackson_core_jackson_databind_jar
@@ -51,7 +51,7 @@ rectangle "quality-monitor\n\n3.0.0-SNAPSHOT" as edu_hm_hafner_quality_monitor_j
 rectangle "github-api\n\n1.327" as org_kohsuke_github_api_jar
 rectangle "codingstyle\n\n5.14.0" as edu_hm_hafner_codingstyle_jar
 rectangle "spotbugs-annotations\n\n4.9.3" as com_github_spotbugs_spotbugs_annotations_jar
-rectangle "error_prone_annotations\n\n2.38.0" as com_google_errorprone_error_prone_annotations_jar
+rectangle "error_prone_annotations\n\n2.39.0" as com_google_errorprone_error_prone_annotations_jar
 rectangle "commons-lang3\n\n3.17.0" as org_apache_commons_commons_lang3_jar
 rectangle "commons-io\n\n2.19.0" as commons_io_commons_io_jar
 rectangle "streamex\n\n0.8.3" as one_util_streamex_jar
