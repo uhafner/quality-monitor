@@ -280,7 +280,6 @@ public class QualityMonitor extends AutoGradingRunner {
      *
      * @return the title
      */
-    @SuppressWarnings("PMD.CyclomaticComplexity")
     private String createMetricsBasedTitle(final AggregatedScore score, final FilteredLog log) {
         // Get the requested metric to show in title (default: "line")
         var titleMetric = StringUtils.defaultIfBlank(
