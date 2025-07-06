@@ -2,6 +2,7 @@ package edu.hm.hafner.grading.github;
 
 import org.apache.commons.lang3.StringUtils;
 
+import edu.hm.hafner.coverage.Metric;
 import edu.hm.hafner.grading.AggregatedScore;
 import edu.hm.hafner.grading.AutoGradingRunner;
 import edu.hm.hafner.grading.GradingReport;
@@ -36,6 +37,7 @@ public class QualityMonitor extends AutoGradingRunner {
     static final String QUALITY_MONITOR = "Quality Monitor";
 
     private static final String NO_TITLE = "none";
+    private static final String DEFAULT_TITLE_METRIC = "line";
 
     /**
      * Public entry point for the GitHub action in the docker container, simply calls the action.
@@ -281,10 +283,9 @@ public class QualityMonitor extends AutoGradingRunner {
     @SuppressWarnings("PMD.CyclomaticComplexity")
     private String createMetricsBasedTitle(final AggregatedScore score, final FilteredLog log) {
         // Get the requested metric to show in title (default: "line")
-        var titleMetric = StringUtils.lowerCase(getEnv("TITLE_METRIC", log));
-        if (titleMetric.isBlank()) {
-            titleMetric = "line";
-        }
+        var titleMetric = StringUtils.defaultIfBlank(
+                StringUtils.lowerCase(getEnv("TITLE_METRIC", log)),
+                DEFAULT_TITLE_METRIC);
 
         // If the user wants no metric in title
         if (NO_TITLE.equals(titleMetric)) {
@@ -293,51 +294,25 @@ public class QualityMonitor extends AutoGradingRunner {
 
         var metrics = score.getMetrics();
 
-        // Show the requested metric
-        switch (titleMetric) {
-            case "line":
-                var lineCoverage = metrics.get("line");
-                if (lineCoverage != null) {
-                    return String.format(Locale.ENGLISH, "%s - Line Coverage: %d%%", getChecksName(), lineCoverage);
-                }
-                break;
+        if (!metrics.containsKey(titleMetric)) {
+            log.logInfo("Requested title metric '%s' not found in metrics: %s", titleMetric, metrics.keySet());
+            log.logInfo("Falling back to default metric %s", DEFAULT_TITLE_METRIC);
 
-            case "branch":
-                var branchCoverage = metrics.get("branch");
-                if (branchCoverage != null) {
-                    return String.format(Locale.ENGLISH, "%s - Branch Coverage: %d%%", getChecksName(), branchCoverage);
-                }
-                break;
-
-            case "instruction":
-                var instructionCoverage = metrics.get("instruction");
-                if (instructionCoverage != null) {
-                    return String.format(Locale.ENGLISH, "%s - Instruction Coverage: %d%%", getChecksName(), instructionCoverage);
-                }
-                break;
-
-            case "mutation":
-                var mutationCoverage = metrics.get("mutation");
-                if (mutationCoverage != null) {
-                    return String.format(Locale.ENGLISH, "%s - Mutation Coverage: %d%%", getChecksName(), mutationCoverage);
-                }
-                break;
-
-            case "style-issues":
-                var checkstyle = metrics.getOrDefault("checkstyle", 0);
-                var pmd = metrics.getOrDefault("pmd", 0);
-                var totalIssues = checkstyle + pmd;
-                return String.format(Locale.ENGLISH, "%s - %d Style Issues", getChecksName(), totalIssues);
-
-            default:
-                // fallback below
+            titleMetric = DEFAULT_TITLE_METRIC; // Fallback to default metric
         }
 
-        // Default to line coverage
-        var lineCoverage = metrics.get("line");
-        if (lineCoverage != null) {
-            return String.format(Locale.ENGLISH, "%s - Line Coverage: %d%%", getChecksName(), lineCoverage);
+        if (metrics.containsKey(titleMetric)) {
+            try {
+                var metric = Metric.fromName(titleMetric);
+                return String.format(Locale.ENGLISH, "%s - %s: %s", getChecksName(),
+                        metric.getDisplayName(), metric.format(Locale.ENGLISH, metrics.get(titleMetric)));
+            }
+            catch (IllegalArgumentException exception) {
+                return String.format(Locale.ENGLISH, "%s - %s: %d", getChecksName(),
+                        titleMetric, metrics.getOrDefault(titleMetric, 0));
+            }
         }
+        log.logInfo("Requested title metric '%s' not found in metrics: %s", titleMetric, metrics.keySet());
 
         return getChecksName();
     }
