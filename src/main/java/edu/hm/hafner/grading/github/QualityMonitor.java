@@ -5,8 +5,8 @@ import org.apache.commons.lang3.StringUtils;
 import edu.hm.hafner.grading.AggregatedScore;
 import edu.hm.hafner.grading.AutoGradingRunner;
 import edu.hm.hafner.grading.GradingReport;
-import edu.hm.hafner.grading.QualityGatesConfiguration;
 import edu.hm.hafner.grading.QualityGateResult;
+import edu.hm.hafner.grading.QualityGatesConfiguration;
 import edu.hm.hafner.util.FilteredLog;
 import edu.hm.hafner.util.VisibleForTesting;
 
@@ -16,7 +16,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 import org.kohsuke.github.GHCheckRun;
@@ -36,12 +35,14 @@ import org.kohsuke.github.HttpException;
 public class QualityMonitor extends AutoGradingRunner {
     static final String QUALITY_MONITOR = "Quality Monitor";
 
+    private static final String NO_TITLE = "none";
+
     /**
-         * Public entry point for the GitHub action in the docker container, simply calls the action.
-         *
-         * @param unused
-         *         not used
-         */
+     * Public entry point for the GitHub action in the docker container, simply calls the action.
+     *
+     * @param unused
+     *         not used
+     */
     public static void main(final String... unused) {
         new QualityMonitor().run();
     }
@@ -77,10 +78,10 @@ public class QualityMonitor extends AutoGradingRunner {
         // Parse and evaluate quality gates
         var qualityGates = QualityGatesConfiguration.parseFromEnvironment("QUALITY_GATES", log);
         var qualityGateResult = QualityGateResult.evaluate(score.getMetrics(), qualityGates, log);
-        
+
         // Determine conclusion based on quality gates and errors
         var conclusion = determineConclusion(errors, qualityGateResult, log);
-        
+
         // Add quality gate details to the output
         var qualityGateDetails = qualityGateResult.createMarkdownSummary();
 
@@ -178,7 +179,8 @@ public class QualityMonitor extends AutoGradingRunner {
             GHCheckRun run = check.create();
             log.logInfo("Successfully created check " + run);
 
-            return "More details are shown in the [GitHub Checks Result](%s).".formatted(run.getDetailsUrl().toString());
+            return "More details are shown in the [GitHub Checks Result](%s).".formatted(
+                    run.getDetailsUrl().toString());
         }
         catch (IOException exception) {
             logException(log, exception, "Could not create check");
@@ -234,96 +236,109 @@ public class QualityMonitor extends AutoGradingRunner {
     /**
      * Determines the GitHub check conclusion based on errors and quality gate results.
      *
-     * @param errors the error messages
-     * @param qualityGateResult the quality gate evaluation result
-     * @param log the logger
+     * @param errors
+     *         the error messages
+     * @param qualityGateResult
+     *         the quality gate evaluation result
+     * @param log
+     *         the logger
+     *
      * @return the conclusion
      */
-    private Conclusion determineConclusion(final String errors, final QualityGateResult qualityGateResult, 
+    private Conclusion determineConclusion(final String errors, final QualityGateResult qualityGateResult,
             final FilteredLog log) {
         if (!errors.isBlank()) {
             log.logInfo("Setting conclusion to FAILURE due to errors");
             return Conclusion.FAILURE;
         }
 
-        var status = qualityGateResult.getOverallStatus();
-        switch (status) {
-            case FAILURE:
+        return switch (qualityGateResult.getOverallStatus()) {
+            case FAILURE -> {
                 log.logInfo("Setting conclusion to FAILURE due to quality gate failures");
-                return Conclusion.FAILURE;
-            case UNSTABLE:
+                yield Conclusion.FAILURE;
+            }
+            case UNSTABLE -> {
                 log.logInfo("Setting conclusion to NEUTRAL due to quality gate warnings");
-                return Conclusion.NEUTRAL;
-            default:
+                yield Conclusion.NEUTRAL;
+            }
+            default -> {
                 log.logInfo("Setting conclusion to SUCCESS - all quality gates passed");
-                return Conclusion.SUCCESS;
-        }
+                yield Conclusion.SUCCESS;
+            }
+        };
     }
 
     /**
      * Creates a title based on the metrics.
      *
-     * @param score the aggregated score
-     * @param log the logger
+     * @param score
+     *         the aggregated score
+     * @param log
+     *         the logger
+     *
      * @return the title
      */
+    @SuppressWarnings("PMD.CyclomaticComplexity")
     private String createMetricsBasedTitle(final AggregatedScore score, final FilteredLog log) {
         // Get the requested metric to show in title (default: "line")
-        var titleMetric = getEnv("TITLE_METRIC", log).toLowerCase(Locale.ENGLISH);
+        var titleMetric = StringUtils.lowerCase(getEnv("TITLE_METRIC", log));
         if (titleMetric.isBlank()) {
             titleMetric = "line";
         }
-        
-        // If user wants no metric in title
-        if ("none".equals(titleMetric)) {
+
+        // If the user wants no metric in title
+        if (NO_TITLE.equals(titleMetric)) {
             return getChecksName();
         }
-        
+
         var metrics = score.getMetrics();
-        
+
         // Show the requested metric
         switch (titleMetric) {
             case "line":
                 var lineCoverage = metrics.get("line");
                 if (lineCoverage != null) {
-                    return String.format("%s - Line Coverage: %d%%", getChecksName(), lineCoverage);
+                    return String.format(Locale.ENGLISH, "%s - Line Coverage: %d%%", getChecksName(), lineCoverage);
                 }
                 break;
-                
+
             case "branch":
                 var branchCoverage = metrics.get("branch");
                 if (branchCoverage != null) {
-                    return String.format("%s - Branch Coverage: %d%%", getChecksName(), branchCoverage);
+                    return String.format(Locale.ENGLISH, "%s - Branch Coverage: %d%%", getChecksName(), branchCoverage);
                 }
                 break;
-                
+
             case "instruction":
                 var instructionCoverage = metrics.get("instruction");
                 if (instructionCoverage != null) {
-                    return String.format("%s - Instruction Coverage: %d%%", getChecksName(), instructionCoverage);
+                    return String.format(Locale.ENGLISH, "%s - Instruction Coverage: %d%%", getChecksName(), instructionCoverage);
                 }
                 break;
-                
+
             case "mutation":
                 var mutationCoverage = metrics.get("mutation");
                 if (mutationCoverage != null) {
-                    return String.format("%s - Mutation Coverage: %d%%", getChecksName(), mutationCoverage);
+                    return String.format(Locale.ENGLISH, "%s - Mutation Coverage: %d%%", getChecksName(), mutationCoverage);
                 }
                 break;
-                
+
             case "style-issues":
                 var checkstyle = metrics.getOrDefault("checkstyle", 0);
                 var pmd = metrics.getOrDefault("pmd", 0);
                 var totalIssues = checkstyle + pmd;
-                return String.format("%s - %d Style Issues", getChecksName(), totalIssues);
+                return String.format(Locale.ENGLISH, "%s - %d Style Issues", getChecksName(), totalIssues);
+
+            default:
+                // fallback below
         }
-        
+
         // Default to line coverage
         var lineCoverage = metrics.get("line");
         if (lineCoverage != null) {
-            return String.format("%s - Line Coverage: %d%%", getChecksName(), lineCoverage);
+            return String.format(Locale.ENGLISH, "%s - Line Coverage: %d%%", getChecksName(), lineCoverage);
         }
-        
+
         return getChecksName();
     }
 }
