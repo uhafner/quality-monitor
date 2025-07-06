@@ -2,9 +2,12 @@ package edu.hm.hafner.grading.github;
 
 import org.apache.commons.lang3.StringUtils;
 
+import edu.hm.hafner.coverage.Metric;
 import edu.hm.hafner.grading.AggregatedScore;
 import edu.hm.hafner.grading.AutoGradingRunner;
 import edu.hm.hafner.grading.GradingReport;
+import edu.hm.hafner.grading.QualityGateResult;
+import edu.hm.hafner.grading.QualityGatesConfiguration;
 import edu.hm.hafner.util.FilteredLog;
 import edu.hm.hafner.util.VisibleForTesting;
 
@@ -33,12 +36,15 @@ import org.kohsuke.github.HttpException;
 public class QualityMonitor extends AutoGradingRunner {
     static final String QUALITY_MONITOR = "Quality Monitor";
 
+    private static final String NO_TITLE = "none";
+    private static final String DEFAULT_TITLE_METRIC = "line";
+
     /**
-         * Public entry point for the GitHub action in the docker container, simply calls the action.
-         *
-         * @param unused
-         *         not used
-         */
+     * Public entry point for the GitHub action in the docker container, simply calls the action.
+     *
+     * @param unused
+     *         not used
+     */
     public static void main(final String... unused) {
         new QualityMonitor().run();
     }
@@ -71,13 +77,23 @@ public class QualityMonitor extends AutoGradingRunner {
 
         var results = new GradingReport();
 
+        // Parse and evaluate quality gates
+        var qualityGates = QualityGatesConfiguration.parseFromEnvironment("QUALITY_GATES", log);
+        var qualityGateResult = QualityGateResult.evaluate(score.getMetrics(), qualityGates, log);
+
+        // Determine conclusion based on quality gates and errors
+        var conclusion = determineConclusion(errors, qualityGateResult, log);
+
+        // Add quality gate details to the output
+        var qualityGateDetails = qualityGateResult.createMarkdownSummary();
+
         var showHeaders = StringUtils.isNotBlank(getEnv("SHOW_HEADERS", log));
         addComment(score,
                 results.getTextSummary(score, getChecksName()),
-                results.getMarkdownDetails(score, getChecksName()) + errors,
-                results.getSubScoreDetails(score) + errors,
-                results.getMarkdownSummary(score, getChecksName(), showHeaders) + errors,
-                errors.isBlank() ? Conclusion.SUCCESS : Conclusion.FAILURE, log);
+                results.getMarkdownDetails(score, getChecksName()) + errors + qualityGateDetails,
+                results.getSubScoreDetails(score).toString() + errors + qualityGateDetails,
+                results.getMarkdownSummary(score, getChecksName(), showHeaders) + errors + qualityGateDetails,
+                conclusion, log);
 
         try {
             var environmentVariables = createEnvironmentVariables(score, log);
@@ -128,7 +144,7 @@ public class QualityMonitor extends AutoGradingRunner {
             GitHub github = githubBuilder.build();
 
             GHCheckRunBuilder check = github.getRepository(repository)
-                    .createCheckRun(getChecksName(), sha)
+                    .createCheckRun(createMetricsBasedTitle(score, log), sha)
                     .withStatus(Status.COMPLETED)
                     .withStartedAt(Date.from(Instant.now()))
                     .withConclusion(conclusion);
@@ -165,7 +181,8 @@ public class QualityMonitor extends AutoGradingRunner {
             GHCheckRun run = check.create();
             log.logInfo("Successfully created check " + run);
 
-            return "More details are shown in the [GitHub Checks Result](%s).".formatted(run.getDetailsUrl().toString());
+            return "More details are shown in the [GitHub Checks Result](%s).".formatted(
+                    run.getDetailsUrl().toString());
         }
         catch (IOException exception) {
             logException(log, exception, "Could not create check");
@@ -216,5 +233,86 @@ public class QualityMonitor extends AutoGradingRunner {
         String value = StringUtils.defaultString(System.getenv(key));
         log.logInfo(">>>> " + key + ": " + value);
         return value;
+    }
+
+    /**
+     * Determines the GitHub check conclusion based on errors and quality gate results.
+     *
+     * @param errors
+     *         the error messages
+     * @param qualityGateResult
+     *         the quality gate evaluation result
+     * @param log
+     *         the logger
+     *
+     * @return the conclusion
+     */
+    private Conclusion determineConclusion(final String errors, final QualityGateResult qualityGateResult,
+            final FilteredLog log) {
+        if (!errors.isBlank()) {
+            log.logInfo("Setting conclusion to FAILURE due to errors");
+            return Conclusion.FAILURE;
+        }
+
+        return switch (qualityGateResult.getOverallStatus()) {
+            case FAILURE -> {
+                log.logInfo("Setting conclusion to FAILURE due to quality gate failures");
+                yield Conclusion.FAILURE;
+            }
+            case UNSTABLE -> {
+                log.logInfo("Setting conclusion to NEUTRAL due to quality gate warnings");
+                yield Conclusion.NEUTRAL;
+            }
+            default -> {
+                log.logInfo("Setting conclusion to SUCCESS - all quality gates passed");
+                yield Conclusion.SUCCESS;
+            }
+        };
+    }
+
+    /**
+     * Creates a title based on the metrics.
+     *
+     * @param score
+     *         the aggregated score
+     * @param log
+     *         the logger
+     *
+     * @return the title
+     */
+    private String createMetricsBasedTitle(final AggregatedScore score, final FilteredLog log) {
+        // Get the requested metric to show in title (default: "line")
+        var titleMetric = StringUtils.defaultIfBlank(
+                StringUtils.lowerCase(getEnv("TITLE_METRIC", log)),
+                DEFAULT_TITLE_METRIC);
+
+        // If the user wants no metric in title
+        if (NO_TITLE.equals(titleMetric)) {
+            return getChecksName();
+        }
+
+        var metrics = score.getMetrics();
+
+        if (!metrics.containsKey(titleMetric)) {
+            log.logInfo("Requested title metric '%s' not found in metrics: %s", titleMetric, metrics.keySet());
+            log.logInfo("Falling back to default metric %s", DEFAULT_TITLE_METRIC);
+
+            titleMetric = DEFAULT_TITLE_METRIC; // Fallback to default metric
+        }
+
+        if (metrics.containsKey(titleMetric)) {
+            try {
+                var metric = Metric.fromName(titleMetric);
+                return String.format(Locale.ENGLISH, "%s - %s: %s", getChecksName(),
+                        metric.getDisplayName(), metric.format(Locale.ENGLISH, metrics.get(titleMetric)));
+            }
+            catch (IllegalArgumentException exception) {
+                return String.format(Locale.ENGLISH, "%s - %s: %d", getChecksName(),
+                        titleMetric, metrics.getOrDefault(titleMetric, 0));
+            }
+        }
+        log.logInfo("Requested title metric '%s' not found in metrics: %s", titleMetric, metrics.keySet());
+
+        return getChecksName();
     }
 }
