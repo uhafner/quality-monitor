@@ -237,16 +237,16 @@ public class QualityMonitor extends AutoGradingRunner {
 
     /**
      * Gets the SHA to use for the quality monitor check. First checks for a custom SHA
-     * (CUSTOM_SHA) which takes precedence over the default GITHUB_SHA.
+     * (SHA) which takes precedence over the default GITHUB_SHA.
      * This allows workflows to override the SHA used for quality monitoring when needed.
      *
      * @param log the logger
      * @return the SHA to use for the check
      */
     private String getCustomSha(final FilteredLog log) {
-        String customSha = getEnv("CUSTOM_SHA", log);
+        String customSha = getEnv("SHA", log);
         if (!customSha.isBlank()) {
-            log.logInfo("Using custom SHA from CUSTOM_SHA: " + customSha);
+            log.logInfo("Using custom SHA from SHA: " + customSha);
             return customSha;
         }
         

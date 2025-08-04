@@ -56,7 +56,7 @@ runs:
     MAX_COVERAGE_ANNOTATIONS: ${{ inputs.max-coverage-annotations }}
     TITLE_METRIC: ${{ inputs.title-metric }}
     QUALITY_GATES: ${{ inputs.quality-gates }}
-    CUSTOM_SHA: ${{ inputs.sha }}
+    SHA: ${{ inputs.sha }}
 
 branding:
   icon: check-square
