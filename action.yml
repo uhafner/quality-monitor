@@ -37,6 +37,9 @@ inputs:
   quality-gates:
     description: "Quality gates configuration as JSON following Jenkins coverage plugin format (optional)"
     required: false
+  sha:
+    description: "Commit SHA to use for the quality check (if not set, GITHUB_SHA will be used)"
+    required: false
 
 runs:
   using: 'docker'
@@ -53,6 +56,7 @@ runs:
     MAX_COVERAGE_ANNOTATIONS: ${{ inputs.max-coverage-annotations }}
     TITLE_METRIC: ${{ inputs.title-metric }}
     QUALITY_GATES: ${{ inputs.quality-gates }}
+    SHA: ${{ inputs.sha }}
 
 branding:
   icon: check-square

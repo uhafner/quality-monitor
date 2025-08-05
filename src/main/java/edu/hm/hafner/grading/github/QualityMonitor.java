@@ -134,7 +134,7 @@ public class QualityMonitor extends AutoGradingRunner {
 
             String apiUrl = getEnv("GITHUB_API_URL", log);
 
-            String sha = getEnv("GITHUB_SHA", log);
+            String sha = getCustomSha(log);
 
             GitHubBuilder githubBuilder = new GitHubBuilder()
                     .withAppInstallationToken(oAuthToken);
@@ -233,6 +233,26 @@ public class QualityMonitor extends AutoGradingRunner {
         String value = StringUtils.defaultString(System.getenv(key));
         log.logInfo(">>>> " + key + ": " + value);
         return value;
+    }
+
+    /**
+     * Gets the SHA to use for the quality monitor check. First checks for a custom SHA
+     * (SHA) which takes precedence over the default GITHUB_SHA.
+     * This allows workflows to override the SHA used for quality monitoring when needed.
+     *
+     * @param log the logger
+     * @return the SHA to use for the check
+     */
+    private String getCustomSha(final FilteredLog log) {
+        String customSha = getEnv("SHA", log);
+        if (!customSha.isBlank()) {
+            log.logInfo("Using custom SHA from SHA: " + customSha);
+            return customSha;
+        }
+        
+        String defaultSha = getEnv("GITHUB_SHA", log);
+        log.logInfo("Using default SHA from GITHUB_SHA: " + defaultSha);
+        return defaultSha;
     }
 
     /**
