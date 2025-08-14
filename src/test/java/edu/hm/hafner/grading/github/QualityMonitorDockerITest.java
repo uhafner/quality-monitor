@@ -154,8 +154,7 @@ public class QualityMonitorDockerITest {
             assertThat(readStandardOut(container))
                     .contains("Obtaining configuration from environment variable CONFIG")
                     .contains(metrics)
-                    .contains(new String[] {
-                            "Processing 1 test configuration(s)",
+                    .contains("Processing 1 test configuration(s)",
                             "-> Unittests Total: TESTS: 1",
                             "=> Unittests: 1 tests passed",
                             "=> JUnit: 1 tests passed",
@@ -176,7 +175,7 @@ public class QualityMonitorDockerITest {
                             "=> Cyclomatic Complexity: 355",
                             "=> Cognitive Complexity: 172",
                             "=> Non Commenting Source Statements: 1200",
-                            "=> N-Path Complexity: 432"});
+                            "=> N-Path Complexity: 432");
 
             container.copyFileFromContainer("/github/workspace/metrics.env", LOCAL_METRICS_FILE);
             assertThat(Files.readString(Path.of(LOCAL_METRICS_FILE)))
@@ -192,8 +191,7 @@ public class QualityMonitorDockerITest {
             assertThat(readStandardOut(container))
                     .contains(
                             "No configuration provided (environment variable CONFIG not set), using default configuration")
-                    .contains(new String[] {
-                            "Processing 1 test configuration(s)",
+                    .contains("Processing 1 test configuration(s)",
                             "-> JUnit Tests Total: TESTS: 1",
                             "=> Tests: 1 tests passed",
                             "Processing 2 coverage configuration(s)",
@@ -207,7 +205,7 @@ public class QualityMonitorDockerITest {
                             "-> PMD (pmd): 1 warning (normal: 1)",
                             "=> Style: 2 warnings (normal: 2)",
                             "-> SpotBugs (spotbugs): 1 bug (low: 1)",
-                            "=> Bugs: 1 bug (low: 1)"});
+                            "=> Bugs: 1 bug (low: 1)");
         }
     }
 
@@ -216,8 +214,7 @@ public class QualityMonitorDockerITest {
         try (var container = createContainer()) {
             container.withWorkingDirectory("/github/workspace").start();
             assertThat(readStandardOut(container))
-                    .contains(new String[] {
-                            "Processing 1 test configuration(s)",
+                    .contains("Processing 1 test configuration(s)",
                             "=> JUnit Tests: 0 tests passed",
                             "Configuration error for 'JUnit Tests'?",
                             "=> Tests: 0 tests passed",
@@ -236,12 +233,12 @@ public class QualityMonitorDockerITest {
                             "-> PMD (pmd): No warnings",
                             "=> Style: No warnings",
                             "-> SpotBugs (spotbugs): No warnings",
-                            "=> Bugs: No warnings"});
+                            "=> Bugs: No warnings");
         }
     }
 
     private GenericContainer<?> createContainer() {
-        return new GenericContainer<>(DockerImageName.parse("uhafner/quality-monitor:3.1.0"));
+        return new GenericContainer<>(DockerImageName.parse("uhafner/quality-monitor:3.2.0-SNAPSHOT"));
     }
 
     private String readStandardOut(final GenericContainer<? extends GenericContainer<?>> container)

@@ -7,7 +7,6 @@ import edu.hm.hafner.grading.AggregatedScore;
 import edu.hm.hafner.grading.AutoGradingRunner;
 import edu.hm.hafner.grading.GradingReport;
 import edu.hm.hafner.grading.QualityGateResult;
-import edu.hm.hafner.grading.QualityGatesConfiguration;
 import edu.hm.hafner.util.FilteredLog;
 import edu.hm.hafner.util.VisibleForTesting;
 
@@ -72,22 +71,13 @@ public class QualityMonitor extends AutoGradingRunner {
     }
 
     @Override
-    protected void publishGradingResult(final AggregatedScore score, final FilteredLog log) {
+    protected void publishGradingResult(final AggregatedScore score, final QualityGateResult qualityGateResult,
+            final FilteredLog log) {
         var errors = createErrorMessageMarkdown(log);
-
-        var results = new GradingReport();
-
-        // Parse and evaluate quality gates
-        var qualityGates = QualityGatesConfiguration.parseFromEnvironment("QUALITY_GATES", log);
-        var qualityGateResult = QualityGateResult.evaluate(score.getMetrics(), qualityGates, log);
-
-        // Determine conclusion based on quality gates and errors
         var conclusion = determineConclusion(errors, qualityGateResult, log);
-
-        // Add quality gate details to the output
         var qualityGateDetails = qualityGateResult.createMarkdownSummary();
-
         var showHeaders = StringUtils.isNotBlank(getEnv("SHOW_HEADERS", log));
+        var results = new GradingReport();
         addComment(score,
                 results.getTextSummary(score, getChecksName()),
                 results.getMarkdownDetails(score, getChecksName()) + errors + qualityGateDetails,
@@ -96,11 +86,11 @@ public class QualityMonitor extends AutoGradingRunner {
                 conclusion, log);
 
         try {
-            var environmentVariables = createEnvironmentVariables(score, log);
-            Files.writeString(Paths.get("metrics.env"), environmentVariables);
+            var metrics = extractAllMetrics(score, log);
+            Files.writeString(Paths.get("metrics.env"), metrics);
         }
         catch (IOException exception) {
-            log.logException(exception, "Can't write environment variables to 'metrics.env'");
+            log.logException(exception, "Can't write metrics to 'metrics.env'");
         }
 
         log.logInfo("GitHub Action has finished");
@@ -149,7 +139,7 @@ public class QualityMonitor extends AutoGradingRunner {
                     .withStartedAt(Date.from(Instant.now()))
                     .withConclusion(conclusion);
 
-            var summaryWithFooter = markdownSummary + "\n\nCreated by " + getVersionLink(log);
+            var summaryWithFooter = markdownSummary + "\n<hr />\nCreated by " + getVersionLink(log);
             Output output = new Output(textSummary, summaryWithFooter).withText(markdownDetails);
 
             if (getEnv("SKIP_ANNOTATIONS", log).isEmpty()) {
@@ -209,7 +199,7 @@ public class QualityMonitor extends AutoGradingRunner {
                 .formatted(getDisplayName(), version, version, sha);
     }
 
-    String createEnvironmentVariables(final AggregatedScore score, final FilteredLog log) {
+    String extractAllMetrics(final AggregatedScore score, final FilteredLog log) {
         var metrics = new StringBuilder();
         score.getMetrics().forEach((metric, value) ->
                 metrics.append(String.format(Locale.ENGLISH, "%s=%d%n", metric, value)));
@@ -249,7 +239,7 @@ public class QualityMonitor extends AutoGradingRunner {
             log.logInfo("Using custom SHA from SHA: " + customSha);
             return customSha;
         }
-        
+
         String defaultSha = getEnv("GITHUB_SHA", log);
         log.logInfo("Using default SHA from GITHUB_SHA: " + defaultSha);
         return defaultSha;

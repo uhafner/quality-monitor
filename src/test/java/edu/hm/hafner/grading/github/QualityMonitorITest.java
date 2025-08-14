@@ -125,68 +125,6 @@ public class QualityMonitorITest extends ResourceTest {
             }
             """;
 
-    @Test
-    void shouldMonitorQualityWithDefaultConfiguration() {
-        assertThat(runAutoGrading())
-                .contains(
-                        "No configuration provided (environment variable CONFIG not set), using default configuration")
-                .contains(new String[] {
-                        "Processing 1 test configuration(s)",
-                        "\"maxScore\" : 0,",
-                        "\"failureImpact\" : 0,",
-                        "\"passedImpact\" : 0,",
-                        "\"skippedImpact\" : 0",
-                        "Processing 2 coverage configuration(s)",
-                        "\"coveredPercentageImpact\" : 0,",
-                        "\"missedPercentageImpact\" : 0,",
-                        "Processing 2 static analysis configuration(s)",
-                        "\"errorImpact\" : 0,",
-                        "\"highImpact\" : 0,",
-                        "\"lowImpact\" : 0",
-                        "\"normalImpact\" : 0,"});
-    }
-
-    @Test
-    @SetEnvironmentVariable(key = "CONFIG", value = CONFIGURATION)
-    void shouldGradeWithConfigurationFromEnvironment() {
-        assertThat(runAutoGrading())
-                .contains("Obtaining configuration from environment variable CONFIG")
-                .contains(new String[] {
-                        "Processing 1 test configuration(s)",
-                        "=> Tests: 13 tests failed, 24 passed",
-                        "Processing 2 coverage configuration(s)",
-                        "-> Line Coverage Total: LINE: 10.93% (33/302)",
-                        "-> Branch Coverage Total: BRANCH: 9.52% (4/42)",
-                        "=> JaCoCo: 10%",
-                        "-> Mutation Coverage Total: MUTATION: 7.86% (11/140)",
-                        "=> PIT: 8%",
-                        "Processing 2 static analysis configuration(s)",
-                        "-> CheckStyle (checkstyle): 19 warnings (normal: 19)",
-                        "=> CheckStyle: 19 warnings (normal: 19)",
-                        "-> PMD (pmd): 41 warnings (normal: 41)",
-                        "=> PMD: 41 warnings (normal: 41)",
-                        "-> SpotBugs (spotbugs): 1 bug (low: 1)",
-                        "=> SpotBugs: 1 bug (low: 1)",
-                        "=> Cyclomatic Complexity: 355",
-                        "=> Cognitive Complexity: 172",
-                        "=> Non Commenting Source Statements: 1200",
-                        "=> N-Path Complexity: 432",
-                        "mutation=8",
-                        "bugs=1",
-                        "tests=37",
-                        "line=11",
-                        "pmd=41",
-                        "style=60",
-                        "spotbugs=1",
-                        "checkstyle=19",
-                        "branch=10",
-                        "ncss=1200",
-                        "npath-complexity=432",
-                        "cognitive-complexity=172",
-                        "cyclomatic-complexity=355"
-                });
-    }
-
     private static final String CONFIGURATION_WRONG_PATHS = """
             {
               "tests": {
@@ -280,13 +218,129 @@ public class QualityMonitorITest extends ResourceTest {
               ]
             }
             """;
+    private static final String QUALITY_GATES_OK = """
+            {
+              "qualityGates": [
+                {
+                  "metric": "line",
+                  "threshold": 10.0,
+                  "criticality": "FAILURE"
+                }
+              ]
+            }
+            """;
+    private static final String QUALITY_GATES_NOK = """
+            {
+              "qualityGates": [
+                {
+                  "metric": "line",
+                  "threshold": 100.0,
+                  "criticality": "FAILURE"
+                }
+              ]
+            }
+            """;
+
+    @Test
+    void shouldMonitorQualityWithDefaultConfiguration() {
+        assertThat(runAutoGrading())
+                .contains("No configuration provided (environment variable CONFIG not set), using default configuration")
+                .contains("Processing 1 test configuration(s)",
+                        "\"maxScore\" : 0,",
+                        "\"failureImpact\" : 0,",
+                        "\"passedImpact\" : 0,",
+                        "\"skippedImpact\" : 0",
+                        "Processing 2 coverage configuration(s)",
+                        "\"coveredPercentageImpact\" : 0,",
+                        "\"missedPercentageImpact\" : 0,",
+                        "Processing 2 static analysis configuration(s)",
+                        "\"errorImpact\" : 0,",
+                        "\"highImpact\" : 0,",
+                        "\"lowImpact\" : 0",
+                        "\"normalImpact\" : 0,");
+    }
+
+    @Test
+    @SetEnvironmentVariable(key = "CONFIG", value = CONFIGURATION)
+    void shouldGradeWithConfigurationFromEnvironment() {
+        assertThat(runAutoGrading())
+                .contains("Obtaining configuration from environment variable CONFIG")
+                .contains("Processing 1 test configuration(s)",
+                        "=> Tests: 13 tests failed, 24 passed",
+                        "Processing 2 coverage configuration(s)",
+                        "-> Line Coverage Total: LINE: 10.93% (33/302)",
+                        "-> Branch Coverage Total: BRANCH: 9.52% (4/42)",
+                        "=> JaCoCo: 10%",
+                        "-> Mutation Coverage Total: MUTATION: 7.86% (11/140)",
+                        "=> PIT: 8%",
+                        "Processing 2 static analysis configuration(s)",
+                        "-> CheckStyle (checkstyle): 19 warnings (normal: 19)",
+                        "=> CheckStyle: 19 warnings (normal: 19)",
+                        "-> PMD (pmd): 41 warnings (normal: 41)",
+                        "=> PMD: 41 warnings (normal: 41)",
+                        "-> SpotBugs (spotbugs): 1 bug (low: 1)",
+                        "=> SpotBugs: 1 bug (low: 1)",
+                        "=> Cyclomatic Complexity: 355",
+                        "=> Cognitive Complexity: 172",
+                        "=> Non Commenting Source Statements: 1200",
+                        "=> N-Path Complexity: 432")
+                .contains("Environment variable 'QUALITY_GATES' not found or empty",
+                        "No quality gates to evaluate",
+                        "Setting conclusion to SUCCESS - all quality gates passed")
+                .contains("mutation=8",
+                        "bugs=1",
+                        "tests=37",
+                        "line=11",
+                        "pmd=41",
+                        "style=60",
+                        "spotbugs=1",
+                        "checkstyle=19",
+                        "branch=10",
+                        "ncss=1200",
+                        "npath-complexity=432",
+                        "cognitive-complexity=172",
+                        "cyclomatic-complexity=355");
+    }
+
+    @Test
+    @SetEnvironmentVariable(key = "CONFIG", value = CONFIGURATION)
+    @SetEnvironmentVariable(key = "QUALITY_GATES", value = QUALITY_GATES_NOK)
+    void shouldGradeWithSuccessfulQualityGate() {
+        assertThat(runAutoGrading())
+                .contains("Processing 1 test configuration(s)",
+                        "Processing 2 coverage configuration(s)",
+                        "Processing 2 static analysis configuration(s)")
+                .contains("Quality Gates Quality Monitor",
+                        "Found quality gates configuration in environment variable 'QUALITY_GATES'",
+                        "Parsed 1 quality gate(s) from JSON configuration",
+                        "Quality gates evaluation completed: ❌ FAILURE",
+                        "Passed: 0, Failed: 1",
+                        "❌ Line Coverage: 11.00 >= 100.00");
+    }
+
+    @Test
+    @SetEnvironmentVariable(key = "CONFIG", value = CONFIGURATION)
+    @SetEnvironmentVariable(key = "QUALITY_GATES", value = QUALITY_GATES_OK)
+    void shouldGradeWithFailedQualityGate() {
+        assertThat(runAutoGrading())
+                .contains("Processing 1 test configuration(s)",
+                        "Processing 2 coverage configuration(s)",
+                        "Processing 2 static analysis configuration(s)")
+                .contains("Found quality gates configuration in environment variable 'QUALITY_GATES'",
+                        "Parsing quality gates from JSON configuration using QualityGatesConfiguration",
+                        "Parsed 1 quality gate(s) from JSON configuration",
+                        "Evaluating 1 quality gate(s)",
+                        "Quality gates evaluation completed: ✅ SUCCESS",
+                        "  Passed: 1, Failed: 0",
+                        "  ✅ Line Coverage: 11.00 >= 10.00",
+                        "Setting conclusion to SUCCESS - all quality gates passed");
+    }
 
     @Test
     @SetEnvironmentVariable(key = "CONFIG", value = CONFIGURATION_WRONG_PATHS)
     void shouldShowErrors() {
         assertThat(runAutoGrading())
-                .contains(new String[] {
-                        "Processing 1 test configuration(s)",
+                .contains("Processing 1 test configuration(s)",
                         "=> JUnit Score: 100 of 100",
                         "Configuration error for 'Unittests'?",
                         "JUnit Score: 100 of 100",
@@ -305,7 +359,7 @@ public class QualityMonitorITest extends ResourceTest {
                         "=> Style Score: 0 of 100",
                         "-> SpotBugs (spotbugs): No warnings",
                         "=> Bugs Score: 100 of 100",
-                        "Autograding score - 400 of 500"});
+                        "Autograding score - 400 of 500");
     }
 
     private String runAutoGrading() {

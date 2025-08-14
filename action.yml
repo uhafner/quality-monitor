@@ -43,7 +43,7 @@ inputs:
 
 runs:
   using: 'docker'
-  image: 'docker://uhafner/quality-monitor:3.1.0'
+  image: 'docker://uhafner/quality-monitor:3.2.0-SNAPSHOT'
   env:
     CONFIG: ${{ inputs.config }}
     CHECKS_NAME: ${{ inputs.checks-name }}
