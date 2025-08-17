@@ -260,7 +260,7 @@ public class QualityMonitor extends AutoGradingRunner {
     private Conclusion determineConclusion(final String errors, final QualityGateResult qualityGateResult,
             final FilteredLog log) {
         if (!errors.isBlank()) {
-            log.logInfo("Setting conclusion to FAILURE due to errors");
+            log.logInfo("Setting conclusion to FAILURE due to errors in log");
             return Conclusion.FAILURE;
         }
 

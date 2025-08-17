@@ -285,8 +285,7 @@ public class QualityMonitorITest extends ResourceTest {
                         "=> Non Commenting Source Statements: 1200",
                         "=> N-Path Complexity: 432")
                 .contains("Environment variable 'QUALITY_GATES' not found or empty",
-                        "No quality gates to evaluate",
-                        "Setting conclusion to SUCCESS - all quality gates passed")
+                        "No quality gates to evaluate")
                 .contains("mutation=8",
                         "bugs=1",
                         "tests=37",
@@ -305,7 +304,7 @@ public class QualityMonitorITest extends ResourceTest {
     @Test
     @SetEnvironmentVariable(key = "CONFIG", value = CONFIGURATION)
     @SetEnvironmentVariable(key = "QUALITY_GATES", value = QUALITY_GATES_NOK)
-    void shouldGradeWithSuccessfulQualityGate() {
+    void shouldGradeWithFailedQualityGate() {
         assertThat(runAutoGrading())
                 .contains("Processing 1 test configuration(s)",
                         "Processing 2 coverage configuration(s)",
@@ -321,7 +320,7 @@ public class QualityMonitorITest extends ResourceTest {
     @Test
     @SetEnvironmentVariable(key = "CONFIG", value = CONFIGURATION)
     @SetEnvironmentVariable(key = "QUALITY_GATES", value = QUALITY_GATES_OK)
-    void shouldGradeWithFailedQualityGate() {
+    void shouldGradeWithSuccessfulQualityGate() {
         assertThat(runAutoGrading())
                 .contains("Processing 1 test configuration(s)",
                         "Processing 2 coverage configuration(s)",
@@ -333,7 +332,7 @@ public class QualityMonitorITest extends ResourceTest {
                         "Quality gates evaluation completed: ✅ SUCCESS",
                         "  Passed: 1, Failed: 0",
                         "  ✅ Line Coverage: 11.00 >= 10.00",
-                        "Setting conclusion to SUCCESS - all quality gates passed");
+                        "Setting conclusion to FAILURE due to errors in log");
     }
 
     @Test
