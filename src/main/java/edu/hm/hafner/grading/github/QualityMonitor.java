@@ -139,7 +139,7 @@ public class QualityMonitor extends AutoGradingRunner {
                     .withStartedAt(Date.from(Instant.now()))
                     .withConclusion(conclusion);
 
-            var summaryWithFooter = markdownSummary + "\n<hr />\nCreated by " + getVersionLink(log);
+            var summaryWithFooter = markdownSummary + "\n\n<hr />\n\nCreated by " + getVersionLink(log);
             Output output = new Output(textSummary, summaryWithFooter).withText(markdownDetails);
 
             if (getEnv("SKIP_ANNOTATIONS", log).isEmpty()) {
@@ -157,7 +157,7 @@ public class QualityMonitor extends AutoGradingRunner {
                 var footer = "Created by %s. %s".formatted(getVersionLink(log), checksResult);
                 github.getRepository(repository)
                         .getPullRequest(Integer.parseInt(prNumber))
-                        .comment(prSummary + "\n\n" + footer + "\n");
+                        .comment(prSummary + "\n\n<hr />\n\n" + footer + "\n");
                 log.logInfo("Successfully commented PR#" + prNumber);
             }
         }
