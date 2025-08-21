@@ -38,7 +38,7 @@ import org.kohsuke.github.HttpException;
  */
 public class QualityMonitor extends AutoGradingRunner {
     private static final String COMMENT_MARKER = "<!-- -[quality-monitor-comment]- -->";
-    private static final String QUALITY_MONITOR = "Quality Monitor";
+    static final String QUALITY_MONITOR = "Quality Monitor";
     private static final ParserRegistry PARSER_REGISTRY = new ParserRegistry();
 
     private static final String NO_TITLE = "none";
