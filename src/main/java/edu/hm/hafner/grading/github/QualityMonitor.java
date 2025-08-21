@@ -1,6 +1,7 @@
 package edu.hm.hafner.grading.github;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 
 import edu.hm.hafner.coverage.Metric;
 import edu.hm.hafner.grading.AggregatedScore;
@@ -17,12 +18,14 @@ import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Optional;
 
 import org.kohsuke.github.GHCheckRun;
 import org.kohsuke.github.GHCheckRun.Conclusion;
 import org.kohsuke.github.GHCheckRun.Status;
 import org.kohsuke.github.GHCheckRunBuilder;
 import org.kohsuke.github.GHCheckRunBuilder.Output;
+import org.kohsuke.github.GHIssueComment;
 import org.kohsuke.github.GitHub;
 import org.kohsuke.github.GitHubBuilder;
 import org.kohsuke.github.HttpException;
@@ -33,6 +36,7 @@ import org.kohsuke.github.HttpException;
  * @author Ullrich Hafner
  */
 public class QualityMonitor extends AutoGradingRunner {
+    static final String COMMENT_MARKER = "<!-- -[quality-monitor-comment]- -->";
     static final String QUALITY_MONITOR = "Quality Monitor";
 
     private static final String NO_TITLE = "none";
@@ -158,16 +162,49 @@ public class QualityMonitor extends AutoGradingRunner {
 
             var prNumber = getEnv("PR_NUMBER", log);
             if (!prNumber.isBlank()) { // optional PR comment
+                var strategy = getEnv("COMMENTS_STRATEGY", log);
+
+                var previousComment = findPreviousComment(github, repository, prNumber);
+                if (Strings.CI.equals(strategy, "DELETE")) {
+                    if (previousComment.isPresent()) {
+                        previousComment.get().delete();
+                        log.logInfo("Successfully deleted previous comment for PR#" + prNumber);
+                    }
+                }
+
                 var footer = "Created by %s. %s".formatted(getVersionLink(log), checksResult);
+                var comment = COMMENT_MARKER + "\n\n" + prSummary + "\n\n<hr />\n\n" + footer + "\n";
+                if (Strings.CI.equals(strategy, "UPDATE")) {
+                    if (previousComment.isPresent()) {
+                        previousComment.get().update(comment);
+                        log.logInfo("Successfully replaced comment for PR#" + prNumber);
+                        return;
+                    }
+                }
+
                 github.getRepository(repository)
                         .getPullRequest(Integer.parseInt(prNumber))
-                        .comment(prSummary + "\n\n<hr />\n\n" + footer + "\n");
-                log.logInfo("Successfully commented PR#" + prNumber);
+                        .comment(comment);
+
+                log.logInfo("Successfully created new comment for PR#" + prNumber);
             }
         }
         catch (IOException exception) {
             logException(log, exception, "Could create GitHub comments");
         }
+    }
+
+    private Optional<GHIssueComment> findPreviousComment(final GitHub github,
+            final String repository, final String prNumber) throws IOException {
+        var comments = github.getRepository(repository)
+                .getPullRequest(Integer.parseInt(prNumber))
+                .listComments();
+        for (var comment : comments) {
+            if (comment.getBody().contains(COMMENT_MARKER)) {
+                return Optional.of(comment);
+            }
+        }
+        return Optional.empty();
     }
 
     private String createChecksRun(final FilteredLog log, final GHCheckRunBuilder check) {
