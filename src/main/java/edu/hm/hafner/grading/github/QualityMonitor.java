@@ -36,6 +36,7 @@ import org.kohsuke.github.HttpException;
  *
  * @author Ullrich Hafner
  */
+@SuppressWarnings("PMD.GodClass")
 public class QualityMonitor extends AutoGradingRunner {
     private static final String COMMENT_MARKER = "<!-- -[quality-monitor-comment]- -->";
     static final String QUALITY_MONITOR = "Quality Monitor";
@@ -132,68 +133,73 @@ public class QualityMonitor extends AutoGradingRunner {
                 return;
             }
 
+            var githubBuilder = new GitHubBuilder().withAppInstallationToken(oAuthToken);
             String apiUrl = getEnv("GITHUB_API_URL", log);
-
-            String sha = getCustomSha(log);
-
-            GitHubBuilder githubBuilder = new GitHubBuilder()
-                    .withAppInstallationToken(oAuthToken);
             if (!apiUrl.isBlank()) {
                 githubBuilder.withEndpoint(apiUrl);
             }
-            GitHub github = githubBuilder.build();
 
-            GHCheckRunBuilder check = github.getRepository(repository)
-                    .createCheckRun(createMetricsBasedTitle(score, log), sha)
+            var github = githubBuilder.build();
+            var check = github.getRepository(repository)
+                    .createCheckRun(createMetricsBasedTitle(score, log), getCustomSha(log))
                     .withStatus(Status.COMPLETED)
                     .withStartedAt(Date.from(Instant.now()))
                     .withConclusion(conclusion);
 
             var summaryWithFooter = markdownSummary + "\n\n<hr />\n\nCreated by " + getVersionLink(log);
-            Output output = new Output(textSummary, summaryWithFooter).withText(markdownDetails);
+            var output = new Output(textSummary, summaryWithFooter).withText(markdownDetails);
 
-            if (getEnv("SKIP_ANNOTATIONS", log).isEmpty()) {
-                var annotationBuilder = new GitHubAnnotationsBuilder(
-                        output, computeAbsolutePathPrefixToRemove(log), log);
-                annotationBuilder.createAnnotations(score);
-            }
-
+            attachAnnotations(score, output, log);
             check.add(output);
 
             var checksResult = createChecksRun(log, check);
 
-            var prNumber = getEnv("PR_NUMBER", log);
-            if (!prNumber.isBlank()) { // optional PR comment
-                var strategy = getEnv("COMMENTS_STRATEGY", log);
-
-                var previousComment = findPreviousComment(github, repository, prNumber);
-                if (Strings.CI.equals(strategy, "REMOVE") || StringUtils.isEmpty(strategy)) {
-                    if (previousComment.isPresent()) {
-                        previousComment.get().delete();
-                        log.logInfo("Successfully deleted previous comment for PR#" + prNumber);
-                    }
-                }
-
-                var footer = "Created by %s. %s".formatted(getVersionLink(log), checksResult);
-                var comment = COMMENT_MARKER + "\n\n" + prSummary + "\n\n<hr />\n\n" + footer + "\n";
-                if (Strings.CI.equals(strategy, "UPDATE")) {
-                    if (previousComment.isPresent()) {
-                        previousComment.get().update(comment);
-                        log.logInfo("Successfully replaced comment for PR#" + prNumber);
-                        return;
-                    }
-                }
-
-                github.getRepository(repository)
-                        .getPullRequest(Integer.parseInt(prNumber))
-                        .comment(comment);
-
-                log.logInfo("Successfully created new comment for PR#" + prNumber);
-            }
+            commentPullRequest(prSummary, checksResult, repository, github, log);
         }
         catch (IOException exception) {
             logException(log, exception, "Could create GitHub comments");
         }
+    }
+
+    private void attachAnnotations(final AggregatedScore score, final Output output, final FilteredLog log) {
+        if (getEnv("SKIP_ANNOTATIONS", log).isEmpty()) {
+            var annotationBuilder = new GitHubAnnotationsBuilder(output, computeAbsolutePathPrefixToRemove(log), log);
+            annotationBuilder.createAnnotations(score);
+        }
+    }
+
+    private void commentPullRequest(final String prSummary, final String checksResult, final String repository,
+            final GitHub github, final FilteredLog log) throws IOException {
+        var prNumber = getEnv("PR_NUMBER", log);
+        if (prNumber.isBlank()) {
+            return;
+        }
+
+        var strategy = getEnv("COMMENTS_STRATEGY", log);
+        var previousComment = findPreviousComment(github, repository, prNumber);
+
+        if ((Strings.CI.equals(strategy, "REMOVE") || StringUtils.isEmpty(strategy))
+                && previousComment.isPresent()) {
+            previousComment.get().delete();
+            log.logInfo("Successfully deleted previous comment for PR#" + prNumber);
+        }
+
+        var comment = createComment(prSummary, checksResult, log);
+        if (Strings.CI.equals(strategy, "UPDATE") && previousComment.isPresent()) {
+            previousComment.get().update(comment);
+            log.logInfo("Successfully replaced comment for PR#" + prNumber);
+            return;
+        }
+
+        github.getRepository(repository)
+                .getPullRequest(Integer.parseInt(prNumber))
+                .comment(comment);
+        log.logInfo("Successfully created new comment for PR#" + prNumber);
+    }
+
+    private String createComment(final String prSummary, final String checksResult, final FilteredLog log) {
+        var footer = "Created by %s. %s".formatted(getVersionLink(log), checksResult);
+        return COMMENT_MARKER + "\n\n" + prSummary + "\n\n<hr />\n\n" + footer + "\n";
     }
 
     private Optional<GHIssueComment> findPreviousComment(final GitHub github,

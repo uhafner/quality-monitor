@@ -157,7 +157,7 @@
             </auth>
           </to>
           <from>
-            <image>maven:3.9.11-eclipse-temurin-21-alpine</image>
+            <image>maven:3.9.11-eclipse-temurin-21-alpine@sha256:1a9d8816a623aa0a386ca26f6cca5e2c9a6a7a54f734db8a229ccd093fac44a7</image>
             <platforms>
               <platform>
                 <architecture>amd64</architecture>
