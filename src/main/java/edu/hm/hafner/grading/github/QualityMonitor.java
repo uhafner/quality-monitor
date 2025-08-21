@@ -85,6 +85,12 @@ public class QualityMonitor extends AutoGradingRunner {
                 results.getMarkdownSummary(score, getChecksName(), showHeaders) + errors + qualityGateDetails,
                 conclusion, log);
 
+        writeMetrics(score, log);
+
+        log.logInfo("GitHub Action has finished");
+    }
+
+    private void writeMetrics(final AggregatedScore score, final FilteredLog log) {
         try {
             var metrics = extractAllMetrics(score, log);
             Files.writeString(Paths.get("metrics.env"), metrics);
@@ -92,8 +98,6 @@ public class QualityMonitor extends AutoGradingRunner {
         catch (IOException exception) {
             log.logException(exception, "Can't write metrics to 'metrics.env'");
         }
-
-        log.logInfo("GitHub Action has finished");
     }
 
     @Override

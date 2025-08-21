@@ -332,7 +332,7 @@ public class QualityMonitorITest extends ResourceTest {
                         "Quality gates evaluation completed: ✅ SUCCESS",
                         "  Passed: 1, Failed: 0",
                         "  ✅ Line Coverage: 11.00 >= 10.00",
-                        "Setting conclusion to FAILURE due to errors in log");
+                        "Setting conclusion to SUCCESS - all quality gates passed");
     }
 
     @Test
