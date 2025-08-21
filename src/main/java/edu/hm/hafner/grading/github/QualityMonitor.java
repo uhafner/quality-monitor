@@ -167,7 +167,7 @@ public class QualityMonitor extends AutoGradingRunner {
                 var strategy = getEnv("COMMENTS_STRATEGY", log);
 
                 var previousComment = findPreviousComment(github, repository, prNumber);
-                if (Strings.CI.equals(strategy, "DELETE") || StringUtils.isEmpty(strategy)) {
+                if (Strings.CI.equals(strategy, "REMOVE") || StringUtils.isEmpty(strategy)) {
                     if (previousComment.isPresent()) {
                         previousComment.get().delete();
                         log.logInfo("Successfully deleted previous comment for PR#" + prNumber);

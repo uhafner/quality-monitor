@@ -32,9 +32,9 @@ inputs:
     description: "Show headers for each subsection in the summary (if not set, headers are hidden)"
     required: false
   comments-strategy:
-    description: "How to handle subsequent comments (options: APPEND, DELETE, REPLACE)."
+    description: "How to handle subsequent comments (options: ADD, REMOVE, REPLACE)."
     required: false
-    default: DELETE
+    default: REMOVE
   max-warning-annotations:
     description: "Limit the number of warning annotations at specific lines. By default, all annotations are created."
     required: false

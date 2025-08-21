@@ -141,8 +141,8 @@ This action can be configured using the following parameters (see example above)
 - ``show-headers`` (boolean, default: `false`): If `true`, section headers are rendered in the Checks summary and PR comment.
 - ``comments-strategy`` (enum, default `UPDATE`): Controls PR commenting:
   - ``UPDATE``: Update existing comment (create if missing).
-  - ``DELETE``: Remove previous comment, then create a fresh one.
-  - ``APPEND``: Always add a new comment (history).
+  - ``REMOVE``: Remove previous comment, then create a fresh one.
+  - ``ADD``: Always add a new comment (history).
 - ``max-warning-annotations`` (number, optional): Upper limit of warning annotations. Omit for unlimited.
 - ``max-coverage-annotations`` (number, optional): Upper limit of missed coverage annotations. Omit for unlimited.
 - ``sha`` (string): Commit SHA to associate results with (override when analyzing a different revision than `GITHUB_SHA`).
@@ -163,8 +163,8 @@ Forked PRs: Commenting works with the default `${{ github.token }}`; pushing bad
 ### Comment strategies
 Use `comments-strategy` to control behavior:
 - `UPDATE` (default): Edit the existing comment (clean thread).
-- `APPEND`: Add a new comment on every run (history/audit).
-- `DELETE`: Remove prior comment, then add a fresh one (forces top placement).
+- `ADD`: Add a new comment on every run (history/audit).
+- `REMOVE`: Remove prior comment, then add a fresh one (forces top placement).
 
 ### Minimal example
 
