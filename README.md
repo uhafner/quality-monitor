@@ -139,10 +139,10 @@ This action can be configured using the following parameters (see example above)
 - ``github-api-url`` (string, rarely needed): Override GitHub API base URL (GitHub Enterprise Server).
 - ``skip-annotations`` (boolean, default: `false`): If `true`, suppress creation of per-line coverage and warning annotations.
 - ``show-headers`` (boolean, default: `false`): If `true`, section headers are rendered in the Checks summary and PR comment.
-- ``comments-strategy`` (enum, default `UPDATE`): Controls PR commenting:
-  - ``UPDATE``: Update existing comment (create if missing).
-  - ``REMOVE``: Remove previous comment, then create a fresh one.
+- ``comments-strategy`` (enum, default `REMOVE`): Controls PR commenting:
   - ``ADD``: Always add a new comment (history).
+  - ``REMOVE``: Remove previous comment, then create a fresh one.
+  - ``UPDATE``: Update existing comment (create if missing).
 - ``max-warning-annotations`` (number, optional): Upper limit of warning annotations. Omit for unlimited.
 - ``max-coverage-annotations`` (number, optional): Upper limit of missed coverage annotations. Omit for unlimited.
 - ``sha`` (string): Commit SHA to associate results with (override when analyzing a different revision than `GITHUB_SHA`).
