@@ -35,12 +35,12 @@ class GitHubAnnotationsBuilder extends CommentBuilder {
     }
 
     @Override
-    protected int getMaxWarningComments() {
+    protected final int getMaxWarningComments() {
         return maxWarningComments;
     }
 
     @Override
-    protected int getMaxCoverageComments() {
+    protected final int getMaxCoverageComments() {
         return maxCoverageComments;
     }
 
