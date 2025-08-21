@@ -3,6 +3,7 @@ package edu.hm.hafner.grading.github;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Strings;
 
+import edu.hm.hafner.analysis.registry.ParserRegistry;
 import edu.hm.hafner.coverage.Metric;
 import edu.hm.hafner.grading.AggregatedScore;
 import edu.hm.hafner.grading.AutoGradingRunner;
@@ -36,8 +37,9 @@ import org.kohsuke.github.HttpException;
  * @author Ullrich Hafner
  */
 public class QualityMonitor extends AutoGradingRunner {
-    static final String COMMENT_MARKER = "<!-- -[quality-monitor-comment]- -->";
-    static final String QUALITY_MONITOR = "Quality Monitor";
+    private static final String COMMENT_MARKER = "<!-- -[quality-monitor-comment]- -->";
+    private static final String QUALITY_MONITOR = "Quality Monitor";
+    private static final ParserRegistry PARSER_REGISTRY = new ParserRegistry();
 
     private static final String NO_TITLE = "none";
     private static final String DEFAULT_TITLE_METRIC = "line";
@@ -165,7 +167,7 @@ public class QualityMonitor extends AutoGradingRunner {
                 var strategy = getEnv("COMMENTS_STRATEGY", log);
 
                 var previousComment = findPreviousComment(github, repository, prNumber);
-                if (Strings.CI.equals(strategy, "DELETE")) {
+                if (Strings.CI.equals(strategy, "DELETE") || StringUtils.isEmpty(strategy)) {
                     if (previousComment.isPresent()) {
                         previousComment.get().delete();
                         log.logInfo("Successfully deleted previous comment for PR#" + prNumber);
@@ -332,12 +334,10 @@ public class QualityMonitor extends AutoGradingRunner {
      * @return the title
      */
     private String createMetricsBasedTitle(final AggregatedScore score, final FilteredLog log) {
-        // Get the requested metric to show in title (default: "line")
         var titleMetric = StringUtils.defaultIfBlank(
                 StringUtils.lowerCase(getEnv("TITLE_METRIC", log)),
                 DEFAULT_TITLE_METRIC);
 
-        // If the user wants no metric in title
         if (NO_TITLE.equals(titleMetric)) {
             return getChecksName();
         }
@@ -345,21 +345,26 @@ public class QualityMonitor extends AutoGradingRunner {
         var metrics = score.getMetrics();
 
         if (!metrics.containsKey(titleMetric)) {
-            log.logInfo("Requested title metric '%s' not found in metrics: %s", titleMetric, metrics.keySet());
-            log.logInfo("Falling back to default metric %s", DEFAULT_TITLE_METRIC);
+            log.logError("Requested title metric '%s' not found in metrics: %s", titleMetric, metrics.keySet());
+            log.logError("Falling back to default metric %s", DEFAULT_TITLE_METRIC);
 
             titleMetric = DEFAULT_TITLE_METRIC; // Fallback to default metric
         }
 
         if (metrics.containsKey(titleMetric)) {
+            var value = metrics.get(titleMetric);
+            if (PARSER_REGISTRY.contains(titleMetric)) {
+                return String.format(Locale.ENGLISH, "%s - %s: %d", getChecksName(),
+                        PARSER_REGISTRY.get(titleMetric).getName(), value);
+            }
             try {
                 var metric = Metric.fromName(titleMetric);
                 return String.format(Locale.ENGLISH, "%s - %s: %s", getChecksName(),
-                        metric.getDisplayName(), metric.format(Locale.ENGLISH, metrics.get(titleMetric)));
+                        metric.getDisplayName(), metric.format(Locale.ENGLISH, value));
             }
             catch (IllegalArgumentException exception) {
                 return String.format(Locale.ENGLISH, "%s - %s: %d", getChecksName(),
-                        titleMetric, metrics.getOrDefault(titleMetric, 0));
+                        titleMetric, value);
             }
         }
         log.logInfo("Requested title metric '%s' not found in metrics: %s", titleMetric, metrics.keySet());
