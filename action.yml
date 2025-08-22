@@ -47,7 +47,7 @@ inputs:
 
 runs:
   using: 'docker'
-  image: 'docker://uhafner/quality-monitor:3.2.0-SNAPSHOT-1'
+  image: 'docker://uhafner/quality-monitor:3.2.0-SNAPSHOT-2'
   env:
     CONFIG: ${{ inputs.config }}
     QUALITY_GATES: ${{ inputs.quality-gates }}
