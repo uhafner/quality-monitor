@@ -7,7 +7,8 @@ The Quality Monitor GitHub Action aggregates test results, code & mutation cover
 It is derived from the Jenkins [Warnings](https://plugins.jenkins.io/warnings-ng/) and [Coverage](https://plugins.jenkins.io/coverage) plugins and works with any language that can produce supported report files. 
 A companion for GitLab is available: [GitLab Quality Monitor](https://github.com/uhafner/autograding-gitlab-action). If you want to autograde student projects, you can use the [Autograding GitHub Action](https://github.com/uhafner/autograding-github-action).
 
-Example: [Sample Pull Request](https://github.com/uhafner/quality-monitor/pull/103) · [Checks Output](https://github.com/uhafner/quality-monitor/runs/44526071206)
+Example Output: [Sample Pull Request](https://github.com/uhafner/quality-monitor/pull/103) · [Checks Output](https://github.com/uhafner/quality-monitor/runs/44526071206)
+Example Workflows: [Build Project Metrics](.github/workflows/quality-monitor-build.yml) · [Comment Quality Results in PR](.github/workflows/quality-monitor-comment.yml).
 
 ## Example PR Comment
 
@@ -37,11 +38,11 @@ Example: [Sample Pull Request](https://github.com/uhafner/quality-monitor/pull/1
 The action does **not** run tests or analysis tools. Generate all reports in previous workflow steps, then invoke the action to collect and publish results.
 
 ## How It Works (High Level)
-1. Your build/test/static analysis steps create XML/JSON reports.
+1. Your build steps create supported XML or JSON reports.
 2. The action parses the configured reports (or uses the default config).
 3. It generates:
     - GitHub Checks summary
-    - Optional PR comment (if PR number provided)
+    - Optional PR comment (if the PR number is provided)
     - Optional annotations
     - `metrics.env` for badge generation
 
