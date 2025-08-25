@@ -350,6 +350,7 @@ public class QualityMonitor extends AutoGradingRunner {
             if (conclusion != Conclusion.SUCCESS) {
                 return getChecksName() + " - Quality gates failed";
             }
+            return getChecksName();
         }
 
         var metrics = score.getMetrics();
