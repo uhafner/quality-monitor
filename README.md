@@ -8,6 +8,7 @@ It is derived from the Jenkins [Warnings](https://plugins.jenkins.io/warnings-ng
 A companion for GitLab is available: [GitLab Quality Monitor](https://github.com/uhafner/autograding-gitlab-action). If you want to autograde student projects, you can use the [Autograding GitHub Action](https://github.com/uhafner/autograding-github-action).
 
 Example Output: [Sample Pull Request](https://github.com/uhafner/quality-monitor/pull/103) · [Checks Output](https://github.com/uhafner/quality-monitor/runs/44526071206)
+
 Example Workflows: [Build Project Metrics](.github/workflows/quality-monitor-build.yml) · [Comment Quality Results in PR](.github/workflows/quality-monitor-comment.yml).
 
 ## Example PR Comment
