@@ -141,7 +141,7 @@ public class QualityMonitor extends AutoGradingRunner {
 
             var github = githubBuilder.build();
             var check = github.getRepository(repository)
-                    .createCheckRun(createMetricsBasedTitle(score, log), getCustomSha(log))
+                    .createCheckRun(createMetricsBasedTitle(score, conclusion, log), getCustomSha(log))
                     .withStatus(Status.COMPLETED)
                     .withStartedAt(Date.from(Instant.now()))
                     .withConclusion(conclusion);
@@ -334,18 +334,22 @@ public class QualityMonitor extends AutoGradingRunner {
      *
      * @param score
      *         the aggregated score
+     * @param conclusion
+     *         the conclusion
      * @param log
      *         the logger
      *
      * @return the title
      */
-    private String createMetricsBasedTitle(final AggregatedScore score, final FilteredLog log) {
+    private String createMetricsBasedTitle(final AggregatedScore score, final Conclusion conclusion, final FilteredLog log) {
         var titleMetric = StringUtils.defaultIfBlank(
                 StringUtils.lowerCase(getEnv("TITLE_METRIC", log)),
                 DEFAULT_TITLE_METRIC);
 
         if (NO_TITLE.equals(titleMetric)) {
-            return getChecksName();
+            if (conclusion != Conclusion.SUCCESS) {
+                return getChecksName() + " - Quality gates failed";
+            }
         }
 
         var metrics = score.getMetrics();

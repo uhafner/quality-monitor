@@ -22,7 +22,7 @@ jobs:
       - name: Set up Maven
         uses: stCarolas/setup-maven@v5
         with:
-          maven-version: 3.9.9
+          maven-version: 3.9.11
       - name: Cache the NVD database
         uses: actions/cache@v4
         with:
@@ -33,124 +33,17 @@ jobs:
           BROWSER: chrome-container
           NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
         run: mvn -V --color always -ntp clean verify -Ppit -Pci -Powasp | tee maven.log
-      - name: Run Quality Monitor Snapshot on the current project
+      - name: Read Quality Monitor Configuration
+        id: quality-monitor
+        run: echo "json=$(jq -c . .github/quality-monitor.json)" >> "$GITHUB_OUTPUT"
+      - name: Read Quality Gates Configuration
+        id: quality-gates
+        run: echo "json=$(jq -c . .github/quality-gates.json)" >> "$GITHUB_OUTPUT"
+      - name: Run Quality Monitor of main branch
         uses: uhafner/quality-monitor@main
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          checks-name: "Quality Monitor Snapshot Version"
-          config: >
-            {
-            "tests": {
-              "name": "Tests",
-              "tools": [
-                {
-                  "id": "junit",
-                  "name": "Tests",
-                  "pattern": "**/target/*-reports/TEST*.xml"
-                }
-              ]
-            },
-            "analysis": [
-              {
-                "name": "Style",
-                "id": "style",
-                "tools": [
-                  {
-                    "id": "checkstyle",
-                    "pattern": "**/target/checkstyle-*/checkstyle-result.xml"
-                  },
-                  {
-                    "id": "pmd",
-                    "pattern": "**/target/pmd-*/pmd.xml"
-                  }
-                ]
-              },
-              {
-                "name": "Bugs",
-                "id": "bugs",
-                "icon": "bug",
-                "tools": [
-                  {
-                    "id": "spotbugs",
-                    "sourcePath": "src/main/java",
-                    "pattern": "**/target/spotbugsXml.xml"
-                  },
-                  {
-                    "id": "error-prone",
-                    "pattern": "**/maven.log"
-                  }
-                ]
-              }
-            ],
-            "coverage": [
-              {
-                "name": "Code Coverage",
-                "tools": [
-                  {
-                    "id": "jacoco",
-                    "name": "Line Coverage",
-                    "metric": "line",
-                    "sourcePath": "src/main/java",
-                    "pattern": "**/target/site/jacoco/jacoco.xml"
-                  },
-                  {
-                    "id": "jacoco",
-                    "name": "Branch Coverage",
-                    "metric": "branch",
-                    "sourcePath": "src/main/java",
-                    "pattern": "**/target/site/jacoco/jacoco.xml"
-                  }
-                ]
-              },
-              {
-                "name": "Mutation Coverage",
-                "tools": [
-                  {
-                    "id": "pit",
-                    "name": "Mutation Coverage",
-                    "metric": "mutation",
-                    "sourcePath": "src/main/java",
-                    "pattern": "**/target/pit-reports/mutations.xml"
-                    },
-                    {
-                      "id": "pit",
-                      "name": "Test Strength",
-                      "metric": "test-strength",
-                      "sourcePath": "src/main/java",
-                      "pattern": "**/target/pit-reports/mutations.xml"
-                    }
-                  ]
-                }
-              ],
-              "metrics": [
-                {
-                  "name": "Toplevel Metrics",
-                  "tools": [
-                    {
-                      "name": "Cyclomatic Complexity",
-                      "id": "metrics",
-                      "pattern": "**/metrics/pmd.xml",
-                      "metric": "CyclomaticComplexity"
-                    },
-                    {
-                      "name": "Cognitive Complexity",
-                      "id": "metrics",
-                      "pattern": "**/metrics/pmd.xml",
-                      "metric": "CognitiveComplexity"
-                    },
-                    {
-                      "name": "Non Commenting Source Statements",
-                      "id": "metrics",
-                      "pattern": "**/metrics/pmd.xml",
-                      "metric": "NCSS"
-                    },
-                    {
-                      "name": "N-Path Complexity",
-                      "id": "metrics",
-                      "pattern": "**/metrics/pmd.xml",
-                      "metric": "NPathComplexity"
-                  }
-                ]
-              }
-             ]
-            }
+          config: ${{ steps.quality-monitor.outputs.json }}
+          quality-gates: ${{ steps.quality-gates.outputs.json }}
+          comments-strategy: ADD
+          show-headers: true
+          title-metric: none
