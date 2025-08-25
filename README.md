@@ -15,7 +15,9 @@ Example: [Sample Pull Request](https://github.com/uhafner/quality-monitor/pull/1
 
 ## Example GitHub Checks Output
 
-![GitHub checks result](images/details.png)
+![GitHub checks summary](images/checks-summary.png)
+![GitHub checks result - part 1](images/details1.png)
+![GitHub checks result - part 2](images/details2.png)
 
 
 ## Key Features
