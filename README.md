@@ -9,7 +9,10 @@ A companion for GitLab is available: [GitLab Quality Monitor](https://github.com
 
 Example Output: [Sample Pull Request](https://github.com/uhafner/quality-monitor/pull/103) · [Checks Output](https://github.com/uhafner/quality-monitor/runs/44526071206)
 
-Example Workflows: [Build Project Metrics](.github/workflows/quality-monitor-build.yml) · [Comment Quality Results in PR](.github/workflows/quality-monitor-comment.yml).
+Example Workflows: 
+- Part 1: [Build Project Metrics](.github/workflows/quality-monitor-build.yml) · Runs on pull request events with read permissions
+- Part 2: [Comment Quality Results in PR](.github/workflows/quality-monitor-comment.yml) · Runs after part 1 with write permissions
+- Single Step: [Create Badges](.github/workflows/update-badges.yml) · Creates and commits badges based on results of the build step
 
 ## Example PR Comment
 
@@ -183,10 +186,6 @@ Use `comments-strategy` to control behavior:
     pr-number: ${{ steps.pr.outputs.number }}
     comments-strategy: UPDATE
 ```
-
-Configuring the action in this way will produce an additional comment of the form:
-
-![Pull request comment](images/pr-comment.png)
 
 ## Automatic Badge Creation
 
