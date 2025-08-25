@@ -116,7 +116,7 @@ public class QualityMonitorITest extends ResourceTest {
                           },
                           {
                             "id": "metrics",
-                            "pattern": "**/metrics/pmd.xml",
+                            "pattern": "**/src/**/metrics.xml",
                             "metric": "WEIGHT_OF_CLASS"
                           }
                         ]

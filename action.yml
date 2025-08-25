@@ -3,10 +3,16 @@ description: Action that monitors the quality of projects and pull requests.
 
 inputs:
   config:
-    description: "Quality monitor configuration (if not set the default configuration will be used)"
+    description: "Quality monitor JSON configuration (if not set, a default configuration will be used)"
+    required: false
+  quality-gates:
+    description: "Quality gates configuration as JSON (optional)"
     required: false
   checks-name:
-    description: "Name of the GitHub checks (if not set the default name will be used)"
+    description: "Name of the GitHub checks (if not set the default name 'Quality Monitor' will be used)"
+    required: false
+  title-metric:
+    description: "Metric to show in the GitHub check title (options: line, branch, instruction, mutation, etc., or none)"
     required: false
   pr-number:
     description: "Pull request number (if not set, PR comments will be skipped)"
@@ -25,17 +31,15 @@ inputs:
   show-headers:
     description: "Show headers for each subsection in the summary (if not set, headers are hidden)"
     required: false
+  comments-strategy:
+    description: "How to handle subsequent comments (options: ADD, REMOVE, REPLACE)."
+    required: false
+    default: REMOVE
   max-warning-annotations:
     description: "Limit the number of warning annotations at specific lines. By default, all annotations are created."
     required: false
   max-coverage-annotations:
     description: "Limit the number of coverage annotations at specific lines. By default, all annotations are created."
-    required: false
-  title-metric:
-    description: "Which metric to show in the GitHub check title (options: line, branch, instruction, mutation, style-issues, none)"
-    required: false
-  quality-gates:
-    description: "Quality gates configuration as JSON following Jenkins coverage plugin format (optional)"
     required: false
   sha:
     description: "Commit SHA to use for the quality check (if not set, GITHUB_SHA will be used)"
@@ -43,19 +47,20 @@ inputs:
 
 runs:
   using: 'docker'
-  image: 'docker://uhafner/quality-monitor:3.2.0-SNAPSHOT'
+  image: 'docker://uhafner/quality-monitor:3.2.0'
   env:
     CONFIG: ${{ inputs.config }}
+    QUALITY_GATES: ${{ inputs.quality-gates }}
     CHECKS_NAME: ${{ inputs.checks-name }}
     PR_NUMBER: ${{ inputs.pr-number }}
     GITHUB_TOKEN: ${{ inputs.github-token }}
     GITHUB_API_URL: ${{ inputs.github-api-url }}
     SKIP_ANNOTATIONS: ${{ inputs.skip-annotations }}
     SHOW_HEADERS: ${{ inputs.show-headers }}
+    COMMENTS_STRATEGY: ${{ inputs.comments-strategy }}
     MAX_WARNING_ANNOTATIONS: ${{ inputs.max-warning-annotations }}
     MAX_COVERAGE_ANNOTATIONS: ${{ inputs.max-coverage-annotations }}
     TITLE_METRIC: ${{ inputs.title-metric }}
-    QUALITY_GATES: ${{ inputs.quality-gates }}
     SHA: ${{ inputs.sha }}
 
 branding:
