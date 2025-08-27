@@ -7,7 +7,7 @@ Automated quality monitoring for GitHub pull requests and branch pipelines.
 The action aggregates test results, code and mutation coverage, static analysis findings, and software metrics, then posts a structured pull request comment and GitHub Checks summary.
 When enabled, it also adds inline line comments for warnings, missed or mutated lines.
 It is inspired by the Jenkins [Warnings](https://plugins.jenkins.io/warnings-ng/) and [Coverage](https://plugins.jenkins.io/coverage) plugins and works with any language that can produce supported report files. 
-A companion for GitLab is available: [Autograding GitLab Action](https://github.com/uhafner/autograding-gitlab-action). If you want to autograde student projects, you can use the [Autograding GitHub Action](https://github.com/uhafner/autograding-github-action).
+A companion for GitLab is available: [Autograding GitLab Action](https://github.com/uhafner/autograding-gitlab-action). If you want to autograde student projects, use the [Autograding GitHub Action](https://github.com/uhafner/autograding-github-action).
 
 Sample Outputs: 
 - [Sample Pull Request](https://github.com/uhafner/quality-monitor/pull/103)
