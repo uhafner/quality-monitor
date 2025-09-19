@@ -363,7 +363,7 @@ public class QualityMonitorITest extends ResourceTest {
 
     private String runAutoGrading() {
         var outputStream = new ByteArrayOutputStream();
-        var runner = new QualityMonitor(new PrintStream(outputStream));
+        var runner = new QualityMonitor(new PrintStream(outputStream, true, StandardCharsets.UTF_8));
         runner.run();
         return outputStream.toString(StandardCharsets.UTF_8);
     }
