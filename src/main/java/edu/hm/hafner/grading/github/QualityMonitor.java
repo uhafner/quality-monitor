@@ -44,6 +44,7 @@ public class QualityMonitor extends AutoGradingRunner {
 
     private static final String NO_TITLE = "none";
     private static final String DEFAULT_TITLE_METRIC = "line";
+    public static final String PATCH_LINE_METRIC = "patch-line";
 
     /**
      * Public entry point for the GitHub action in the docker container, simply calls the action.
@@ -97,6 +98,22 @@ public class QualityMonitor extends AutoGradingRunner {
         log.logInfo("GitHub Action has finished");
     }
 
+    // Model now computes patch coverage. We only need to supply changed lines.
+    /* remove @Override until model hook is available */
+    protected java.util.Map<String, java.util.Set<Integer>> getChangedLines(final FilteredLog log) {
+        var enabled = StringUtils.isNotBlank(getEnv("ENABLE_PATCH_COVERAGE", log))
+                || StringUtils.isNotBlank(getEnv("PR_NUMBER", log));
+        if (!enabled) {
+            return java.util.Collections.emptyMap();
+        }
+        var repository = getEnv("GITHUB_REPOSITORY", log);
+        var prNumber = getEnv("PR_NUMBER", log);
+        // fetching directly to avoid logging token in Info log
+        var token = StringUtils.defaultString(System.getenv("GITHUB_TOKEN"));
+        var apiUrl = getEnv("GITHUB_API_URL", log);
+        var diffProvider = new GitHubDiffProvider();
+        return diffProvider.loadChangedLines(repository, prNumber, token, apiUrl, log);
+    }
     private void writeMetrics(final AggregatedScore score, final FilteredLog log) {
         try {
             var metrics = extractAllMetrics(score, log);
@@ -127,13 +144,14 @@ public class QualityMonitor extends AutoGradingRunner {
                 return;
             }
 
-            String oAuthToken = getEnv("GITHUB_TOKEN", log);
+            // fetching directly to avoid logging token in Info log
+            String oAuthToken = StringUtils.defaultString(System.getenv("GITHUB_TOKEN"));
             if (oAuthToken.isBlank()) {
                 log.logError("No valid GITHUB_TOKEN found - skipping");
                 return;
             }
 
-            var githubBuilder = new GitHubBuilder().withAppInstallationToken(oAuthToken);
+            var githubBuilder = new GitHubBuilder().withOAuthToken(oAuthToken);
             String apiUrl = getEnv("GITHUB_API_URL", log);
             if (!apiUrl.isBlank()) {
                 githubBuilder.withEndpoint(apiUrl);
@@ -252,6 +270,10 @@ public class QualityMonitor extends AutoGradingRunner {
         var metrics = new StringBuilder();
         score.getMetrics().forEach((metric, value) ->
                 metrics.append(String.format(Locale.ENGLISH, "%s=%d%n", metric, value)));
+        var patchLine = System.getProperty("PATCH_LINE_PERCENTAGE");
+        if (StringUtils.isNotBlank(patchLine)) {
+            metrics.append(String.format(Locale.ENGLISH, "%s=%d%n", "patch-line", Integer.parseInt(patchLine)));
+        }
         log.logInfo("---------------");
         log.logInfo("Metrics Summary");
         log.logInfo("---------------");
@@ -354,6 +376,14 @@ public class QualityMonitor extends AutoGradingRunner {
         }
 
         var metrics = score.getMetrics();
+
+        // Special-case: allow "patch-line" in the title using model metrics
+        if (PATCH_LINE_METRIC.equals(titleMetric)) {
+            var patch = score.getMetrics().get(PATCH_LINE_METRIC);
+            if (patch != null) {
+                return String.format(java.util.Locale.ENGLISH, "%s - Patch Coverage: %d%%", getChecksName(), patch);
+            }
+        }
 
         if (!metrics.containsKey(titleMetric)) {
             log.logError("Requested title metric '%s' not found in metrics: %s", titleMetric, metrics.keySet());
