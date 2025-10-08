@@ -28,7 +28,7 @@
     <module.name>${project.groupId}.quality.monitor</module.name>
     <docker-image-tag>${project.version}</docker-image-tag>
 
-    <autograding-model.version>8.5.0</autograding-model.version>
+    <autograding-model.version>8.6.0</autograding-model.version>
     <testcontainers.version>1.21.3</testcontainers.version>
     <github-api.version>1.330</github-api.version>
 
