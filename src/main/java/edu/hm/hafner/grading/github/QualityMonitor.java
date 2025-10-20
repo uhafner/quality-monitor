@@ -44,7 +44,6 @@ public class QualityMonitor extends AutoGradingRunner {
 
     private static final String NO_TITLE = "none";
     private static final String DEFAULT_TITLE_METRIC = "line";
-    public static final String PATCH_LINE_METRIC = "patch-line";
 
     /**
      * Public entry point for the GitHub action in the docker container, simply calls the action.
@@ -80,7 +79,10 @@ public class QualityMonitor extends AutoGradingRunner {
 
     @Override
     protected void publishGradingResult(final AggregatedScore score, final QualityGateResult qualityGateResult,
-            final FilteredLog log) {
+                                        final FilteredLog log) {
+        // Attach changed lines to coverage tree BEFORE generating reports/metrics
+        attachChangedLinesToCoverageTree(score, log);
+
         var errors = createErrorMessageMarkdown(log);
         var conclusion = determineConclusion(errors, qualityGateResult, log);
         var qualityGateDetails = qualityGateResult.createMarkdownSummary();
@@ -96,6 +98,97 @@ public class QualityMonitor extends AutoGradingRunner {
         writeMetrics(score, log);
 
         log.logInfo("GitHub Action has finished");
+    }
+
+    /**
+     * Attaches changed lines from the PR to the coverage tree so that modified lines coverage can be computed.
+     * This must be called before generating metrics or reports.
+     *
+     * @param score the aggregated score containing coverage reports
+     * @param log the logger
+     */
+    private void attachChangedLinesToCoverageTree(final AggregatedScore score, final FilteredLog log) {
+        var changedLines = getChangedLines(log);
+        if (changedLines == null || changedLines.isEmpty()) {
+            log.logInfo("No changed lines to attach for patch coverage computation");
+            return;
+        }
+
+        log.logInfo("Attaching changed lines to coverage tree for %d file(s)", changedLines.size());
+
+        // Iterate through all coverage scores and attach changed lines to their FileNodes
+        score.getCoverageScores().stream()
+                .flatMap(coverageScore -> coverageScore.getSubScores().stream())
+                .forEach(subScore -> attachChangedLinesToReport(subScore.getReport(), changedLines, log));
+
+        log.logInfo("Successfully attached changed lines to coverage tree");
+    }
+
+    /**
+     * Attaches changed lines to FileNodes in a coverage report.
+     *
+     * @param report the coverage report root node
+     * @param scmChangedLines mapping of SCM file paths to changed line numbers
+     * @param log the logger
+     */
+    private void attachChangedLinesToReport(final edu.hm.hafner.coverage.Node report,
+                                            final java.util.Map<String, java.util.Set<Integer>> scmChangedLines,
+                                            final FilteredLog log) {
+        // Create mapping of report paths to FileNodes
+        var fileNodesByPath = new java.util.HashMap<String, edu.hm.hafner.coverage.FileNode>();
+        for (var fileNode : report.getAllFileNodes()) {
+            fileNodesByPath.put(fileNode.getRelativePath(), fileNode);
+        }
+
+        // Map SCM paths to report paths and attach changed lines
+        int attachedFiles = 0;
+        for (var entry : scmChangedLines.entrySet()) {
+            String scmPath = entry.getKey();
+            java.util.Set<Integer> changedLineNumbers = entry.getValue();
+
+            // Try to find matching report path (simple suffix matching for now)
+            String matchingReportPath = findMatchingReportPath(scmPath, fileNodesByPath.keySet());
+
+            if (matchingReportPath != null && fileNodesByPath.containsKey(matchingReportPath)) {
+                var fileNode = fileNodesByPath.get(matchingReportPath);
+                for (int lineNumber : changedLineNumbers) {
+                    fileNode.addModifiedLines(lineNumber);
+                }
+                attachedFiles++;
+            }
+        }
+
+        if (attachedFiles > 0) {
+            log.logInfo("  Attached changed lines to %d file(s) in this coverage report", attachedFiles);
+        }
+    }
+
+    /**
+     * Finds a report path that matches the given SCM path using suffix matching.
+     * This handles cases where SCM paths are absolute but report paths are relative.
+     *
+     * @param scmPath the SCM file path
+     * @param reportPaths available report paths
+     * @return the matching report path, or null if no match found
+     */
+    private String findMatchingReportPath(final String scmPath, final java.util.Set<String> reportPaths) {
+        // First try exact match
+        if (reportPaths.contains(scmPath)) {
+            return scmPath;
+        }
+
+        // Try suffix matching (longest match wins)
+        String bestMatch = null;
+        int bestMatchLength = 0;
+
+        for (String reportPath : reportPaths) {
+            if (scmPath.endsWith(reportPath) && reportPath.length() > bestMatchLength) {
+                bestMatch = reportPath;
+                bestMatchLength = reportPath.length();
+            }
+        }
+
+        return bestMatch;
     }
 
     // Model now computes patch coverage. We only need to supply changed lines.
@@ -114,6 +207,7 @@ public class QualityMonitor extends AutoGradingRunner {
         var diffProvider = new GitHubDiffProvider();
         return diffProvider.loadChangedLines(repository, prNumber, token, apiUrl, log);
     }
+
     private void writeMetrics(final AggregatedScore score, final FilteredLog log) {
         try {
             var metrics = extractAllMetrics(score, log);
@@ -134,8 +228,8 @@ public class QualityMonitor extends AutoGradingRunner {
     }
 
     private void addComment(final AggregatedScore score, final String textSummary,
-            final String markdownDetails, final String markdownSummary, final String prSummary,
-            final Conclusion conclusion, final FilteredLog log) {
+                            final String markdownDetails, final String markdownSummary, final String prSummary,
+                            final Conclusion conclusion, final FilteredLog log) {
         try {
             var repository = getEnv("GITHUB_REPOSITORY", log);
             if (repository.isBlank()) {
@@ -270,10 +364,6 @@ public class QualityMonitor extends AutoGradingRunner {
         var metrics = new StringBuilder();
         score.getMetrics().forEach((metric, value) ->
                 metrics.append(String.format(Locale.ENGLISH, "%s=%d%n", metric, value)));
-        var patchLine = System.getProperty("PATCH_LINE_PERCENTAGE");
-        if (StringUtils.isNotBlank(patchLine)) {
-            metrics.append(String.format(Locale.ENGLISH, "%s=%d%n", "patch-line", Integer.parseInt(patchLine)));
-        }
         log.logInfo("---------------");
         log.logInfo("Metrics Summary");
         log.logInfo("---------------");
@@ -329,7 +419,7 @@ public class QualityMonitor extends AutoGradingRunner {
      * @return the conclusion
      */
     private Conclusion determineConclusion(final String errors, final QualityGateResult qualityGateResult,
-            final FilteredLog log) {
+                                           final FilteredLog log) {
         if (!errors.isBlank()) {
             log.logInfo("Setting conclusion to FAILURE due to errors in log");
             return Conclusion.FAILURE;
@@ -376,14 +466,6 @@ public class QualityMonitor extends AutoGradingRunner {
         }
 
         var metrics = score.getMetrics();
-
-        // Special-case: allow "patch-line" in the title using model metrics
-        if (PATCH_LINE_METRIC.equals(titleMetric)) {
-            var patch = score.getMetrics().get(PATCH_LINE_METRIC);
-            if (patch != null) {
-                return String.format(java.util.Locale.ENGLISH, "%s - Patch Coverage: %d%%", getChecksName(), patch);
-            }
-        }
 
         if (!metrics.containsKey(titleMetric)) {
             log.logError("Requested title metric '%s' not found in metrics: %s", titleMetric, metrics.keySet());

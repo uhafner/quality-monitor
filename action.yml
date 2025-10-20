@@ -12,7 +12,7 @@ inputs:
     description: "Name of the GitHub checks (if not set the default name 'Quality Monitor' will be used)"
     required: false
   title-metric:
-    description: "Metric to show in the GitHub check title (options: line, branch, instruction, mutation, patch-line, etc., or none)"
+    description: "Metric to show in the GitHub check title (options: line, branch, instruction, mutation, line-modified, etc., or none)"
     required: false
   pr-number:
     description: "Pull request number (if not set, PR comments will be skipped)"
