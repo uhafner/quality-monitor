@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    name: Build and deploy to Docker hub
+    name: Build and deploy to Docker Hub and GHCR
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -22,8 +22,18 @@ jobs:
         uses: stCarolas/setup-maven@v5
         with:
           maven-version: 3.9.11
-      - name: Build and deploy
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and deploy to Docker Hub
         env:
           DOCKER_IO_USERNAME: ${{ secrets.DOCKER_IO_USERNAME }}
           DOCKER_IO_PASSWORD: ${{ secrets.DOCKER_IO_PASSWORD }}
         run: mvn -ntp clean install -Pci
+      - name: Build and deploy to GHCR
+        run: | 
+          mvn -ntp clean compile jib:build \
+            -Djib.to.image=ghcr.io/${{ github.repository_owner }}/quality-monitor
