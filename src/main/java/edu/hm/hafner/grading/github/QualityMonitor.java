@@ -9,6 +9,7 @@ import edu.hm.hafner.grading.AggregatedScore;
 import edu.hm.hafner.grading.AutoGradingRunner;
 import edu.hm.hafner.grading.GradingReport;
 import edu.hm.hafner.grading.QualityGateResult;
+import edu.hm.hafner.grading.Scope;
 import edu.hm.hafner.util.FilteredLog;
 import edu.hm.hafner.util.VisibleForTesting;
 
@@ -250,7 +251,7 @@ public class QualityMonitor extends AutoGradingRunner {
 
     String extractAllMetrics(final AggregatedScore score, final FilteredLog log) {
         var metrics = new StringBuilder();
-        score.getMetrics().forEach((metric, value) ->
+        score.getMetrics(Scope.PROJECT).forEach((metric, value) ->
                 metrics.append(String.format(Locale.ENGLISH, "%s=%d%n", metric, value)));
         log.logInfo("---------------");
         log.logInfo("Metrics Summary");
