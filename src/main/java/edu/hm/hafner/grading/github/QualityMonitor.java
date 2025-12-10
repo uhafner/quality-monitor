@@ -9,6 +9,7 @@ import edu.hm.hafner.grading.AggregatedScore;
 import edu.hm.hafner.grading.AutoGradingRunner;
 import edu.hm.hafner.grading.GradingReport;
 import edu.hm.hafner.grading.QualityGateResult;
+import edu.hm.hafner.grading.Scope;
 import edu.hm.hafner.util.FilteredLog;
 import edu.hm.hafner.util.VisibleForTesting;
 
@@ -250,8 +251,8 @@ public class QualityMonitor extends AutoGradingRunner {
 
     String extractAllMetrics(final AggregatedScore score, final FilteredLog log) {
         var metrics = new StringBuilder();
-        score.getMetrics().forEach((metric, value) ->
-                metrics.append(String.format(Locale.ENGLISH, "%s=%d%n", metric, value)));
+        score.getMetrics(Scope.PROJECT).forEach((metric, value) ->
+                metrics.append(String.format(Locale.ENGLISH, "%s=%f%n", metric, value)));
         log.logInfo("---------------");
         log.logInfo("Metrics Summary");
         log.logInfo("---------------");
@@ -353,7 +354,7 @@ public class QualityMonitor extends AutoGradingRunner {
             return getChecksName();
         }
 
-        var metrics = score.getMetrics();
+        var metrics = score.getMetrics(Scope.PROJECT);
 
         if (!metrics.containsKey(titleMetric)) {
             log.logError("Requested title metric '%s' not found in metrics: %s", titleMetric, metrics.keySet());
@@ -365,7 +366,7 @@ public class QualityMonitor extends AutoGradingRunner {
         if (metrics.containsKey(titleMetric)) {
             var value = metrics.get(titleMetric);
             if (PARSER_REGISTRY.contains(titleMetric)) {
-                return String.format(Locale.ENGLISH, "%s - %s: %d", getChecksName(),
+                return String.format(Locale.ENGLISH, "%s - %s: %f", getChecksName(),
                         PARSER_REGISTRY.get(titleMetric).getName(), value);
             }
             try {
