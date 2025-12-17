@@ -137,9 +137,9 @@ public class QualityMonitorDockerITest {
 
             var metrics = new String[] {
                     "tests=1",
-                    "line=11",
-                    "branch=10",
-                    "mutation=8",
+                    "line=10.93",
+                    "branch=9.52",
+                    "mutation=7.86",
                     "bugs=1",
                     "spotbugs=1",
                     "style=2",
@@ -148,24 +148,26 @@ public class QualityMonitorDockerITest {
                     "ncss=1200",
                     "npath-complexity=432",
                     "cognitive-complexity=172",
-                    "cyclomatic-complexity=355"
+                    "cyclomatic-complexity=355",
+                    "test-success-rate=100.00"
             };
 
             assertThat(readStandardOut(container))
                     .contains("Obtaining configuration from environment variable CONFIG")
                     .contains(metrics)
                     .contains("Processing 1 test configuration(s)",
-                            "-> Unittests Total: TESTS: 1",
-                            "=> Unittests: 1 tests passed",
-                            "=> JUnit: 1 tests passed",
+                            "-> Unittests (project) Total: 1",
+                            "=> Unittests: 100.00% successful (1 passed)",
+                            "=> JUnit: 100.00% successful (1 passed)",
                             "Processing 2 coverage configuration(s)",
-                            "-> Line Coverage Total: LINE: 10.93% (33/302)",
-                            "=> Line Coverage: 11% (269 missed lines)",
-                            "-> Branch Coverage Total: BRANCH: 9.52% (4/42)",
-                            "=> Branch Coverage: 10% (38 missed branches)",
-                            "=> JaCoCo: 10% (307 missed items)",
-                            "-> Mutation Coverage Total: MUTATION: 7.86% (11/140)",
-                            "=> PIT: 8% (129 survived mutations)",
+                            "-> Line Coverage (project) Total: LINE: 10.93% (33/302)",
+                            "=> Line Coverage: 10.93% (269 missed lines)",
+                            "-> Branch Coverage (project) Total: BRANCH: 9.52% (4/42)",
+                            "=> Branch Coverage: 9.52% (38 missed branches)",
+                            "=> JaCoCo: 10.76% (307 missed items)",
+                            "-> Mutation Coverage (project) Total: MUTATION: 7.86% (11/140)",
+                            "=> Mutation Coverage: 7.86% (129 survived mutations)",
+                            "=> PIT: 7.86% (129 survived mutations)",
                             "Processing 2 static analysis configuration(s)",
                             "-> CheckStyle (checkstyle): 1 warning (normal: 1)",
                             "-> PMD (pmd): 1 warning (normal: 1)",
@@ -192,14 +194,14 @@ public class QualityMonitorDockerITest {
                     .contains(
                             "No configuration provided (environment variable CONFIG not set), using default configuration")
                     .contains("Processing 1 test configuration(s)",
-                            "-> JUnit Tests Total: TESTS: 1",
-                            "=> Tests: 1 tests passed",
+                            "-> JUnit Tests (project) Total: 1",
+                            "=> Tests: 100.00% successful (1 passed)",
                             "Processing 2 coverage configuration(s)",
-                            "-> Line Coverage Total: LINE: 10.93% (33/302)",
-                            "-> Branch Coverage Total: BRANCH: 9.52% (4/42)",
-                            "=> Code Coverage: 10%",
-                            "-> Mutation Coverage Total: MUTATION: 7.86% (11/140)",
-                            "=> Mutation Coverage: 8% ",
+                            "-> Line Coverage (project) Total: LINE: 10.93% (33/302)",
+                            "-> Branch Coverage (project) Total: BRANCH: 9.52% (4/42)",
+                            "=> Code Coverage: 10.76% (307 missed items)",
+                            "-> Mutation Coverage (project) Total: MUTATION: 7.86% (11/140)",
+                            "=> Mutation Coverage: 7.86% (129 survived mutations)",
                             "Processing 2 static analysis configuration(s)",
                             "-> CheckStyle (checkstyle): 1 warning (normal: 1)",
                             "-> PMD (pmd): 1 warning (normal: 1)",
@@ -215,16 +217,16 @@ public class QualityMonitorDockerITest {
             container.withWorkingDirectory("/github/workspace").start();
             assertThat(readStandardOut(container))
                     .contains("Processing 1 test configuration(s)",
-                            "=> JUnit Tests: 0 tests passed",
+                            "=> JUnit Tests: No test results available",
+                            "=> Tests: No test results available",
                             "Configuration error for 'JUnit Tests'?",
-                            "=> Tests: 0 tests passed",
                             "Processing 2 coverage configuration(s)",
                             "Configuration error for 'Line Coverage'?",
                             "Configuration error for 'Branch Coverage'?",
                             "Configuration error for 'Mutation Coverage'?",
-                            "=> Code Coverage: 100% (0 missed items)",
-                            "=> Mutation Coverage: 100% (0 survived mutations)",
-                            "=> Test Strength: 100% (0 survived mutations in tested code)",
+                            "=> Code Coverage: n/a (0 missed items)",
+                            "=> Mutation Coverage: n/a (0 survived mutations)",
+                            "=> Test Strength: n/a (0 survived mutations in tested code)",
                             "Processing 2 static analysis configuration(s)",
                             "Configuration error for 'CheckStyle'?",
                             "Configuration error for 'PMD'?",
@@ -238,7 +240,7 @@ public class QualityMonitorDockerITest {
     }
 
     private GenericContainer<?> createContainer() {
-        return new GenericContainer<>(DockerImageName.parse("uhafner/quality-monitor:3.6.0-SNAPSHOT"));
+        return new GenericContainer<>(DockerImageName.parse("uhafner/quality-monitor:4.0.0-SNAPSHOT"));
     }
 
     private String readStandardOut(final GenericContainer<? extends GenericContainer<?>> container)
