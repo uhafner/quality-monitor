@@ -266,13 +266,13 @@ public class QualityMonitorITest extends ResourceTest {
         assertThat(runAutoGrading())
                 .contains("Obtaining configuration from environment variable CONFIG")
                 .contains("Processing 1 test configuration(s)",
-                        "=> Tests: 13 tests failed, 24 passed",
+                        "=> Tests: 64.86% successful (13 failed, 24 passed)",
                         "Processing 2 coverage configuration(s)",
-                        "-> Line Coverage Total: LINE: 10.93% (33/302)",
-                        "-> Branch Coverage Total: BRANCH: 9.52% (4/42)",
-                        "=> JaCoCo: 10%",
-                        "-> Mutation Coverage Total: MUTATION: 7.86% (11/140)",
-                        "=> PIT: 8%",
+                        "-> Line Coverage (project) Total: LINE: 10.93% (33/302)",
+                        "-> Branch Coverage (project) Total: BRANCH: 9.52% (4/42)",
+                        "=> JaCoCo: 10.76% (307 missed items)",
+                        "-> Mutation Coverage (project) Total: MUTATION: 7.86% (11/140)",
+                        "=> PIT: 7.86% (129 survived mutations)",
                         "Processing 2 static analysis configuration(s)",
                         "-> CheckStyle (checkstyle): 19 warnings (normal: 19)",
                         "=> CheckStyle: 19 warnings (normal: 19)",
@@ -286,18 +286,22 @@ public class QualityMonitorITest extends ResourceTest {
                         "=> N-Path Complexity: 432")
                 .contains("Environment variable 'QUALITY_GATES' not found or empty",
                         "No quality gates to evaluate")
-                .contains("mutation=8",
-                        "bugs=1",
-                        "tests=37",
-                        "line=11",
+                .contains("loc=0",
+                        "line=10.93",
                         "pmd=41",
-                        "style=60",
-                        "spotbugs=1",
-                        "checkstyle=19",
-                        "branch=10",
                         "ncss=1200",
                         "npath-complexity=432",
+                        "weight-of-class=0.00",
+                        "branch=9.52",
+                        "mutation=7.86",
+                        "bugs=1",
+                        "tests=37",
+                        "style=60",
+                        "spotbugs=1",
                         "cognitive-complexity=172",
+                        "test-success-rate=64.86",
+                        "cohesion=0.00",
+                        "checkstyle=19",
                         "cyclomatic-complexity=355");
     }
 
@@ -314,7 +318,7 @@ public class QualityMonitorITest extends ResourceTest {
                         "Parsed 1 quality gate(s) from JSON configuration",
                         "Quality gates evaluation completed: ❌ FAILURE",
                         "Passed: 0, Failed: 1",
-                        "❌ Line Coverage: 11.00 >= 100.00");
+                        "❌ Line Coverage: 10.93 >= 100.00");
     }
 
     @Test
@@ -331,7 +335,7 @@ public class QualityMonitorITest extends ResourceTest {
                         "Evaluating 1 quality gate(s)",
                         "Quality gates evaluation completed: ✅ SUCCESS",
                         "  Passed: 1, Failed: 0",
-                        "  ✅ Line Coverage: 11.00 >= 10.00",
+                        "  ✅ Line Coverage: 10.93 >= 10.00",
                         "Setting conclusion to SUCCESS - all quality gates passed");
     }
 
