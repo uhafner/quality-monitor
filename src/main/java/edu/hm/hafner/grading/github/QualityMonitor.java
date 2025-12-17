@@ -251,7 +251,7 @@ public class QualityMonitor extends AutoGradingRunner {
 
     String extractAllMetrics(final AggregatedScore score, final FilteredLog log) {
         var metrics = new StringBuilder();
-        score.getRoundedMetrics(Scope.PROJECT).forEach((metric, value) ->
+        score.getRoundedMetrics().forEach((metric, value) ->
                 metrics.append(String.format(Locale.ENGLISH, "%s=%s%n", metric, value)));
         log.logInfo("---------------");
         log.logInfo("Metrics Summary");
