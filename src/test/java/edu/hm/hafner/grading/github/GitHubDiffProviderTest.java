@@ -21,18 +21,19 @@ class GitHubDiffProviderTest {
     @Test
     void shouldIgnoreDeletionsAndAdvanceContext() {
         String diff = """
-                   @@ -10,3 +20,3 @@
-                    lineA
-                   -deleted
-                    lineB
-                   +added
-                    lineC
+                @@ -10,3 +20,3 @@
+                 lineA
+                -deleted
+                 lineB
+                +added
+                 lineC
                 """;
-        // The new hunk starts at 20, the first added occurs after two context/deletion lines advancing the pointer to 22, then '+': 22
+        // New hunk starts at 20, first added occurs after two context/deletion lines advancing pointer to 22, then '+': 22
         assertThat(parse(diff)).containsExactly(22);
     }
 
     @Test
+    @SuppressWarnings("StringConcatToTextBlock")
     void shouldHandleCrlf() {
         String diff = "@@ -1,1 +1,2 @@\r\n"
                 + " line1\r\n"

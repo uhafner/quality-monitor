@@ -376,7 +376,7 @@ public class QualityMonitor extends AutoGradingRunner {
                         metric.getDisplayName(), metric.format(Locale.ENGLISH, value));
             }
             catch (IllegalArgumentException exception) {
-                return String.format(Locale.ENGLISH, "%s - %s: %d", getChecksName(),
+                return String.format(Locale.ENGLISH, "%s - %s: %f", getChecksName(),
                         titleMetric, value);
             }
         }

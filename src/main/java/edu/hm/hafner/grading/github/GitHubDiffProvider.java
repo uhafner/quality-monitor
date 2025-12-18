@@ -31,6 +31,9 @@ class GitHubDiffProvider {
     private static final String DELTA_ANALYSIS_PREFIX = "[Delta Analysis] ";
     private static final Pattern HUNK_REGEXP = Pattern.compile(
             "^@@ -(?<oldStart>\\d+)(?:,\\d+)? \\+(?<newStart>\\d+)(?:,\\d+)? @@.*$");
+    private static final String DIFF_REMOVED = "removed";
+    private static final String DIFF_RENAMED = "renamed";
+    private static final String DIFF_COPIED = "copied";
 
     /**
      * Loads changed lines per file from a GitHub PR.
@@ -60,7 +63,7 @@ class GitHubDiffProvider {
                 String newPath = normalize(file.getFilename()); // use new filename for renames
                 String oldPath = normalize(file.getPreviousFilename());
 
-                if ("removed".equals(status)) {
+                if (DIFF_REMOVED.equals(status)) {
                     // Skip removed files; only added/modified/renamed/copied are relevant
                     continue;
                 }
@@ -93,7 +96,7 @@ class GitHubDiffProvider {
 
     private String getProcessingMessage(final String status, final String newPath, final String oldPath) {
         var logMessage = (DELTA_ANALYSIS_PREFIX + "Processing %s file: %s").formatted(status, newPath);
-        if (!oldPath.isBlank() && Strings.CI.equalsAny(status, "renamed", "copied")) {
+        if (!oldPath.isBlank() && Strings.CI.equalsAny(status, DIFF_RENAMED, DIFF_COPIED)) {
             logMessage += " (previous=%s)".formatted(oldPath);
         }
         return logMessage;
@@ -124,8 +127,10 @@ class GitHubDiffProvider {
      *
      * @param patch
      *         the unified diff text
+     * @return the set of 1-based line numbers in the new file that were added or replaced
      */
     @VisibleForTesting
+    @SuppressWarnings({"PMD.CyclomaticComplexity", "StringSplitter"})
     Set<Integer> parseUnifiedDiffForNewFileAddedLines(final String patch) {
         Set<Integer> newFileChangedLines = new HashSet<>();
         int newLinePointer = -1;
@@ -188,6 +193,6 @@ class GitHubDiffProvider {
     }
 
     private String safeLower(final String s) {
-        return s == null ? "" : s.toLowerCase(java.util.Locale.ENGLISH);
+        return StringUtils.toRootLowerCase(s);
     }
 }
