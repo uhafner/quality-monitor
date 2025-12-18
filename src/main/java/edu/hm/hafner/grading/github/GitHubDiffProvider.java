@@ -132,7 +132,7 @@ class GitHubDiffProvider {
      * @return the set of 1-based line numbers in the new file that were added or replaced
      */
     @VisibleForTesting
-    @SuppressWarnings({"PMD.CyclomaticComplexity", "StringSplitter"})
+    @SuppressWarnings("StringSplitter")
     Set<Integer> parseUnifiedDiffForNewFileAddedLines(final String patch) {
         Set<Integer> newFileChangedLines = new HashSet<>();
         int newLinePointer = -1;
@@ -158,12 +158,17 @@ class GitHubDiffProvider {
 
             char marker = line.charAt(0);
             switch (marker) {
-                case '+' -> { // Added or replaced line in a new file
+                case '+' -> {
+                    // Added or replaced line in a new file
                     newFileChangedLines.add(newLinePointer);
                     newLinePointer++;
                 }
-                case ' ' -> newLinePointer++; // context line, advances the new file pointer
+                case ' ' -> {
+                    // context line, advances the new file pointer
+                    newLinePointer++;
+                }
                 default -> {
+                    // Removed line or other unknown line, does not advance the new file pointer
                 }
             }
         }
