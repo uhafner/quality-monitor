@@ -103,7 +103,8 @@ class GitHubDiffProvider {
     }
 
     private String createEmptyPatchMessage(final String newPath, final String oldPath, final String status) {
-        var message = (DELTA_ANALYSIS_PREFIX + "Skipping file without patch (possibly binary/large): %s ").formatted(newPath);
+        var message = (DELTA_ANALYSIS_PREFIX + "Skipping file without patch (possibly binary/large): %s ").formatted(
+                newPath);
         if (oldPath.isBlank()) {
             return message + "(status=%s)".formatted(status);
         }
@@ -127,6 +128,7 @@ class GitHubDiffProvider {
      *
      * @param patch
      *         the unified diff text
+     *
      * @return the set of 1-based line numbers in the new file that were added or replaced
      */
     @VisibleForTesting
@@ -156,21 +158,13 @@ class GitHubDiffProvider {
 
             char marker = line.charAt(0);
             switch (marker) {
-                case '+':
-                    // Added or replaced line in a new file
+                case '+' -> { // Added or replaced line in a new file
                     newFileChangedLines.add(newLinePointer);
                     newLinePointer++;
-                    break;
-                case ' ': // context line, advances the new file pointer
-                    newLinePointer++;
-                    break;
-                case '-': // deletion in the old file; does not advance the new pointer
-                    break;
-                case '\\': // "\\ No newline at end of file" marker
-                    break;
-                default:
-                    // Headers like "+++" or "---" may appear; ignore.
-                    break;
+                }
+                case ' ' -> newLinePointer++; // context line, advances the new file pointer
+                default -> {
+                }
             }
         }
 
