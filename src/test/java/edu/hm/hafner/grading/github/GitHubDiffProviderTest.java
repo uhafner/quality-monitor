@@ -79,5 +79,3 @@ class GitHubDiffProviderTest {
         return provider.parseUnifiedDiffForNewFileAddedLines(diff);
     }
 }
-
-
