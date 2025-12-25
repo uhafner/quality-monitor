@@ -29,7 +29,7 @@
     <docker-image-tag>${project.version}</docker-image-tag>
 
     <autograding-model.version>10.1.0</autograding-model.version>
-    <testcontainers.version>2.0.2</testcontainers.version>
+    <testcontainers.version>2.0.3</testcontainers.version>
     <github-api.version>1.330</github-api.version>
 
     <jib-maven-plugin.version>3.5.1</jib-maven-plugin.version>
