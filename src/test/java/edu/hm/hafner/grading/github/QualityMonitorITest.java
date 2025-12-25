@@ -268,10 +268,10 @@ public class QualityMonitorITest extends ResourceTest {
                 .contains("Processing 1 test configuration(s)",
                         "=> Tests: 64.86% successful (13 failed, 24 passed)",
                         "Processing 2 coverage configuration(s)",
-                        "-> Line Coverage (project) Total: LINE: 10.93% (33/302)",
-                        "-> Branch Coverage (project) Total: BRANCH: 9.52% (4/42)",
+                        "-> Line Coverage (Whole Project) Total: LINE: 10.93% (33/302)",
+                        "-> Branch Coverage (Whole Project) Total: BRANCH: 9.52% (4/42)",
                         "=> JaCoCo: 10.76% (307 missed items)",
-                        "-> Mutation Coverage (project) Total: MUTATION: 7.86% (11/140)",
+                        "-> Mutation Coverage (Whole Project) Total: MUTATION: 7.86% (11/140)",
                         "=> PIT: 7.86% (129 survived mutations)",
                         "Processing 2 static analysis configuration(s)",
                         "-> CheckStyle (checkstyle): 19 warnings (normal: 19)",
@@ -318,7 +318,7 @@ public class QualityMonitorITest extends ResourceTest {
                         "Parsed 1 quality gate(s) from JSON configuration",
                         "Quality gates evaluation completed: ❌ FAILURE",
                         "Passed: 0, Failed: 1",
-                        "❌ Line Coverage: 10.93 >= 100.00");
+                        "❌ Line Coverage (Whole Project): 10.93 >= 100.00");
     }
 
     @Test
@@ -335,7 +335,7 @@ public class QualityMonitorITest extends ResourceTest {
                         "Evaluating 1 quality gate(s)",
                         "Quality gates evaluation completed: ✅ SUCCESS",
                         "  Passed: 1, Failed: 0",
-                        "  ✅ Line Coverage: 10.93 >= 10.00",
+                        "  ✅ Line Coverage (Whole Project): 10.93 >= 10.00",
                         "Setting conclusion to SUCCESS - all quality gates passed");
     }
 

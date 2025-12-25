@@ -20,7 +20,9 @@ import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import org.kohsuke.github.GHCheckRun;
 import org.kohsuke.github.GHCheckRun.Conclusion;
@@ -84,7 +86,7 @@ public class QualityMonitor extends AutoGradingRunner {
         var errors = createErrorMessageMarkdown(log);
         var conclusion = determineConclusion(errors, qualityGateResult, log);
         var qualityGateDetails = qualityGateResult.createMarkdownSummary();
-        var showHeaders = StringUtils.isNotBlank(getEnv("SHOW_HEADERS", log));
+        var showHeaders = StringUtils.isNotBlank(getEnv("SHOW_HEADERS"));
         var results = new GradingReport();
         addComment(score,
                 results.getTextSummary(score, getChecksName()),
@@ -121,21 +123,21 @@ public class QualityMonitor extends AutoGradingRunner {
             final String markdownDetails, final String markdownSummary, final String prSummary,
             final Conclusion conclusion, final FilteredLog log) {
         try {
-            var repository = getEnv("GITHUB_REPOSITORY", log);
+            var repository = getEnv("GITHUB_REPOSITORY");
             if (repository.isBlank()) {
                 log.logError("No GITHUB_REPOSITORY defined - skipping");
 
                 return;
             }
 
-            String oAuthToken = getEnv("GITHUB_TOKEN", log);
+            String oAuthToken = getEnv("GITHUB_TOKEN");
             if (oAuthToken.isBlank()) {
                 log.logError("No valid GITHUB_TOKEN found - skipping");
                 return;
             }
 
             var githubBuilder = new GitHubBuilder().withAppInstallationToken(oAuthToken);
-            String apiUrl = getEnv("GITHUB_API_URL", log);
+            String apiUrl = getEnv("GITHUB_API_URL");
             if (!apiUrl.isBlank()) {
                 githubBuilder.withEndpoint(apiUrl);
             }
@@ -163,20 +165,20 @@ public class QualityMonitor extends AutoGradingRunner {
     }
 
     private void attachAnnotations(final AggregatedScore score, final Output output, final FilteredLog log) {
-        if (getEnv("SKIP_ANNOTATIONS", log).isEmpty()) {
-            var annotationBuilder = new GitHubAnnotationsBuilder(output, computeAbsolutePathPrefixToRemove(log), log);
+        if (getEnv("SKIP_ANNOTATIONS").isEmpty()) {
+            var annotationBuilder = new GitHubAnnotationsBuilder(output, computeAbsolutePathPrefixToRemove(), log);
             annotationBuilder.createAnnotations(score);
         }
     }
 
     private void commentPullRequest(final String prSummary, final String checksResult, final String repository,
             final GitHub github, final FilteredLog log) throws IOException {
-        var prNumber = getEnv("PR_NUMBER", log);
+        var prNumber = getEnv("PR_NUMBER");
         if (prNumber.isBlank()) {
             return;
         }
 
-        var strategy = getEnv("COMMENTS_STRATEGY", log);
+        var strategy = getEnv("COMMENTS_STRATEGY");
         var previousComment = findPreviousComment(github, repository, prNumber);
 
         if ((Strings.CI.equals(strategy, "REMOVE") || StringUtils.isEmpty(strategy))
@@ -264,15 +266,13 @@ public class QualityMonitor extends AutoGradingRunner {
         return StringUtils.defaultIfBlank(System.getenv("CHECKS_NAME"), getDisplayName());
     }
 
-    private String computeAbsolutePathPrefixToRemove(final FilteredLog log) {
-        return String.format("%s/%s/", getEnv("RUNNER_WORKSPACE", log),
-                StringUtils.substringAfter(getEnv("GITHUB_REPOSITORY", log), "/"));
+    private String computeAbsolutePathPrefixToRemove() {
+        return String.format("%s/%s/", getEnv("RUNNER_WORKSPACE"),
+                StringUtils.substringAfter(getEnv("GITHUB_REPOSITORY"), "/"));
     }
 
-    private String getEnv(final String key, final FilteredLog log) {
-        String value = StringUtils.defaultString(System.getenv(key));
-        log.logInfo(">>>> " + key + ": " + value);
-        return value;
+    private String getEnv(final String key) {
+        return StringUtils.defaultString(System.getenv(key));
     }
 
     /**
@@ -284,13 +284,13 @@ public class QualityMonitor extends AutoGradingRunner {
      * @return the SHA to use for the check
      */
     private String getCustomSha(final FilteredLog log) {
-        String customSha = getEnv("SHA", log);
+        String customSha = getEnv("SHA");
         if (!customSha.isBlank()) {
             log.logInfo("Using custom SHA from SHA: " + customSha);
             return customSha;
         }
 
-        String defaultSha = getEnv("GITHUB_SHA", log);
+        String defaultSha = getEnv("GITHUB_SHA");
         log.logInfo("Using default SHA from GITHUB_SHA: " + defaultSha);
         return defaultSha;
     }
@@ -342,9 +342,10 @@ public class QualityMonitor extends AutoGradingRunner {
      *
      * @return the title
      */
-    private String createMetricsBasedTitle(final AggregatedScore score, final Conclusion conclusion, final FilteredLog log) {
+    private String createMetricsBasedTitle(final AggregatedScore score, final Conclusion conclusion,
+            final FilteredLog log) {
         var titleMetric = StringUtils.defaultIfBlank(
-                StringUtils.lowerCase(getEnv("TITLE_METRIC", log)),
+                StringUtils.lowerCase(getEnv("TITLE_METRIC")),
                 DEFAULT_TITLE_METRIC);
 
         if (NO_TITLE.equals(titleMetric)) {
@@ -375,12 +376,28 @@ public class QualityMonitor extends AutoGradingRunner {
                         metric.getDisplayName(), metric.format(Locale.ENGLISH, value));
             }
             catch (IllegalArgumentException exception) {
-                return String.format(Locale.ENGLISH, "%s - %s: %d", getChecksName(),
+                return String.format(Locale.ENGLISH, "%s - %s: %f", getChecksName(),
                         titleMetric, value);
             }
         }
         log.logInfo("Requested title metric '%s' not found in metrics: %s", titleMetric, metrics.keySet());
 
         return getChecksName();
+    }
+
+    @Override
+    protected Map<String, Set<Integer>> getModifiedLines(final FilteredLog log) {
+        var prNumber = getEnv("PR_NUMBER");
+        if (StringUtils.isBlank(prNumber)) {
+            return super.getModifiedLines(log);
+        }
+        var pr = Integer.parseInt(prNumber);
+
+        var repository = getEnv("GITHUB_REPOSITORY");
+        var token = getEnv("GITHUB_TOKEN");
+        var apiUrl = getEnv("GITHUB_API_URL");
+        var diffProvider = new GitHubDiffProvider();
+
+        return diffProvider.loadChangedLines(repository, token, apiUrl, log, pr);
     }
 }
