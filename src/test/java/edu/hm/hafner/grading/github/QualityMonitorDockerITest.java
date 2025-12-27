@@ -156,28 +156,28 @@ public class QualityMonitorDockerITest {
                     .contains("Obtaining configuration from environment variable CONFIG")
                     .contains(metrics)
                     .contains("Processing 1 test configuration(s)",
-                            "-> Unittests (Whole Project) Total: 1",
-                            "=> Unittests: 100.00% successful (1 passed)",
-                            "=> JUnit: 100.00% successful (1 passed)",
+                            "-> Unittests Total: 1",
+                            "=> Unittests: 100.00% successful (1 passed) [Whole Project]",
+                            "=> JUnit: 100.00% successful (1 passed) [Whole Project]",
                             "Processing 2 coverage configuration(s)",
-                            "-> Line Coverage (Whole Project) Total: LINE: 10.93% (33/302)",
-                            "=> Line Coverage: 10.93% (269 missed lines)",
-                            "-> Branch Coverage (Whole Project) Total: BRANCH: 9.52% (4/42)",
-                            "=> Branch Coverage: 9.52% (38 missed branches)",
-                            "=> JaCoCo: 10.76% (307 missed items)",
-                            "-> Mutation Coverage (Whole Project) Total: MUTATION: 7.86% (11/140)",
-                            "=> Mutation Coverage: 7.86% (129 survived mutations)",
-                            "=> PIT: 7.86% (129 survived mutations)",
+                            "-> Line Coverage Total: LINE: 10.93% (33/302) [Whole Project]",
+                            "=> Line Coverage: 10.93% (269 missed lines) [Whole Project]",
+                            "-> Branch Coverage Total: BRANCH: 9.52% (4/42) [Whole Project]",
+                            "=> Branch Coverage: 9.52% (38 missed branches) [Whole Project]",
+                            "=> JaCoCo: 10.76% (307 missed items) [Whole Project]",
+                            "-> Mutation Coverage Total: MUTATION: 7.86% (11/140) [Whole Project]",
+                            "=> Mutation Coverage: 7.86% (129 survived mutations) [Whole Project]",
+                            "=> PIT: 7.86% (129 survived mutations) [Whole Project]",
                             "Processing 2 static analysis configuration(s)",
-                            "-> CheckStyle (checkstyle): 1 warning (normal: 1)",
-                            "-> PMD (pmd): 1 warning (normal: 1)",
-                            "=> Style: 2 warnings (normal: 2)",
-                            "-> SpotBugs (spotbugs): 1 bug (low: 1)",
-                            "=> Bugs: 1 bug (low: 1)",
-                            "=> Cyclomatic Complexity: 355",
-                            "=> Cognitive Complexity: 172",
-                            "=> Non Commenting Source Statements: 1200",
-                            "=> N-Path Complexity: 432");
+                            "-> CheckStyle (checkstyle): 1 warning (normal: 1) [Whole Project]",
+                            "-> PMD (pmd): 1 warning (normal: 1) [Whole Project]",
+                            "=> Style: 2 warnings (normal: 2) [Whole Project]",
+                            "-> SpotBugs (spotbugs): 1 bug (low: 1) [Whole Project]",
+                            "=> Bugs: 1 bug (low: 1) [Whole Project]",
+                            "=> Cyclomatic Complexity: 355 (total) [Whole Project]",
+                            "=> Cognitive Complexity: 172 (total) [Whole Project]",
+                            "=> Non Commenting Source Statements: 1200 (total) [Whole Project]",
+                            "=> N-Path Complexity: 432 (total) [Whole Project]");
 
             container.copyFileFromContainer("/github/workspace/metrics.env", LOCAL_METRICS_FILE);
             assertThat(Files.readString(Path.of(LOCAL_METRICS_FILE)))
@@ -194,20 +194,20 @@ public class QualityMonitorDockerITest {
                     .contains(
                             "No configuration provided (environment variable CONFIG not set), using default configuration")
                     .contains("Processing 1 test configuration(s)",
-                            "-> JUnit Tests (Whole Project) Total: 1",
-                            "=> Tests: 100.00% successful (1 passed)",
+                            "-> JUnit Tests Total: 1 [Whole Project]",
+                            "=> Tests: 100.00% successful (1 passed) [Whole Project]",
                             "Processing 2 coverage configuration(s)",
-                            "-> Line Coverage (Whole Project) Total: LINE: 10.93% (33/302)",
-                            "-> Branch Coverage (Whole Project) Total: BRANCH: 9.52% (4/42)",
-                            "=> Code Coverage: 10.76% (307 missed items)",
-                            "-> Mutation Coverage (Whole Project) Total: MUTATION: 7.86% (11/140)",
-                            "=> Mutation Coverage: 7.86% (129 survived mutations)",
+                            "-> Line Coverage Total: LINE: 10.93% (33/302) [Whole Project]",
+                            "-> Branch Coverage Total: BRANCH: 9.52% (4/42) [Whole Project]",
+                            "=> Code Coverage: 10.76% (307 missed items) [Whole Project]",
+                            "-> Mutation Coverage Total: MUTATION: 7.86% (11/140) [Whole Project]",
+                            "=> Mutation Coverage: 7.86% (129 survived mutations) [Whole Project]",
                             "Processing 2 static analysis configuration(s)",
-                            "-> CheckStyle (checkstyle): 1 warning (normal: 1)",
-                            "-> PMD (pmd): 1 warning (normal: 1)",
-                            "=> Style: 2 warnings (normal: 2)",
-                            "-> SpotBugs (spotbugs): 1 bug (low: 1)",
-                            "=> Bugs: 1 bug (low: 1)");
+                            "-> CheckStyle (checkstyle): 1 warning (normal: 1) [Whole Project]",
+                            "-> PMD (pmd): 1 warning (normal: 1) [Whole Project]",
+                            "=> Style: 2 warnings (normal: 2) [Whole Project]",
+                            "-> SpotBugs (spotbugs): 1 bug (low: 1) [Whole Project]",
+                            "=> Bugs: 1 bug (low: 1) [Whole Project]");
         }
     }
 
