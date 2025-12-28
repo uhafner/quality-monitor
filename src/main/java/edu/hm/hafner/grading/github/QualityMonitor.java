@@ -136,7 +136,7 @@ public class QualityMonitor extends AutoGradingRunner {
                 return;
             }
 
-            var githubBuilder = new GitHubBuilder().withAppInstallationToken(oAuthToken);
+            var githubBuilder = new GitHubBuilder().withOAuthToken(oAuthToken);
             String apiUrl = getEnv("GITHUB_API_URL");
             if (!apiUrl.isBlank()) {
                 githubBuilder.withEndpoint(apiUrl);

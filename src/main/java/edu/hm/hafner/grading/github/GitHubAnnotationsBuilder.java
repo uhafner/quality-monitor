@@ -30,8 +30,8 @@ class GitHubAnnotationsBuilder extends CommentBuilder {
         this.output = output;
         this.log = log;
 
-        maxWarningComments = getIntegerEnvironment("MAX_WARNING_ANNOTATIONS");
-        maxCoverageComments = getIntegerEnvironment("MAX_COVERAGE_ANNOTATIONS");
+        maxWarningComments = getIntegerEnvironmentWithDefault("MAX_WARNING_ANNOTATIONS");
+        maxCoverageComments = getIntegerEnvironmentWithDefault("MAX_COVERAGE_ANNOTATIONS");
     }
 
     @Override
@@ -44,12 +44,6 @@ class GitHubAnnotationsBuilder extends CommentBuilder {
         return maxCoverageComments;
     }
 
-    private int getIntegerEnvironment(final String key) {
-        var value = getIntegerEnvironmentWithDefault(key);
-        log.logInfo(">>>> %s: %d", key, value);
-        return value;
-    }
-
     private int getIntegerEnvironmentWithDefault(final String key) {
         var value = getEnv(key);
         try {
@@ -60,7 +54,7 @@ class GitHubAnnotationsBuilder extends CommentBuilder {
                 log.logInfo(">>>> Environment variable %s not set, falling back to default Integer.MAX_VALUE", key);
             }
             else {
-                log.logError(">>>> Error: no integer value in environment variable key %s: %s", key, value);
+                log.logError(">>>> Error: no integer value in environment variable key %s: %s, falling back to default Integer.MAX_VALUE", key, value);
             }
 
             return Integer.MAX_VALUE;
