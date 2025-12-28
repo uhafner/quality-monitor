@@ -58,7 +58,6 @@ class GitHubDiffProvider {
             for (GHPullRequestFileDetail file : files) {
                 String status = safeLower(file.getStatus());
                 String newPath = normalize(file.getFilename()); // use new filename for renames
-                String oldPath = normalize(file.getPreviousFilename());
 
                 if (DIFF_REMOVED.equals(status)) {
                     // Skip removed files; only added/modified/renamed/copied are relevant
