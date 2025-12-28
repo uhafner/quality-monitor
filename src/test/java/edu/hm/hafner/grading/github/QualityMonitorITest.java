@@ -318,7 +318,7 @@ public class QualityMonitorITest extends ResourceTest {
                         "Parsed 1 quality gate(s) from JSON configuration",
                         "Quality gates evaluation completed: ❌ FAILURE",
                         "Passed: 0, Failed: 1",
-                        "❌ Line Coverage (Whole Project): 10.93 >= 100.00");
+                        "❌ Line Coverage (Whole Project): **10.93** >= 100.00");
     }
 
     @Test
@@ -335,7 +335,7 @@ public class QualityMonitorITest extends ResourceTest {
                         "Evaluating 1 quality gate(s)",
                         "Quality gates evaluation completed: ✅ SUCCESS",
                         "  Passed: 1, Failed: 0",
-                        "  ✅ Line Coverage (Whole Project): 10.93 >= 10.00",
+                        "  ✅ Line Coverage (Whole Project): **10.93** >= 10.00",
                         "Setting conclusion to SUCCESS - all quality gates passed");
     }
 
