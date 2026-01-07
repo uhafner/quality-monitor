@@ -9,9 +9,9 @@
       },
       {
         "id": "junit",
-        "icon": "no_entry",
-        "name": "Architecture Tests",
-        "pattern": "**/target/archunit-reports/TEST*.xml"
+        "icon": "rocket",
+        "name": "Integration Tests",
+        "pattern": "**/target/failsafe-reports/TEST*.xml"
       }
     ]
   },
@@ -27,11 +27,6 @@
         {
           "id": "pmd",
           "pattern": "**/target/pmd-*/pmd.xml"
-        },
-        {
-          "id": "java",
-          "icon": "coffee",
-          "pattern": "**/maven.log"
         }
       ]
     },
@@ -48,18 +43,6 @@
         {
           "id": "error-prone",
           "pattern": "**/maven.log"
-        }
-      ]
-    },
-    {
-      "name": "API Problems",
-      "id": "api",
-      "icon": "no_entry_sign",
-      "tools": [
-        {
-          "id": "revapi",
-          "sourcePath": "src/main/java",
-          "pattern": "**/target/revapi-result.json"
         }
       ]
     },
@@ -93,20 +76,6 @@
           "scope": "new",
           "sourcePath": "src/main/java",
           "pattern": "**/target/site/jacoco/jacoco.xml"
-        },
-        {
-          "id": "pit",
-          "scope": "new",
-          "metric": "mutation",
-          "sourcePath": "src/main/java",
-          "pattern": "**/target/pit-reports/mutations.xml"
-        },
-        {
-          "id": "pit",
-          "metric": "test-strength",
-          "scope": "new",
-          "sourcePath": "src/main/java",
-          "pattern": "**/target/pit-reports/mutations.xml"
         }
       ]
     },
@@ -124,18 +93,6 @@
           "metric": "branch",
           "sourcePath": "src/main/java",
           "pattern": "**/target/site/jacoco/jacoco.xml"
-        },
-        {
-          "id": "pit",
-          "metric": "mutation",
-          "sourcePath": "src/main/java",
-          "pattern": "**/target/pit-reports/mutations.xml"
-        },
-        {
-          "id": "pit",
-          "metric": "test-strength",
-          "sourcePath": "src/main/java",
-          "pattern": "**/target/pit-reports/mutations.xml"
         }
       ]
     }
