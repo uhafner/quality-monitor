@@ -13,7 +13,7 @@
 
   <groupId>edu.hm.hafner</groupId>
   <artifactId>quality-monitor</artifactId>
-  <version>4.0.0-rc2</version>
+  <version>4.0.0</version>
   <packaging>jar</packaging>
 
   <scm>
