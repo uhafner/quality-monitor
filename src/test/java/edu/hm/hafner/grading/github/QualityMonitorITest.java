@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.*;
  *
  * @author Ullrich Hafner
  */
-public class QualityMonitorITest extends ResourceTest {
+class QualityMonitorITest extends ResourceTest {
     private static final String CONFIGURATION = """
             {
               "tests": {

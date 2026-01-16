@@ -12,7 +12,14 @@
         "icon": "rocket",
         "name": "Integration Tests",
         "pattern": "**/target/failsafe-reports/TEST*.xml"
+      },
+      {
+        "id": "junit",
+        "icon": "no_entry",
+        "name": "Architecture Tests",
+        "pattern": "**/target/archunit-reports/TEST*.xml"
       }
+
     ]
   },
   "analysis": [

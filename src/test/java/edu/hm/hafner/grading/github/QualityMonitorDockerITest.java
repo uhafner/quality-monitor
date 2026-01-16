@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.*;
  *
  * @author Ullrich Hafner
  */
-public class QualityMonitorDockerITest {
+class QualityMonitorDockerITest {
     private static final String CONFIGURATION = """
                 {
                  "tests": {
