@@ -19,7 +19,6 @@
         "name": "Architecture Tests",
         "pattern": "**/target/archunit-reports/TEST*.xml"
       }
-
     ]
   },
   "analysis": [
