@@ -28,6 +28,8 @@
     <module.name>${project.groupId}.quality.monitor</module.name>
     <docker-image-tag>${project.version}</docker-image-tag>
 
+    <java.version>25</java.version>
+
     <autograding-model.version>10.3.0</autograding-model.version>
     <testcontainers.version>2.0.3</testcontainers.version>
     <github-api.version>1.330</github-api.version>
