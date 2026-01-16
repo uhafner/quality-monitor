@@ -28,6 +28,8 @@
     <module.name>${project.groupId}.quality.monitor</module.name>
     <docker-image-tag>${project.version}</docker-image-tag>
 
+    <java.version>25</java.version>
+
     <autograding-model.version>10.3.0</autograding-model.version>
     <testcontainers.version>2.0.3</testcontainers.version>
     <github-api.version>1.330</github-api.version>
@@ -150,7 +152,7 @@
             </auth>
           </to>
           <from>
-            <image>maven:3.9.11-eclipse-temurin-21-alpine@sha256:1a9d8816a623aa0a386ca26f6cca5e2c9a6a7a54f734db8a229ccd093fac44a7</image>
+            <image>maven:3.9.12-eclipse-temurin-25-alpine@sha256:c36ce99a7301bbd39e3a1aa5883b0e31b19b6101a7c4c44625dc4e6dbfbbc22b</image>
             <platforms>
               <platform>
                 <architecture>amd64</architecture>
