@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.kohsuke.github.GHPullRequestFileDetail;
@@ -56,15 +55,15 @@ class GitHubDiffProvider {
                     .getPullRequest(prNumber)
                     .listFiles();
             for (GHPullRequestFileDetail file : files) {
-                String status = safeLower(file.getStatus());
-                String newPath = normalize(file.getFilename()); // use new filename for renames
+                var status = safeLower(file.getStatus());
+                var newPath = normalize(file.getFilename()); // use new filename for renames
 
                 if (DIFF_REMOVED.equals(status)) {
                     // Skip removed files; only added/modified/renamed/copied are relevant
                     continue;
                 }
 
-                String patch = file.getPatch();
+                var patch = file.getPatch();
                 if (StringUtils.isBlank(patch)) {
                     // no patch available
 
@@ -87,7 +86,7 @@ class GitHubDiffProvider {
     }
 
     private GitHub connectWithGitHub(final String token, final String apiUrl) throws IOException {
-        GitHubBuilder builder = new GitHubBuilder().withOAuthToken(token);
+        var builder = new GitHubBuilder().withOAuthToken(token);
         if (!isBlank(apiUrl)) {
             builder.withEndpoint(apiUrl);
         }
@@ -110,11 +109,11 @@ class GitHubDiffProvider {
         Set<Integer> newFileChangedLines = new HashSet<>();
         int newLinePointer = -1;
 
-        String[] lines = patch.split("\n");
+        var lines = patch.split("\n");
         for (String raw : lines) {
-            String line = stripTrailingCarriageReturn(raw);
+            var line = stripTrailingCarriageReturn(raw);
             if (line.startsWith("@@")) {
-                Matcher matcher = HUNK_REGEXP.matcher(line);
+                var matcher = HUNK_REGEXP.matcher(line);
                 if (matcher.matches()) {
                     newLinePointer = Integer.parseInt(matcher.group("newStart"));
                 }

@@ -9,7 +9,7 @@ import static org.assertj.core.api.Assertions.*;
 class GitHubDiffProviderTest {
     @Test
     void shouldParseAddedLines() {
-        String diff = """
+        var diff = """
                 @@ -1,3 +1,3 @@
                  line1
                 +added
@@ -20,7 +20,7 @@ class GitHubDiffProviderTest {
 
     @Test
     void shouldIgnoreDeletionsAndAdvanceContext() {
-        String diff = """
+        var diff = """
                 @@ -10,3 +20,3 @@
                  lineA
                 -deleted
@@ -35,7 +35,7 @@ class GitHubDiffProviderTest {
     @Test
     @SuppressWarnings("StringConcatToTextBlock")
     void shouldHandleCrlf() {
-        String diff = "@@ -1,1 +1,2 @@\r\n"
+        var diff = "@@ -1,1 +1,2 @@\r\n"
                 + " line1\r\n"
                 + "+added1\r\n"
                 + "+added2\r\n";
@@ -44,7 +44,7 @@ class GitHubDiffProviderTest {
 
     @Test
     void shouldHandleMultipleHunks() {
-        String diff = """
+        var diff = """
                 @@ -1,2 +5,2 @@
                 +a
                  b
@@ -64,7 +64,7 @@ class GitHubDiffProviderTest {
 
     @Test
     void shouldSkipHeadersAndUnknownLines() {
-        String diff = """
+        var diff = """
                 --- a/Foo.java
                 +++ b/Foo.java
                 @@ -1,1 +1,1 @@
