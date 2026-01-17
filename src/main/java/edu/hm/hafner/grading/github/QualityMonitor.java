@@ -48,12 +48,9 @@ public class QualityMonitor extends AutoGradingRunner {
     private static final String DEFAULT_TITLE_METRIC = "line";
 
     /**
-     * Public entry point for the GitHub action in the docker container, simply calls the action.
-     *
-     * @param unused
-     *         not used
+     * The public entry point for the action in the docker container simply calls the quality monitor.
      */
-    static void main(final String... unused) {
+    void main() {
         new QualityMonitor().run();
     }
 
