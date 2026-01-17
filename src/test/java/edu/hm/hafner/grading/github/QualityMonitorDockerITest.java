@@ -135,7 +135,7 @@ class QualityMonitorDockerITest {
             container.withEnv("CONFIG", CONFIGURATION);
             startContainerWithAllFiles(container);
 
-            var metrics = new String[] {
+            var metrics = new String[]{
                     "tests=1",
                     "line=10.93",
                     "branch=9.52",

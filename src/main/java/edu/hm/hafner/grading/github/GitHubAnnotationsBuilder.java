@@ -49,7 +49,7 @@ class GitHubAnnotationsBuilder extends CommentBuilder {
         try {
             return Integer.parseInt(value);
         }
-        catch (NumberFormatException exception) {
+        catch (NumberFormatException _) {
             if (StringUtils.isEmpty(value)) {
                 log.logInfo(">>>> Environment variable %s not set, falling back to default Integer.MAX_VALUE", key);
             }
@@ -83,7 +83,7 @@ class GitHubAnnotationsBuilder extends CommentBuilder {
             actualLineStart = lineStart;
             actualLineEnd = lineEnd;
         }
-        Annotation annotation = new Annotation(relativePath,
+        var annotation = new Annotation(relativePath,
                 actualLineStart, actualLineEnd, AnnotationLevel.WARNING, message).withTitle(title);
 
         if (lineStart == lineEnd) {
