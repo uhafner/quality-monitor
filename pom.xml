@@ -16,6 +16,14 @@
   <version>4.1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
+  <name>Quality Monitor GitHub Action</name>
+  <description>
+    Automated quality monitoring for GitHub pull requests and branch pipelines.
+    The action aggregates test results, code and mutation coverage, static analysis findings,
+    and software metrics, then posts a structured pull request comment and GitHub Checks summary.
+    When enabled, it also adds inline line comments for warnings, missed or mutated lines.
+  </description>
+
   <scm>
     <connection>scm:git:https://github.com/uhafner/quality-monitor.git</connection>
     <developerConnection>scm:git:git@github.com:uhafner/quality-monitor.git</developerConnection>
@@ -30,8 +38,8 @@
     <java.version>25</java.version>
 
     <autograding-model.version>10.3.0</autograding-model.version>
-    <testcontainers.version>2.0.3</testcontainers.version>
     <github-api.version>1.330</github-api.version>
+    <testcontainers.version>2.0.3</testcontainers.version>
 
     <jib-maven-plugin.version>3.5.1</jib-maven-plugin.version>
   </properties>
