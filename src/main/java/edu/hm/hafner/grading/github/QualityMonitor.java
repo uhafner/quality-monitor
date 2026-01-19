@@ -16,7 +16,7 @@ import edu.hm.hafner.util.VisibleForTesting;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.time.Instant;
 import java.util.Date;
 import java.util.Locale;
@@ -24,7 +24,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-import org.kohsuke.github.GHCheckRun;
 import org.kohsuke.github.GHCheckRun.Conclusion;
 import org.kohsuke.github.GHCheckRun.Status;
 import org.kohsuke.github.GHCheckRunBuilder;
@@ -49,12 +48,9 @@ public class QualityMonitor extends AutoGradingRunner {
     private static final String DEFAULT_TITLE_METRIC = "line";
 
     /**
-     * Public entry point for the GitHub action in the docker container, simply calls the action.
-     *
-     * @param unused
-     *         not used
+     * The public entry point for the action in the docker container simply calls the quality monitor.
      */
-    public static void main(final String... unused) {
+    void main() {
         new QualityMonitor().run();
     }
 
@@ -103,7 +99,7 @@ public class QualityMonitor extends AutoGradingRunner {
     private void writeMetrics(final AggregatedScore score, final FilteredLog log) {
         try {
             var metrics = extractAllMetrics(score, log);
-            Files.writeString(Paths.get("metrics.env"), metrics);
+            Files.writeString(Path.of("metrics.env"), metrics);
         }
         catch (IOException exception) {
             log.logException(exception, "Can't write metrics to 'metrics.env'");
@@ -130,14 +126,14 @@ public class QualityMonitor extends AutoGradingRunner {
                 return;
             }
 
-            String oAuthToken = getEnv("GITHUB_TOKEN");
+            var oAuthToken = getEnv("GITHUB_TOKEN");
             if (oAuthToken.isBlank()) {
                 log.logError("No valid GITHUB_TOKEN found - skipping");
                 return;
             }
 
             var githubBuilder = new GitHubBuilder().withOAuthToken(oAuthToken);
-            String apiUrl = getEnv("GITHUB_API_URL");
+            var apiUrl = getEnv("GITHUB_API_URL");
             if (!apiUrl.isBlank()) {
                 githubBuilder.withEndpoint(apiUrl);
             }
@@ -220,7 +216,7 @@ public class QualityMonitor extends AutoGradingRunner {
 
     private String createChecksRun(final FilteredLog log, final GHCheckRunBuilder check) {
         try {
-            GHCheckRun run = check.create();
+            var run = check.create();
             log.logInfo("Successfully created check " + run);
 
             return "More details are shown in the [GitHub Checks Result](%s).".formatted(
@@ -267,7 +263,7 @@ public class QualityMonitor extends AutoGradingRunner {
     }
 
     private String computeAbsolutePathPrefixToRemove() {
-        return String.format("%s/%s/", getEnv("RUNNER_WORKSPACE"),
+        return "%s/%s/".formatted(getEnv("RUNNER_WORKSPACE"),
                 StringUtils.substringAfter(getEnv("GITHUB_REPOSITORY"), "/"));
     }
 
@@ -276,21 +272,22 @@ public class QualityMonitor extends AutoGradingRunner {
     }
 
     /**
-     * Gets the SHA to use for the quality monitor check. First checks for a custom SHA
-     * (SHA) which takes precedence over the default GITHUB_SHA.
-     * This allows workflows to override the SHA used for quality monitoring when needed.
+     * Gets the SHA to use for the quality monitor check. First checks for a custom SHA (SHA) which takes precedence
+     * over the default GITHUB_SHA. This allows workflows to override the SHA used for quality monitoring when needed.
      *
-     * @param log the logger
+     * @param log
+     *         the logger
+     *
      * @return the SHA to use for the check
      */
     private String getCustomSha(final FilteredLog log) {
-        String customSha = getEnv("SHA");
+        var customSha = getEnv("SHA");
         if (!customSha.isBlank()) {
             log.logInfo("Using custom SHA from SHA: " + customSha);
             return customSha;
         }
 
-        String defaultSha = getEnv("GITHUB_SHA");
+        var defaultSha = getEnv("GITHUB_SHA");
         log.logInfo("Using default SHA from GITHUB_SHA: " + defaultSha);
         return defaultSha;
     }
@@ -375,7 +372,7 @@ public class QualityMonitor extends AutoGradingRunner {
                 return String.format(Locale.ENGLISH, "%s - %s: %s", getChecksName(),
                         metric.getDisplayName(), metric.format(Locale.ENGLISH, value));
             }
-            catch (IllegalArgumentException exception) {
+            catch (IllegalArgumentException _) {
                 return String.format(Locale.ENGLISH, "%s - %s: %f", getChecksName(),
                         titleMetric, value);
             }
