@@ -36,14 +36,24 @@ jobs:
               echo "PIT=-Ppit" >> "$GITHUB_ENV"
             fi
           fi
+      - name: Determine if PR comes from a fork
+        id: detect-fork
+        run: |
+          # use expression expansion; resolved at workflow render time
+          if [[ "${{ github.event.pull_request.head.repo.fork }}" == "true" ]]; then
+            echo "OWASP=" >> "$GITHUB_ENV"
+          else
+            echo "OWASP=-Powasp" >> "$GITHUB_ENV"
+          fi
       - name: Build with Maven
         env:
           NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
           OSS_INDEX_TOKEN: ${{ secrets.OSS_INDEX_TOKEN }}
           PIT: ${{ env.PIT }}
+          OWASP: ${{ env.OWASP }}
           BROWSER: chrome-container
         run: |
-          mvn -V --color always -ntp clean verify $PIT -Pci -Powasp | tee maven.log
+          mvn -V --color always -ntp clean verify $PIT $OWASP -Pci | tee maven.log
           if [ "${PIPESTATUS[0]}" != "0" ]; then
              exit 1;
           fi
