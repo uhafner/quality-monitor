@@ -37,7 +37,7 @@
 
     <java.version>25</java.version>
 
-    <autograding-model.version>10.3.0</autograding-model.version>
+    <autograding-model.version>11.0.0</autograding-model.version>
     <github-api.version>1.330</github-api.version>
     <testcontainers.version>2.0.3</testcontainers.version>
 
