@@ -87,7 +87,7 @@ public class QualityMonitor extends AutoGradingRunner {
         addComment(score,
                 results.getTextSummary(score, getChecksName()),
                 results.getMarkdownDetails(score, getChecksName()) + errors + qualityGateDetails,
-                results.getSubScoreDetails(score).toString() + errors + qualityGateDetails,
+                results.getSubScoreDetails(score, false).toString() + errors + qualityGateDetails,
                 results.getMarkdownSummary(score, getChecksName(), showHeaders) + errors + qualityGateDetails,
                 conclusion, log);
 

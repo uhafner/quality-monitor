@@ -266,12 +266,13 @@ class QualityMonitorITest extends ResourceTest {
         assertThat(runAutoGrading())
                 .contains("Obtaining configuration from environment variable CONFIG")
                 .contains("Processing 1 test configuration(s)",
-                        "=> Tests: 64.86% successful (13 failed, 24 passed)",
+                        "-> Number of Tests Total: 37 [Whole Project]",
+                        "=> Tests: 64.86% successful (13 failed, 24 passed) [Whole Project]",
                         "Processing 2 coverage configuration(s)",
-                        "-> Line Coverage Total: LINE: 10.93% (33/302) [Whole Project]",
-                        "-> Branch Coverage Total: BRANCH: 9.52% (4/42) [Whole Project]",
+                        "-> Line Coverage Total: 10.93% [Whole Project]",
+                        "-> Branch Coverage Total: 9.52% [Whole Project]",
                         "=> JaCoCo: 10.76% (307 missed items) [Whole Project]",
-                        "-> Mutation Coverage Total: MUTATION: 7.86% (11/140) [Whole Project]",
+                        "-> Mutation Coverage Total: 7.86% [Whole Project]",
                         "=> PIT: 7.86% (129 survived mutations) [Whole Project]",
                         "Processing 2 static analysis configuration(s)",
                         "-> CheckStyle (checkstyle): 19 warnings (normal: 19) [Whole Project]",
