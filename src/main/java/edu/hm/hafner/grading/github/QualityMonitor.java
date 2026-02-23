@@ -346,10 +346,7 @@ public class QualityMonitor extends AutoGradingRunner {
                 DEFAULT_TITLE_METRIC);
 
         if (NO_TITLE.equals(titleMetric)) {
-            if (conclusion != Conclusion.SUCCESS) {
-                return getChecksName() + " - Quality gates failed";
-            }
-            return getChecksName();
+            return createDefaultTitle(conclusion, log);
         }
 
         var metrics = score.getMetrics(Scope.PROJECT);
@@ -380,6 +377,16 @@ public class QualityMonitor extends AutoGradingRunner {
         log.logInfo("Requested title metric '%s' not found in metrics: %s", titleMetric, metrics.keySet());
 
         return getChecksName();
+    }
+
+    private String createDefaultTitle(final Conclusion conclusion, final FilteredLog log) {
+        if (conclusion == Conclusion.SUCCESS) {
+            return getChecksName();
+        }
+        if (log.hasErrors()) {
+            return getChecksName() + " - Errors detected";
+        }
+        return getChecksName() + " - Quality gates failed";
     }
 
     @Override
