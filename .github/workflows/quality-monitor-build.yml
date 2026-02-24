@@ -1,15 +1,18 @@
-name: 'Quality Monitor Build'
+name: 'Quality Monitor'
 
 on:
+  push:
+      branches:
+      - main
   pull_request:
 
 jobs:
   build:
     runs-on: [ubuntu-latest]
-    name: Create quality reports
+    name: Create reports
 
     steps:
-      - name: Checkout PR
+      - name: Checkout project
         uses: actions/checkout@v6
       - name: Set up JDK
         uses: actions/setup-java@v5
@@ -22,11 +25,6 @@ jobs:
         uses: stCarolas/setup-maven@v5
         with:
           maven-version: 3.9.12
-      - name: Cache the NVD database
-        uses: actions/cache@v5
-        with:
-          path: ~/.m2/repository/org/owasp/dependency-check-data
-          key: dependency-check
       - name: Check if quality monitor reports mutation coverage
         run: |
           FILE='.github/quality-monitor.json'
@@ -36,24 +34,12 @@ jobs:
               echo "PIT=-Ppit" >> "$GITHUB_ENV"
             fi
           fi
-      - name: Determine if PR comes from a fork
-        id: detect-fork
-        run: |
-          # use expression expansion; resolved at workflow render time
-          if [[ "${{ github.event.pull_request.head.repo.fork }}" == "true" ]]; then
-            echo "OWASP=" >> "$GITHUB_ENV"
-          else
-            echo "OWASP=-Powasp" >> "$GITHUB_ENV"
-          fi
       - name: Build with Maven
         env:
-          NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
-          OSS_INDEX_TOKEN: ${{ secrets.OSS_INDEX_TOKEN }}
           PIT: ${{ env.PIT }}
-          OWASP: ${{ env.OWASP }}
           BROWSER: chrome-container
         run: |
-          mvn -V --color always -ntp clean verify $PIT $OWASP -Pci | tee maven.log
+          mvn -V --color always -ntp clean verify $PIT -Pci | tee maven.log
           if [ "${PIPESTATUS[0]}" != "0" ]; then
              exit 1;
           fi

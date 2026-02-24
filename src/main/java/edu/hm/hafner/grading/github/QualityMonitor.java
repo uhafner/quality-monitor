@@ -46,6 +46,7 @@ public class QualityMonitor extends AutoGradingRunner {
 
     private static final String NO_TITLE = "none";
     private static final String DEFAULT_TITLE_METRIC = "line";
+    private static final boolean SHOW_HEADERS_IN_CHECKS_DETAILS = false;
 
     /**
      * The public entry point for the action in the docker container simply calls the quality monitor.
@@ -87,7 +88,7 @@ public class QualityMonitor extends AutoGradingRunner {
         addComment(score,
                 results.getTextSummary(score, getChecksName()),
                 results.getMarkdownDetails(score, getChecksName()) + errors + qualityGateDetails,
-                results.getSubScoreDetails(score, true).toString() + errors + qualityGateDetails,
+                results.getSubScoreDetails(score, SHOW_HEADERS_IN_CHECKS_DETAILS).toString() + errors + qualityGateDetails,
                 results.getMarkdownSummary(score, getChecksName(), showHeaders) + errors + qualityGateDetails,
                 conclusion, log);
 
