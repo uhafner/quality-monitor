@@ -136,9 +136,7 @@ class QualityMonitorITest extends ResourceTest {
                   }
                 ],
                 "name": "JUnit",
-                "passedImpact": 10,
-                "skippedImpact": -1,
-                "failureImpact": -5,
+                "failureRateImpact": -5,
                 "maxScore": 100
               },
               "analysis": [
@@ -247,9 +245,8 @@ class QualityMonitorITest extends ResourceTest {
                 .contains("No configuration provided (environment variable CONFIG not set), using default configuration")
                 .contains("Processing 1 test configuration(s)",
                         "\"maxScore\" : 0,",
-                        "\"failureImpact\" : 0,",
-                        "\"passedImpact\" : 0,",
-                        "\"skippedImpact\" : 0",
+                        "\"successRateImpact\" : 0,",
+                        "\"failureRateImpact\" : 0,",
                         "Processing 2 coverage configuration(s)",
                         "\"coveredPercentageImpact\" : 0,",
                         "\"missedPercentageImpact\" : 0,",
@@ -271,7 +268,7 @@ class QualityMonitorITest extends ResourceTest {
                         "Processing 2 coverage configuration(s)",
                         "-> Line Coverage Total: 10.93% [Whole Project]",
                         "-> Branch Coverage Total: 9.52% [Whole Project]",
-                        "=> JaCoCo: 10.76% (307 missed items) [Whole Project]",
+                        "=> JaCoCo: 10.23% (307 missed items) [Whole Project]",
                         "-> Mutation Coverage Total: 7.86% [Whole Project]",
                         "=> PIT: 7.86% (129 survived mutations) [Whole Project]",
                         "Processing 2 static analysis configuration(s)",
