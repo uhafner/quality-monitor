@@ -15,6 +15,37 @@ jobs:
     name: Comment on PR
 
     steps:
+      - name: Create dedicated check run
+        id: dedicated-check
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OWNER: ${{ github.repository_owner }}
+          REPO: ${{ github.event.repository.name }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          sudo apt-get update && sudo apt-get install -y jq
+
+          name='Quality Monitor (PR)'
+          payload=$(jq -n \
+            --arg name "$name" \
+            --arg sha "$HEAD_SHA" \
+            --arg started_at "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+            '{name: $name, head_sha: $sha, status:"in_progress", started_at: $started_at, output:{title:$name, summary:"Waiting for reports and running quality monitor…"}}')
+
+          response=$(curl -sS -X POST \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/$OWNER/$REPO/check-runs" \
+            -d "$payload")
+
+          check_run_id=$(echo "$response" | jq -r '.id')
+          if [ -z "$check_run_id" ] || [ "$check_run_id" = "null" ]; then
+            echo "Failed to create check-run: $response" >&2
+            exit 1
+          fi
+
+          echo "check_run_id=$check_run_id" >> "$GITHUB_OUTPUT"
+
       - name: Checkout PR
         uses: actions/checkout@v6
         with:
@@ -52,6 +83,7 @@ jobs:
         run: echo "json=$(jq -c . .github/quality-gates-pr.json)" >> "$GITHUB_OUTPUT"
 
       - name: Run Quality Monitor and Comment on PR
+        id: run-quality-monitor
         uses: uhafner/quality-monitor@v4
         with:
           sha: ${{ github.event.pull_request.head.sha }}
@@ -61,3 +93,35 @@ jobs:
           comments-strategy: REMOVE
           show-headers: true
           title-metric: none
+
+      - name: Finalize dedicated check run
+        if: ${{ always() }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OWNER: ${{ github.repository_owner }}
+          REPO: ${{ github.event.repository.name }}
+          CHECK_RUN_ID: ${{ steps.dedicated-check.outputs.check_run_id }}
+        run: |
+          sudo apt-get update && sudo apt-get install -y jq curl
+
+          if [ "${{ job.status }}" = "success" ]; then
+            conclusion=success
+          else
+            conclusion=failure
+          fi
+
+          name='Quality Monitor (PR)'
+          run_url="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+          payload=$(jq -n \
+            --arg conclusion "$conclusion" \
+            --arg completed_at "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+            --arg title "$name" \
+            --arg summary "Conclusion: **$conclusion**\n\nThis check was created as a dedicated check-run to avoid UI attribution issues.\n\nWorkflow run: $run_url" \
+            '{status:"completed", conclusion:$conclusion, completed_at:$completed_at, output:{title:$title, summary:$summary}}')
+
+          curl -sS -X PATCH \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/$OWNER/$REPO/check-runs/$CHECK_RUN_ID" \
+            -d "$payload" >/dev/null
