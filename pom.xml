@@ -7,13 +7,13 @@
   <parent>
     <groupId>edu.hm.hafner</groupId>
     <artifactId>codingstyle-pom</artifactId>
-    <version>6.5.0</version>
+    <version>6.6.0</version>
     <relativePath/>
   </parent>
 
   <groupId>edu.hm.hafner</groupId>
   <artifactId>quality-monitor</artifactId>
-  <version>4.5.0-SNAPSHOT</version>
+  <version>4.4.1</version>
   <packaging>jar</packaging>
 
   <name>Quality Monitor GitHub Action</name>
@@ -37,7 +37,7 @@
 
     <java.version>25</java.version>
 
-    <autograding-model.version>13.1.1</autograding-model.version>
+    <autograding-model.version>13.2.0</autograding-model.version>
     <github-api.version>1.330</github-api.version>
     <testcontainers.version>2.0.3</testcontainers.version>
 
