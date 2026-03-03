@@ -124,7 +124,6 @@ class QualityMonitorDockerITest {
                    }
                  ]
                }
-             }
             """;
     private static final String WS = "/github/workspace/target/";
     private static final String LOCAL_METRICS_FILE = "target/metrics.env";
@@ -240,7 +239,7 @@ class QualityMonitorDockerITest {
     }
 
     private GenericContainer<?> createContainer() {
-        return new GenericContainer<>(DockerImageName.parse("uhafner/quality-monitor:4.4.1"));
+        return new GenericContainer<>(DockerImageName.parse("uhafner/quality-monitor:4.5.0"));
     }
 
     private String readStandardOut(final GenericContainer<? extends GenericContainer<?>> container)
