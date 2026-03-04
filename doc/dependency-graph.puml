@@ -49,6 +49,8 @@ rectangle "jackson-databind\n\n3.1.0" as tools_jackson_core_jackson_databind_jar
 rectangle "jackson-annotations\n\n2.21" as com_fasterxml_jackson_core_jackson_annotations_jar
 rectangle "jackson-core\n\n3.1.0" as tools_jackson_core_jackson_core_jar
 rectangle "quality-monitor\n\n4.6.0-SNAPSHOT" as edu_hm_hafner_quality_monitor_jar
+rectangle "jackson-databind\n\n2.21.0" as com_fasterxml_jackson_core_jackson_databind_jar
+rectangle "jackson-core\n\n2.21.0" as com_fasterxml_jackson_core_jackson_core_jar
 rectangle "github-api\n\n1.330" as org_kohsuke_github_api_jar
 rectangle "codingstyle\n\n6.5.0" as edu_hm_hafner_codingstyle_jar
 rectangle "spotbugs-annotations\n\n4.9.8" as com_github_spotbugs_spotbugs_annotations_jar
@@ -99,6 +101,9 @@ tools_jackson_core_jackson_databind_jar -[#000000]-> com_fasterxml_jackson_core_
 tools_jackson_core_jackson_databind_jar -[#000000]-> tools_jackson_core_jackson_core_jar
 edu_hm_hafner_autograding_model_jar -[#000000]-> tools_jackson_core_jackson_databind_jar
 edu_hm_hafner_quality_monitor_jar -[#000000]-> edu_hm_hafner_autograding_model_jar
+com_fasterxml_jackson_core_jackson_databind_jar .[#ABABAB].> com_fasterxml_jackson_core_jackson_annotations_jar
+com_fasterxml_jackson_core_jackson_databind_jar -[#000000]-> com_fasterxml_jackson_core_jackson_core_jar
+org_kohsuke_github_api_jar -[#000000]-> com_fasterxml_jackson_core_jackson_databind_jar
 edu_hm_hafner_quality_monitor_jar -[#000000]-> org_kohsuke_github_api_jar
 edu_hm_hafner_quality_monitor_jar -[#000000]-> org_slf4j_slf4j_api_jar
 edu_hm_hafner_quality_monitor_jar -[#000000]-> edu_hm_hafner_codingstyle_jar
