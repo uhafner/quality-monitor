@@ -13,7 +13,7 @@
 
   <groupId>edu.hm.hafner</groupId>
   <artifactId>quality-monitor</artifactId>
-  <version>4.6.0</version>
+  <version>4.7.0</version>
   <packaging>jar</packaging>
 
   <name>Quality Monitor GitHub Action</name>
@@ -37,7 +37,7 @@
 
     <java.version>25</java.version>
 
-    <autograding-model.version>15.0.0</autograding-model.version>
+    <autograding-model.version>16.0.0</autograding-model.version>
     <github-api.version>1.330</github-api.version>
     <testcontainers.version>2.0.3</testcontainers.version>
 

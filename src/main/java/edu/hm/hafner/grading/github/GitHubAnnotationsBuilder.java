@@ -5,6 +5,9 @@ import org.apache.commons.lang3.StringUtils;
 import edu.hm.hafner.grading.CommentBuilder;
 import edu.hm.hafner.util.FilteredLog;
 
+import java.util.Map;
+import java.util.Set;
+
 import org.kohsuke.github.GHCheckRun.AnnotationLevel;
 import org.kohsuke.github.GHCheckRunBuilder.Annotation;
 import org.kohsuke.github.GHCheckRunBuilder.Output;
@@ -24,8 +27,9 @@ class GitHubAnnotationsBuilder extends CommentBuilder {
     private final int maxWarningComments;
     private final int maxCoverageComments;
 
-    GitHubAnnotationsBuilder(final Output output, final String prefix, final FilteredLog log) {
-        super(prefix, GITHUB_WORKSPACE_REL, GITHUB_WORKSPACE_ABS);
+    GitHubAnnotationsBuilder(final Map<String, Set<Integer>> modifiedFilesAndLines,
+            final Output output, final String prefix, final FilteredLog log) {
+        super(modifiedFilesAndLines, prefix, GITHUB_WORKSPACE_REL, GITHUB_WORKSPACE_ABS);
 
         this.output = output;
         this.log = log;
@@ -67,11 +71,15 @@ class GitHubAnnotationsBuilder extends CommentBuilder {
 
     @Override
     @SuppressWarnings("checkstyle:ParameterNumber")
-    protected void createComment(final CommentType commentType, final String relativePath,
+    protected boolean createComment(final CommentType commentType, final String relativePath,
             final int lineStart, final int lineEnd,
             final String message, final String title,
             final int columnStart, final int columnEnd,
             final String details, final String markDownDetails) {
+        if (!isPartOfChangedFiles(relativePath, lineStart, lineEnd) && commentType != CommentType.WARNING) {
+            return false; // do not create coverage comments for lines that are not part of the diff
+        }
+
         // GitHub annotations are 1-based, so we have to adjust the line numbers if some tools annotate the whole file
         int actualLineStart;
         int actualLineEnd;
@@ -94,5 +102,7 @@ class GitHubAnnotationsBuilder extends CommentBuilder {
         }
 
         output.add(annotation);
+
+        return true;
     }
 }
