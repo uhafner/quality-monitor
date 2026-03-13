@@ -163,7 +163,8 @@ public class QualityMonitor extends AutoGradingRunner {
 
     private void attachAnnotations(final AggregatedScore score, final Output output, final FilteredLog log) {
         if (getEnv("SKIP_ANNOTATIONS").isEmpty()) {
-            var annotationBuilder = new GitHubAnnotationsBuilder(output, computeAbsolutePathPrefixToRemove(), log);
+            var annotationBuilder = new GitHubAnnotationsBuilder(getModifiedFilesAndLines(), output,
+                    computeAbsolutePathPrefixToRemove(), log);
             annotationBuilder.createAnnotations(score);
         }
     }
@@ -391,18 +392,23 @@ public class QualityMonitor extends AutoGradingRunner {
     }
 
     @Override
-    protected Map<String, Set<Integer>> getModifiedLines(final FilteredLog log) {
+    protected Map<String, Set<Integer>> extractModifiedLinesFromDiff(final FilteredLog log) {
         var prNumber = getEnv("PR_NUMBER");
         if (StringUtils.isBlank(prNumber)) {
-            return super.getModifiedLines(log);
+            return Map.of();
         }
-        var pr = Integer.parseInt(prNumber);
 
+        var pr = Integer.parseInt(prNumber);
         var repository = getEnv("GITHUB_REPOSITORY");
         var token = getEnv("GITHUB_TOKEN");
         var apiUrl = getEnv("GITHUB_API_URL");
         var diffProvider = new GitHubDiffProvider();
 
         return diffProvider.loadChangedLines(repository, token, apiUrl, log, pr);
+    }
+
+    @Override
+    protected Optional<Path> fetchDeltaReportsFromPreviousPipeline(final FilteredLog log) {
+        return Optional.empty(); // TODO: Implement fetching of delta reports from previous pipeline if needed
     }
 }
