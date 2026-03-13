@@ -48,7 +48,7 @@ rectangle "commons-math3\n\n3.6.1" as org_apache_commons_commons_math3_jar
 rectangle "jackson-databind\n\n3.1.0" as tools_jackson_core_jackson_databind_jar
 rectangle "jackson-annotations\n\n2.21" as com_fasterxml_jackson_core_jackson_annotations_jar
 rectangle "jackson-core\n\n3.1.0" as tools_jackson_core_jackson_core_jar
-rectangle "quality-monitor\n\n4.8.0-SNAPSHOT" as edu_hm_hafner_quality_monitor_jar
+rectangle "quality-monitor\n\n4.7.1" as edu_hm_hafner_quality_monitor_jar
 rectangle "jackson-databind\n\n2.21.1" as com_fasterxml_jackson_core_jackson_databind_jar
 rectangle "jackson-core\n\n2.21.1" as com_fasterxml_jackson_core_jackson_core_jar
 rectangle "github-api\n\n1.330" as org_kohsuke_github_api_jar
