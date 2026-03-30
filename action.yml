@@ -28,6 +28,9 @@ inputs:
   skip-annotations:
     description: "Skip the creation of annotations (for warnings and missed coverage) if not empty"
     required: false
+  log-comments:
+    description: "Log comment properties to the console (helps to debug comment creation issues)"
+    required: false
   show-headers:
     description: "Show headers for each subsection in the summary (if not set, headers are hidden)"
     required: false
@@ -57,6 +60,7 @@ runs:
     GITHUB_API_URL: ${{ inputs.github-api-url }}
     SKIP_ANNOTATIONS: ${{ inputs.skip-annotations }}
     SHOW_HEADERS: ${{ inputs.show-headers }}
+    LOG_COMMENTS: ${{ inputs.log-comments }}
     COMMENTS_STRATEGY: ${{ inputs.comments-strategy }}
     MAX_WARNING_ANNOTATIONS: ${{ inputs.max-warning-annotations }}
     MAX_COVERAGE_ANNOTATIONS: ${{ inputs.max-coverage-annotations }}

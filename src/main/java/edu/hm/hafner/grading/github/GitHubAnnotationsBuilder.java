@@ -26,6 +26,7 @@ class GitHubAnnotationsBuilder extends CommentBuilder {
     private final FilteredLog log;
     private final int maxWarningComments;
     private final int maxCoverageComments;
+    private final boolean isLoggingEnabled;
 
     GitHubAnnotationsBuilder(final Map<String, Set<Integer>> modifiedFilesAndLines,
             final Output output, final String prefix, final FilteredLog log) {
@@ -36,6 +37,8 @@ class GitHubAnnotationsBuilder extends CommentBuilder {
 
         maxWarningComments = getIntegerEnvironmentWithDefault("MAX_WARNING_ANNOTATIONS");
         maxCoverageComments = getIntegerEnvironmentWithDefault("MAX_COVERAGE_ANNOTATIONS");
+
+        isLoggingEnabled = StringUtils.isNotBlank(getEnv("LOG_COMMENTS"));
     }
 
     @Override
@@ -76,6 +79,13 @@ class GitHubAnnotationsBuilder extends CommentBuilder {
             final String message, final String title,
             final int columnStart, final int columnEnd,
             final String details, final String markDownDetails) {
+        if (isLoggingEnabled) {
+            log.logInfo("Creating annotation for %s in %s", relativePath, GITHUB_WORKSPACE_REL);
+            log.logInfo("Line start is %d, line end is %d", lineStart, lineEnd);
+            log.logInfo("CommentType is %s", commentType);
+            log.logInfo("Message is %s", message);
+            log.logInfo("Full Message is %s", markDownDetails);
+        }
         if (!isPartOfChangedFiles(relativePath, lineStart, lineEnd) && commentType != CommentType.WARNING) {
             return false; // do not create coverage comments for lines that are not part of the diff
         }
