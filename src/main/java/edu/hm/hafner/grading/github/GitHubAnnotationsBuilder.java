@@ -79,15 +79,15 @@ class GitHubAnnotationsBuilder extends CommentBuilder {
             final String message, final String title,
             final int columnStart, final int columnEnd,
             final String details, final String markDownDetails) {
+        if (!isPartOfChangedFiles(relativePath, lineStart, lineEnd) && commentType != CommentType.WARNING) {
+            return false; // do not create coverage comments for lines that are not part of the diff
+        }
         if (isLoggingEnabled) {
             log.logInfo("Creating annotation for %s in %s", relativePath, GITHUB_WORKSPACE_REL);
             log.logInfo("Line start is %d, line end is %d", lineStart, lineEnd);
             log.logInfo("CommentType is %s", commentType);
             log.logInfo("Message is %s", message);
             log.logInfo("Full Message is %s", markDownDetails);
-        }
-        if (!isPartOfChangedFiles(relativePath, lineStart, lineEnd) && commentType != CommentType.WARNING) {
-            return false; // do not create coverage comments for lines that are not part of the diff
         }
 
         // GitHub annotations are 1-based, so we have to adjust the line numbers if some tools annotate the whole file
