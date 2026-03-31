@@ -46,6 +46,7 @@ class GitHubDiffProvider {
      *
      * @return a mapping of a repository-relative file path to a set of 1-based changed line numbers
      */
+    @SuppressWarnings({"PMD.CognitiveComplexity", "PMD.CyclomaticComplexity"})
     Map<String, Set<Integer>> loadChangedLines(final String repository,
             final String token, final String apiUrl, final FilteredLog log, final int prNumber) {
         try {
@@ -54,23 +55,38 @@ class GitHubDiffProvider {
             var files = connectWithGitHub(token, apiUrl).getRepository(repository)
                     .getPullRequest(prNumber)
                     .listFiles();
+            log.logInfo("Loaded changed files from GitHub");
+
+            var isLoggingEnabled = StringUtils.isNotBlank(System.getenv("LOG_COMMENTS"));
+
             for (GHPullRequestFileDetail file : files) {
+                if (isLoggingEnabled) {
+                    log.logInfo("Processing file %s with status %s", file.getFilename(), file.getStatus());
+                }
                 var status = safeLower(file.getStatus());
                 var newPath = normalize(file.getFilename()); // use new filename for renames
 
                 if (DIFF_REMOVED.equals(status)) {
-                    // Skip removed files; only added/modified/renamed/copied are relevant
+                    if (isLoggingEnabled) {
+                        log.logInfo("Skipping removed file %s", newPath);
+                    }
+
                     continue;
                 }
 
                 var patch = file.getPatch();
                 if (StringUtils.isBlank(patch)) {
-                    // no patch available
+                    if (isLoggingEnabled) {
+                        log.logInfo("No patch available for file %s, skipping", newPath);
+                    }
 
                     continue;
                 }
 
                 Set<Integer> lines = parseUnifiedDiffForNewFileAddedLines(patch);
+                if (isLoggingEnabled) {
+                    log.logInfo("File %s has %d changed lines: %s", newPath, lines.size(), lines);
+                }
                 if (!lines.isEmpty()) {
                     changedLinesByPath.put(newPath, lines);
                 }
