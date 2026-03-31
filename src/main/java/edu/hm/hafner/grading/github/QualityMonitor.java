@@ -395,6 +395,7 @@ public class QualityMonitor extends AutoGradingRunner {
     protected Map<String, Set<Integer>> extractModifiedLinesFromDiff(final FilteredLog log) {
         var prNumber = getEnv("PR_NUMBER");
         if (StringUtils.isBlank(prNumber)) {
+            log.logInfo("No PR_NUMBER environment variable set, skipping diff extraction");
             return Map.of();
         }
 
