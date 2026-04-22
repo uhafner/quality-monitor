@@ -50,7 +50,7 @@ inputs:
 
 runs:
   using: 'docker'
-  image: 'docker://ghcr.io/uhafner/quality-monitor:4.11.0'
+  image: 'docker://ghcr.io/uhafner/quality-monitor:4.12.0-SNAPSHOT'
   env:
     CONFIG: ${{ inputs.config }}
     QUALITY_GATES: ${{ inputs.quality-gates }}
