@@ -47,6 +47,7 @@ public class QualityMonitor extends AutoGradingRunner {
     private static final String NO_TITLE = "none";
     private static final String DEFAULT_TITLE_METRIC = "line";
     private static final boolean SHOW_HEADERS_IN_CHECKS_DETAILS = false;
+    static final String REFERENCE_REPORTS = "reference-reports";
 
     /**
      * The public entry point for the action in the docker container simply calls the quality monitor.
@@ -410,6 +411,14 @@ public class QualityMonitor extends AutoGradingRunner {
 
     @Override
     protected Optional<Path> fetchDeltaReportsFromPreviousPipeline(final FilteredLog log) {
-        return Optional.empty(); // TODO: Implement fetching of delta reports from previous pipeline if needed
+        var referencePath = Path.of(REFERENCE_REPORTS);
+        if (Files.exists(referencePath)) {
+            log.logInfo("Creating delta with reference reports from " + referencePath.toAbsolutePath());
+
+            return Optional.of(referencePath);
+        }
+        log.logInfo("Skipping delta computation, no reference reports found at " + referencePath.toAbsolutePath());
+
+        return Optional.empty();
     }
 }
