@@ -2,70 +2,78 @@ name: Quality Monitor
 description: Action that monitors the quality of projects and pull requests.
 
 inputs:
-  config:
-    description: "Quality monitor JSON configuration (if not set, a default configuration will be used)"
-    required: false
-  quality-gates:
-    description: "Quality gates configuration as JSON (optional)"
-    required: false
   checks-name:
     description: "Name of the GitHub checks (if not set the default name 'Quality Monitor' will be used)"
-    required: false
-  title-metric:
-    description: "Metric to show in the GitHub check title (options: line, branch, instruction, mutation, etc., or none)"
-    required: false
-  pr-number:
-    description: "Pull request number (if not set, PR comments will be skipped)"
-    required: false
-  github-token:
-    description: "GitHub authentication token (GITHUB_TOKEN)"
-    required: false
-    default: ${{github.token}}
-  github-api-url:
-    description: "GitHub API URL (GITHUB_API_URL)"
-    required: false
-    default: ${{github.api_url}}
-  skip-annotations:
-    description: "Skip the creation of annotations (for warnings and missed coverage) if not empty"
-    required: false
-  log-comments:
-    description: "Log comment properties to the console (helps to debug comment creation issues)"
-    required: false
-  show-headers:
-    description: "Show headers for each subsection in the summary (if not set, headers are hidden)"
     required: false
   comments-strategy:
     description: "How to handle subsequent comments (options: ADD, REMOVE, REPLACE)."
     required: false
     default: REMOVE
-  max-warning-annotations:
-    description: "Limit the number of warning annotations at specific lines. By default, all annotations are created."
+  config:
+    description: "Quality monitor JSON configuration (if not set, a default configuration will be used)"
+    required: false
+  github-api-url:
+    description: "GitHub API URL (GITHUB_API_URL)"
+    required: false
+    default: ${{github.api_url}}
+  github-token:
+    description: "GitHub authentication token (GITHUB_TOKEN)"
+    required: false
+    default: ${{github.token}}
+  log-comments:
+    description: "Log comment properties to the console (helps to debug comment creation issues)"
     required: false
   max-coverage-annotations:
     description: "Limit the number of coverage annotations at specific lines. By default, all annotations are created."
     required: false
+  max-warning-annotations:
+    description: "Limit the number of warning annotations at specific lines. By default, all annotations are created."
+    required: false
+  pr-number:
+    description: "Pull request number (if not set, PR comments will be skipped)"
+    required: false
+  quality-gates:
+    description: "Quality gates configuration as JSON (optional)"
+    required: false
+  reference-commit-url:
+    description: "Commit URL of the reference results that are used for delta calculation"
+    required: false
+  reference-run-url:
+    description: "Pipeline run URL of the reference results that are used for delta calculation"
+    required: false
   sha:
     description: "Commit SHA to use for the quality check (if not set, GITHUB_SHA will be used)"
+    required: false
+  show-headers:
+    description: "Show headers for each subsection in the summary (if not set, headers are hidden)"
+    required: false
+  skip-annotations:
+    description: "Skip the creation of annotations (for warnings and missed coverage) if not empty"
+    required: false
+  title-metric:
+    description: "Metric to show in the GitHub check title (options: line, branch, instruction, mutation, etc., or none)"
     required: false
 
 runs:
   using: 'docker'
-  image: 'docker://ghcr.io/uhafner/quality-monitor:4.13.0-SNAPSHOT'
+  image: 'docker://ghcr.io/uhafner/quality-monitor:4.13.0'
   env:
-    CONFIG: ${{ inputs.config }}
-    QUALITY_GATES: ${{ inputs.quality-gates }}
     CHECKS_NAME: ${{ inputs.checks-name }}
-    PR_NUMBER: ${{ inputs.pr-number }}
-    GITHUB_TOKEN: ${{ inputs.github-token }}
-    GITHUB_API_URL: ${{ inputs.github-api-url }}
-    SKIP_ANNOTATIONS: ${{ inputs.skip-annotations }}
-    SHOW_HEADERS: ${{ inputs.show-headers }}
-    LOG_COMMENTS: ${{ inputs.log-comments }}
     COMMENTS_STRATEGY: ${{ inputs.comments-strategy }}
-    MAX_WARNING_ANNOTATIONS: ${{ inputs.max-warning-annotations }}
+    COMMIT_URL: ${{ input.reference-commit-url }}
+    CONFIG: ${{ inputs.config }}
+    GITHUB_API_URL: ${{ inputs.github-api-url }}
+    GITHUB_TOKEN: ${{ inputs.github-token }}
+    LOG_COMMENTS: ${{ inputs.log-comments }}
     MAX_COVERAGE_ANNOTATIONS: ${{ inputs.max-coverage-annotations }}
-    TITLE_METRIC: ${{ inputs.title-metric }}
+    MAX_WARNING_ANNOTATIONS: ${{ inputs.max-warning-annotations }}
+    PR_NUMBER: ${{ inputs.pr-number }}
+    QUALITY_GATES: ${{ inputs.quality-gates }}
+    RUN_URL: ${{ input.reference-run-url }}
     SHA: ${{ inputs.sha }}
+    SHOW_HEADERS: ${{ inputs.show-headers }}
+    SKIP_ANNOTATIONS: ${{ inputs.skip-annotations }}
+    TITLE_METRIC: ${{ inputs.title-metric }}
 
 branding:
   icon: check-square
