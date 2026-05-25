@@ -56,7 +56,7 @@ inputs:
 
 runs:
   using: 'docker'
-  image: 'docker://ghcr.io/uhafner/quality-monitor:4.13.1'
+  image: 'docker://ghcr.io/uhafner/quality-monitor:4.14.0-SNAPSHOT'
   env:
     CHECKS_NAME: ${{ inputs.checks-name }}
     COMMENTS_STRATEGY: ${{ inputs.comments-strategy }}
