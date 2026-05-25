@@ -86,7 +86,7 @@ jobs:
       - name: Set up Maven
         uses: stCarolas/setup-maven@v5
         with:
-          maven-version: 3.9.11
+          maven-version: 3.9.16
       - name: Build (compile, run tests with coverage & mutation analysis, and static analysis)
         run: mvn -ntp clean verify -Ppit
       - name: Extract pull request number # (commenting on the pull request requires the PR number)
