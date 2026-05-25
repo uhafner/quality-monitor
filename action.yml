@@ -56,11 +56,11 @@ inputs:
 
 runs:
   using: 'docker'
-  image: 'docker://ghcr.io/uhafner/quality-monitor:4.13.0'
+  image: 'docker://ghcr.io/uhafner/quality-monitor:4.13.1'
   env:
     CHECKS_NAME: ${{ inputs.checks-name }}
     COMMENTS_STRATEGY: ${{ inputs.comments-strategy }}
-    COMMIT_URL: ${{ input.reference-commit-url }}
+    COMMIT_URL: ${{ inputs.reference-commit-url }}
     CONFIG: ${{ inputs.config }}
     GITHUB_API_URL: ${{ inputs.github-api-url }}
     GITHUB_TOKEN: ${{ inputs.github-token }}
@@ -69,7 +69,7 @@ runs:
     MAX_WARNING_ANNOTATIONS: ${{ inputs.max-warning-annotations }}
     PR_NUMBER: ${{ inputs.pr-number }}
     QUALITY_GATES: ${{ inputs.quality-gates }}
-    RUN_URL: ${{ input.reference-run-url }}
+    RUN_URL: ${{ inputs.reference-run-url }}
     SHA: ${{ inputs.sha }}
     SHOW_HEADERS: ${{ inputs.show-headers }}
     SKIP_ANNOTATIONS: ${{ inputs.skip-annotations }}
