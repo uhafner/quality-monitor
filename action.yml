@@ -12,6 +12,10 @@ inputs:
   config:
     description: "Quality monitor JSON configuration (if not set, a default configuration will be used)"
     required: false
+  delta-enabled:
+    description: "Automatically download reference reports from the main branch and compute delta metrics (if not set, no delta metrics will be computed)"
+    required: false
+    default: 'false'
   github-api-url:
     description: "GitHub API URL (GITHUB_API_URL)"
     required: false
@@ -33,19 +37,13 @@ inputs:
     description: "Pull request number (if not set, PR comments will be skipped)"
     required: false
   quality-gates:
-    description: "Quality gates configuration as JSON (optional)"
-    required: false
-  reference-commit-url:
-    description: "Commit URL of the reference results that are used for delta calculation"
-    required: false
-  reference-run-url:
-    description: "Pipeline run URL of the reference results that are used for delta calculation"
+    description: "Quality gates configuration as JSON (if not set, quality is only monitored but no quality gates will be evaluated)"
     required: false
   sha:
     description: "Commit SHA to use for the quality check (if not set, GITHUB_SHA will be used)"
     required: false
   show-headers:
-    description: "Show headers for each subsection in the summary (if not set, headers are hidden)"
+    description: "Show headers for each subsection in the comment summary (if not set, headers are hidden)"
     required: false
   skip-annotations:
     description: "Skip the creation of annotations (for warnings and missed coverage) if not empty"
@@ -55,25 +53,34 @@ inputs:
     required: false
 
 runs:
-  using: 'docker'
-  image: 'docker://ghcr.io/uhafner/quality-monitor:4.14.0-SNAPSHOT'
-  env:
-    CHECKS_NAME: ${{ inputs.checks-name }}
-    COMMENTS_STRATEGY: ${{ inputs.comments-strategy }}
-    COMMIT_URL: ${{ inputs.reference-commit-url }}
-    CONFIG: ${{ inputs.config }}
-    GITHUB_API_URL: ${{ inputs.github-api-url }}
-    GITHUB_TOKEN: ${{ inputs.github-token }}
-    LOG_COMMENTS: ${{ inputs.log-comments }}
-    MAX_COVERAGE_ANNOTATIONS: ${{ inputs.max-coverage-annotations }}
-    MAX_WARNING_ANNOTATIONS: ${{ inputs.max-warning-annotations }}
-    PR_NUMBER: ${{ inputs.pr-number }}
-    QUALITY_GATES: ${{ inputs.quality-gates }}
-    RUN_URL: ${{ inputs.reference-run-url }}
-    SHA: ${{ inputs.sha }}
-    SHOW_HEADERS: ${{ inputs.show-headers }}
-    SKIP_ANNOTATIONS: ${{ inputs.skip-annotations }}
-    TITLE_METRIC: ${{ inputs.title-metric }}
+  using: composite
+  steps:
+    - name: Download reference reports from main branch
+      id: reference
+      if: ${{ inputs.download-reference == 'true' }}
+      uses: ./.github/actions/download-reference
+      with:
+        repository: ${{ inputs.repository }}
+
+    - name: Run Quality Monitor
+      uses: docker://ghcr.io/uhafner/quality-monitor:4.14.0-SNAPSHOT
+      env:
+        CHECKS_NAME: ${{ inputs.checks-name }}
+        COMMENTS_STRATEGY: ${{ inputs.comments-strategy }}
+        COMMIT_URL: ${{ inputs.delta-enabled == 'true' && steps.reference.outputs.commit_url }}
+        CONFIG: ${{ inputs.config }}
+        GITHUB_API_URL: ${{ inputs.github-api-url }}
+        GITHUB_TOKEN: ${{ inputs.github-token }}
+        LOG_COMMENTS: ${{ inputs.log-comments }}
+        MAX_COVERAGE_ANNOTATIONS: ${{ inputs.max-coverage-annotations }}
+        MAX_WARNING_ANNOTATIONS: ${{ inputs.max-warning-annotations }}
+        PR_NUMBER: ${{ inputs.pr-number }}
+        QUALITY_GATES: ${{ inputs.quality-gates }}
+        RUN_URL: ${{ inputs.delta-enabled == 'true' && steps.reference.outputs.run_url }}
+        SHA: ${{ inputs.sha }}
+        SHOW_HEADERS: ${{ inputs.show-headers }}
+        SKIP_ANNOTATIONS: ${{ inputs.skip-annotations }}
+        TITLE_METRIC: ${{ inputs.title-metric }}
 
 branding:
   icon: check-square
