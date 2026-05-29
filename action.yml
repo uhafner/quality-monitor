@@ -63,7 +63,7 @@ runs:
         repository: ${{ inputs.repository }}
 
     - name: Run Quality Monitor
-      uses: docker://ghcr.io/uhafner/quality-monitor:4.14.0-SNAPSHOT
+      uses: docker://ghcr.io/uhafner/quality-monitor:4.14.0
       env:
         CHECKS_NAME: ${{ inputs.checks-name }}
         COMMENTS_STRATEGY: ${{ inputs.comments-strategy }}
