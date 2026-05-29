@@ -12,7 +12,7 @@ inputs:
   config:
     description: "Quality monitor JSON configuration (if not set, a default configuration will be used)"
     required: false
-  delta-enabled:
+  enable-delta:
     description: "Automatically download reference reports from the main branch and compute delta metrics (if not set, no delta metrics will be computed)"
     required: false
     default: 'false'
@@ -63,11 +63,11 @@ runs:
         repository: ${{ inputs.repository }}
 
     - name: Run Quality Monitor
-      uses: docker://ghcr.io/uhafner/quality-monitor:4.14.0
+      uses: docker://ghcr.io/uhafner/quality-monitor:4.14.1
       env:
         CHECKS_NAME: ${{ inputs.checks-name }}
         COMMENTS_STRATEGY: ${{ inputs.comments-strategy }}
-        COMMIT_URL: ${{ inputs.delta-enabled == 'true' && steps.reference.outputs.commit_url }}
+        COMMIT_URL: ${{ inputs.enable-delta == 'true' && steps.reference.outputs.commit_url }}
         CONFIG: ${{ inputs.config }}
         GITHUB_API_URL: ${{ inputs.github-api-url }}
         GITHUB_TOKEN: ${{ inputs.github-token }}
@@ -76,7 +76,7 @@ runs:
         MAX_WARNING_ANNOTATIONS: ${{ inputs.max-warning-annotations }}
         PR_NUMBER: ${{ inputs.pr-number }}
         QUALITY_GATES: ${{ inputs.quality-gates }}
-        RUN_URL: ${{ inputs.delta-enabled == 'true' && steps.reference.outputs.run_url }}
+        RUN_URL: ${{ inputs.enable-delta == 'true' && steps.reference.outputs.run_url }}
         SHA: ${{ inputs.sha }}
         SHOW_HEADERS: ${{ inputs.show-headers }}
         SKIP_ANNOTATIONS: ${{ inputs.skip-annotations }}
