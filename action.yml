@@ -55,31 +55,62 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Download reference reports from main branch
-      id: reference
-      if: ${{ inputs.enable-delta == 'true' }}
-      uses: ./.github/actions/download-reference
+  - name: Download reference reports from main branch
+    id: reference-download
+    if: ${{ inputs.enable-delta == 'true' }}
+    uses: dawidd6/action-download-artifact@v21
+    with:
+      branch: main
+      check_artifacts: true
+      if_no_artifact_found: ignore
+      name: quality-reports
+      path: reference-reports
+      workflow: quality-monitor-build.yml
 
-    - name: Run Quality Monitor
-      id: report
-      uses: docker://ghcr.io/uhafner/quality-monitor:4.14.2
-      env:
-        CHECKS_NAME: ${{ inputs.checks-name }}
-        COMMENTS_STRATEGY: ${{ inputs.comments-strategy }}
-        COMMIT_URL: ${{ inputs.enable-delta == 'true' && steps.reference.outputs.commit_url }}
-        CONFIG: ${{ inputs.config }}
-        GITHUB_API_URL: ${{ inputs.github-api-url }}
-        GITHUB_TOKEN: ${{ inputs.github-token }}
-        LOG_COMMENTS: ${{ inputs.log-comments }}
-        MAX_COVERAGE_ANNOTATIONS: ${{ inputs.max-coverage-annotations }}
-        MAX_WARNING_ANNOTATIONS: ${{ inputs.max-warning-annotations }}
-        PR_NUMBER: ${{ inputs.pr-number }}
-        QUALITY_GATES: ${{ inputs.quality-gates }}
-        RUN_URL: ${{ inputs.enable-delta == 'true' && steps.reference.outputs.run_url }}
-        SHA: ${{ inputs.sha }}
-        SHOW_HEADERS: ${{ inputs.show-headers }}
-        SKIP_ANNOTATIONS: ${{ inputs.skip-annotations }}
-        TITLE_METRIC: ${{ inputs.title-metric }}
+  - name: Create information links to the reference results
+    id: reference-info
+    if: ${{ inputs.enable-delta == 'true' }}
+    shell: bash
+    run: |
+      run_id=$(echo '${{ steps.reference-download.outputs.artifacts }}' | jq -r '.[0].workflow_run.id // "unknown"')
+      echo "run_id=$run_id" >> "$GITHUB_OUTPUT"
+      
+      if [ "$run_id" != "unknown" ]; then
+        run_url="https://github.com/${{ github.repository }}/actions/runs/$run_id"
+        echo "run_url=$run_url" >> "$GITHUB_OUTPUT"
+      fi
+
+      head_sha=$(echo '${{ steps.reference-download.outputs.artifacts }}' | jq -r '.[0].workflow_run.head_sha // "unknown"')
+      echo "head_sha=$head_sha" >> "$GITHUB_OUTPUT"
+
+      if [ "$head_sha" != "unknown" ]; then
+        commit_url="https://github.com/${{ github.repository }}/commit/$head_sha"
+        echo "commit_url=$commit_url" >> "$GITHUB_OUTPUT"
+      fi
+      
+      echo "Downloaded artifact from Run $run_id ($run_url)"
+      echo "Downloaded artifact from Commit SHA $head_sha ($commit_url)"
+
+  - name: Run Quality Monitor
+    id: report
+    uses: docker://ghcr.io/uhafner/quality-monitor:4.14.2
+    env:
+      CHECKS_NAME: ${{ inputs.checks-name }}
+      COMMENTS_STRATEGY: ${{ inputs.comments-strategy }}
+      COMMIT_URL: ${{ inputs.enable-delta == 'true' && steps.reference-info.outputs.commit_url }}
+      CONFIG: ${{ inputs.config }}
+      GITHUB_API_URL: ${{ inputs.github-api-url }}
+      GITHUB_TOKEN: ${{ inputs.github-token }}
+      LOG_COMMENTS: ${{ inputs.log-comments }}
+      MAX_COVERAGE_ANNOTATIONS: ${{ inputs.max-coverage-annotations }}
+      MAX_WARNING_ANNOTATIONS: ${{ inputs.max-warning-annotations }}
+      PR_NUMBER: ${{ inputs.pr-number }}
+      QUALITY_GATES: ${{ inputs.quality-gates }}
+      RUN_URL: ${{ inputs.enable-delta == 'true' && steps.reference-info.outputs.run_url }}
+      SHA: ${{ inputs.sha }}
+      SHOW_HEADERS: ${{ inputs.show-headers }}
+      SKIP_ANNOTATIONS: ${{ inputs.skip-annotations }}
+      TITLE_METRIC: ${{ inputs.title-metric }}
 
 branding:
   icon: check-square
