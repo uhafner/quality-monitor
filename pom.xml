@@ -13,7 +13,7 @@
 
   <groupId>edu.hm.hafner</groupId>
   <artifactId>quality-monitor</artifactId>
-  <version>4.14.0</version>
+  <version>4.15.0</version>
   <packaging>jar</packaging>
 
   <name>Quality Monitor GitHub Action</name>
@@ -166,7 +166,7 @@
             </auth>
           </to>
           <from>
-            <image>maven:3.9.12-eclipse-temurin-25-alpine@sha256:c36ce99a7301bbd39e3a1aa5883b0e31b19b6101a7c4c44625dc4e6dbfbbc22b</image>
+            <image>maven:3.9.16-eclipse-temurin-25-alpine@sha256:1a1f3bd96046f84c5beeb1f28bf909f9618b9dd6ef8d5af404e82dc67cf2cef9</image>
             <platforms>
               <platform>
                 <architecture>amd64</architecture>
