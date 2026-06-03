@@ -93,7 +93,7 @@ runs:
 
   - name: Run Quality Monitor
     id: report
-    uses: docker://ghcr.io/uhafner/quality-monitor:4.14.0
+    uses: docker://ghcr.io/uhafner/quality-monitor:v4.14.3
     env:
       CHECKS_NAME: ${{ inputs.checks-name }}
       COMMENTS_STRATEGY: ${{ inputs.comments-strategy }}
