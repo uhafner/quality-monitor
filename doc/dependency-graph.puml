@@ -6,7 +6,7 @@ skinparam rectangle {
   BackgroundColor<<runtime>> lightBlue
   BackgroundColor<<provided>> lightGray
 }
-rectangle "analysis-model\n\n14.11.0" as edu_hm_hafner_analysis_model_jar
+rectangle "analysis-model\n\n14.12.0" as edu_hm_hafner_analysis_model_jar
 rectangle "jsoup\n\n1.22.2" as org_jsoup_jsoup_jar
 rectangle "commons-digester3\n\n3.2" as org_apache_commons_commons_digester3_jar
 rectangle "cglib\n\n2.2.2" as cglib_cglib_jar
@@ -42,15 +42,15 @@ rectangle "jsr305\n\n3.0.2" as com_google_code_findbugs_jsr305_jar
 rectangle "asm\n\n3.3.1" as asm_asm_jar
 rectangle "xmlresolver\n\n5.3.3" as org_xmlresolver_xmlresolver_jar
 rectangle "xmlresolver\ndata\n5.3.3" as org_xmlresolver_xmlresolver_jar_data
-rectangle "autograding-model\n\n17.1.0" as edu_hm_hafner_autograding_model_jar
-rectangle "coverage-model\n\n0.69.0" as edu_hm_hafner_coverage_model_jar
+rectangle "autograding-model\n\n17.2.0" as edu_hm_hafner_autograding_model_jar
+rectangle "coverage-model\n\n0.71.0" as edu_hm_hafner_coverage_model_jar
+rectangle "jackson-databind\n\n3.2.0" as tools_jackson_core_jackson_databind_jar
+rectangle "jackson-annotations\n\n2.22" as com_fasterxml_jackson_core_jackson_annotations_jar
+rectangle "jackson-core\n\n3.2.0" as tools_jackson_core_jackson_core_jar
 rectangle "commons-math3\n\n3.6.1" as org_apache_commons_commons_math3_jar
-rectangle "jackson-databind\n\n3.1.4" as tools_jackson_core_jackson_databind_jar
-rectangle "jackson-annotations\n\n2.21" as com_fasterxml_jackson_core_jackson_annotations_jar
-rectangle "jackson-core\n\n3.1.4" as tools_jackson_core_jackson_core_jar
 rectangle "quality-monitor\n\n4.16.0-SNAPSHOT" as edu_hm_hafner_quality_monitor_jar
-rectangle "jackson-databind\n\n2.21.4" as com_fasterxml_jackson_core_jackson_databind_jar
-rectangle "jackson-core\n\n2.21.4" as com_fasterxml_jackson_core_jackson_core_jar
+rectangle "jackson-databind\n\n2.20.0" as com_fasterxml_jackson_core_jackson_databind_jar
+rectangle "jackson-core\n\n2.20.0" as com_fasterxml_jackson_core_jackson_core_jar
 rectangle "github-api\n\n1.330" as org_kohsuke_github_api_jar
 rectangle "codingstyle\n\n6.13.0" as edu_hm_hafner_codingstyle_jar
 rectangle "spotbugs-annotations\n\n4.10.1" as com_github_spotbugs_spotbugs_annotations_jar
@@ -94,11 +94,14 @@ edu_hm_hafner_analysis_model_jar -[#000000]-> asm_asm_jar
 edu_hm_hafner_analysis_model_jar -[#000000]-> org_xmlresolver_xmlresolver_jar
 edu_hm_hafner_analysis_model_jar -[#000000]-> org_xmlresolver_xmlresolver_jar_data
 edu_hm_hafner_autograding_model_jar -[#000000]-> edu_hm_hafner_analysis_model_jar
+edu_hm_hafner_coverage_model_jar .[#ABABAB].> tools_jackson_core_jackson_databind_jar
+edu_hm_hafner_coverage_model_jar -[#000000]-> com_fasterxml_jackson_core_jackson_annotations_jar
+edu_hm_hafner_coverage_model_jar -[#000000]-> tools_jackson_core_jackson_core_jar
 edu_hm_hafner_coverage_model_jar .[#ABABAB].> com_google_code_findbugs_jsr305_jar
 edu_hm_hafner_autograding_model_jar -[#000000]-> edu_hm_hafner_coverage_model_jar
 edu_hm_hafner_autograding_model_jar -[#000000]-> org_apache_commons_commons_math3_jar
-tools_jackson_core_jackson_databind_jar -[#000000]-> com_fasterxml_jackson_core_jackson_annotations_jar
-tools_jackson_core_jackson_databind_jar -[#000000]-> tools_jackson_core_jackson_core_jar
+tools_jackson_core_jackson_databind_jar .[#ABABAB].> com_fasterxml_jackson_core_jackson_annotations_jar
+tools_jackson_core_jackson_databind_jar .[#ABABAB].> tools_jackson_core_jackson_core_jar
 edu_hm_hafner_autograding_model_jar -[#000000]-> tools_jackson_core_jackson_databind_jar
 edu_hm_hafner_quality_monitor_jar -[#000000]-> edu_hm_hafner_autograding_model_jar
 com_fasterxml_jackson_core_jackson_databind_jar .[#ABABAB].> com_fasterxml_jackson_core_jackson_annotations_jar
