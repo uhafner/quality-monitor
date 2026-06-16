@@ -52,9 +52,9 @@ rectangle "quality-monitor\n\n4.16.0-SNAPSHOT" as edu_hm_hafner_quality_monitor_
 rectangle "jackson-databind\n\n2.20.0" as com_fasterxml_jackson_core_jackson_databind_jar
 rectangle "jackson-core\n\n2.20.0" as com_fasterxml_jackson_core_jackson_core_jar
 rectangle "github-api\n\n1.330" as org_kohsuke_github_api_jar
-rectangle "codingstyle\n\n6.13.0" as edu_hm_hafner_codingstyle_jar
-rectangle "spotbugs-annotations\n\n4.10.1" as com_github_spotbugs_spotbugs_annotations_jar
-rectangle "error_prone_annotations\n\n2.49.0" as com_google_errorprone_error_prone_annotations_jar
+rectangle "codingstyle\n\n6.14.0" as edu_hm_hafner_codingstyle_jar
+rectangle "spotbugs-annotations\n\n4.10.2" as com_github_spotbugs_spotbugs_annotations_jar
+rectangle "error_prone_annotations\n\n2.50.0" as com_google_errorprone_error_prone_annotations_jar
 rectangle "commons-lang3\n\n3.20.0" as org_apache_commons_commons_lang3_jar
 rectangle "commons-io\n\n2.22.0" as commons_io_commons_io_jar
 rectangle "streamex\n\n0.8.4" as one_util_streamex_jar
