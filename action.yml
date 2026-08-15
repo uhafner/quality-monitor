@@ -58,7 +58,7 @@ runs:
   - name: Download reference reports from main branch
     id: reference-download
     if: ${{ inputs.enable-delta == 'true' }}
-    uses: dawidd6/action-download-artifact@v21
+    uses: dawidd6/action-download-artifact@v23
     with:
       branch: main
       check_artifacts: true
