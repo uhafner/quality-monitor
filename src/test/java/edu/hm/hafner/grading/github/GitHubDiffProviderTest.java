@@ -1,10 +1,9 @@
 package edu.hm.hafner.grading.github;
 
-import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Set;
-
-import static org.assertj.core.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 class GitHubDiffProviderTest {
     @Test
@@ -28,17 +27,15 @@ class GitHubDiffProviderTest {
                 +added
                  lineC
                 """;
-        // New hunk starts at 20, first added occurs after two context/deletion lines advancing pointer to 22, then '+': 22
+        // New hunk starts at 20, first added occurs after two context/deletion lines advancing pointer to 22, then '+':
+        // 22
         assertThat(parse(diff)).containsExactly(22);
     }
 
     @Test
     @SuppressWarnings("StringConcatToTextBlock")
     void shouldHandleCrlf() {
-        var diff = "@@ -1,1 +1,2 @@\r\n"
-                + " line1\r\n"
-                + "+added1\r\n"
-                + "+added2\r\n";
+        var diff = "@@ -1,1 +1,2 @@\r\n" + " line1\r\n" + "+added1\r\n" + "+added2\r\n";
         assertThat(parse(diff)).containsExactly(2, 3);
     }
 

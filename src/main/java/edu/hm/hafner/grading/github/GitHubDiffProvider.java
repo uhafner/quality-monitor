@@ -1,17 +1,14 @@
 package edu.hm.hafner.grading.github;
 
-import org.apache.commons.lang3.StringUtils;
-
 import edu.hm.hafner.util.FilteredLog;
 import edu.hm.hafner.util.VisibleForTesting;
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
-
+import org.apache.commons.lang3.StringUtils;
 import org.kohsuke.github.GHPullRequestFileDetail;
 import org.kohsuke.github.GitHub;
 import org.kohsuke.github.GitHubBuilder;
@@ -19,40 +16,37 @@ import org.kohsuke.github.GitHubBuilder;
 /**
  * Provides changed lines for a GitHub pull request so patch coverage can be computed.
  *
- * <p>
- * Calls the GitHub REST API to list PR files and parses unified diffs from each file's {@code patch} field into
+ * <p>Calls the GitHub REST API to list PR files and parses unified diffs from each file's {@code patch} field into
  * per-file 1-based line numbers for the new file (added or replaced lines only). Renamed files are keyed by the new
  * filename.
- * </p>
  */
 class GitHubDiffProvider {
-    private static final Pattern HUNK_REGEXP = Pattern.compile(
-            "^@@ -(?<oldStart>\\d+)(?:,\\d+)? \\+(?<newStart>\\d+)(?:,\\d+)? @@.*$");
+    private static final Pattern HUNK_REGEXP =
+            Pattern.compile("^@@ -(?<oldStart>\\d+)(?:,\\d+)? \\+(?<newStart>\\d+)(?:,\\d+)? @@.*$");
     private static final String DIFF_REMOVED = "removed";
 
     /**
      * Loads changed lines per file from a GitHub PR.
      *
-     * @param repository
-     *         the {@code owner/repo}
-     * @param token
-     *         the GitHub token
-     * @param apiUrl
-     *         optional alternative API URL
-     * @param log
-     *         logger
-     * @param prNumber
-     *         the pull request number
-     *
+     * @param repository the {@code owner/repo}
+     * @param token the GitHub token
+     * @param apiUrl optional alternative API URL
+     * @param log logger
+     * @param prNumber the pull request number
      * @return a mapping of a repository-relative file path to a set of 1-based changed line numbers
      */
     @SuppressWarnings({"PMD.CognitiveComplexity", "PMD.CyclomaticComplexity"})
-    Map<String, Set<Integer>> loadChangedLines(final String repository,
-            final String token, final String apiUrl, final FilteredLog log, final int prNumber) {
+    Map<String, Set<Integer>> loadChangedLines(
+            final String repository,
+            final String token,
+            final String apiUrl,
+            final FilteredLog log,
+            final int prNumber) {
         try {
             Map<String, Set<Integer>> changedLinesByPath = new HashMap<>();
 
-            var files = connectWithGitHub(token, apiUrl).getRepository(repository)
+            var files = connectWithGitHub(token, apiUrl)
+                    .getRepository(repository)
                     .getPullRequest(prNumber)
                     .listFiles();
             log.logInfo("Loaded changed files from GitHub");
@@ -93,8 +87,7 @@ class GitHubDiffProvider {
             }
 
             return changedLinesByPath;
-        }
-        catch (IOException exception) {
+        } catch (IOException exception) {
             log.logException(exception, "Failed to load changed lines from GitHub");
 
             return Map.of();
@@ -114,9 +107,7 @@ class GitHubDiffProvider {
      * replaced by the patch. Only "+" lines inside hunks are considered; deletions ("-") and hunk context are not
      * recorded. Hunk headers of the form {@code @@ -a,b +c,d @@} advance the new-file line pointer to {@code c}.
      *
-     * @param patch
-     *         the unified diff text
-     *
+     * @param patch the unified diff text
      * @return the set of 1-based line numbers in the new file that were added or replaced
      */
     @VisibleForTesting

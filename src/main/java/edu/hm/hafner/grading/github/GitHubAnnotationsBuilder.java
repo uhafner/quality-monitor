@@ -1,20 +1,17 @@
 package edu.hm.hafner.grading.github;
 
-import org.apache.commons.lang3.StringUtils;
-
 import edu.hm.hafner.grading.CommentBuilder;
 import edu.hm.hafner.util.FilteredLog;
-
 import java.util.Map;
 import java.util.Set;
-
+import org.apache.commons.lang3.StringUtils;
 import org.kohsuke.github.GHCheckRun.AnnotationLevel;
 import org.kohsuke.github.GHCheckRunBuilder.Annotation;
 import org.kohsuke.github.GHCheckRunBuilder.Output;
 
 /**
- * Creates GitHub annotations for static analysis warnings, for lines with missing coverage, and for lines with
- * survived mutations.
+ * Creates GitHub annotations for static analysis warnings, for lines with missing coverage, and for lines with survived
+ * mutations.
  *
  * @author Ullrich Hafner
  */
@@ -28,8 +25,11 @@ class GitHubAnnotationsBuilder extends CommentBuilder {
     private final int maxCoverageComments;
     private final boolean isLoggingEnabled;
 
-    GitHubAnnotationsBuilder(final Map<String, Set<Integer>> modifiedFilesAndLines,
-            final Output output, final String prefix, final FilteredLog log) {
+    GitHubAnnotationsBuilder(
+            final Map<String, Set<Integer>> modifiedFilesAndLines,
+            final Output output,
+            final String prefix,
+            final FilteredLog log) {
         super(modifiedFilesAndLines, prefix, GITHUB_WORKSPACE_REL, GITHUB_WORKSPACE_ABS);
 
         this.output = output;
@@ -55,13 +55,13 @@ class GitHubAnnotationsBuilder extends CommentBuilder {
         var value = getEnv(key);
         try {
             return Integer.parseInt(value);
-        }
-        catch (NumberFormatException _) {
+        } catch (NumberFormatException _) {
             if (StringUtils.isEmpty(value)) {
                 log.logInfo(">>>> Environment variable %s not set, falling back to default Integer.MAX_VALUE", key);
-            }
-            else {
-                log.logError(">>>> Error: no integer value in environment variable key %s: %s, falling back to default Integer.MAX_VALUE", key, value);
+            } else {
+                log.logError(
+                        ">>>> Error: no integer value in environment variable key %s: %s, falling back to default Integer.MAX_VALUE",
+                        key, value);
             }
 
             return Integer.MAX_VALUE;
@@ -74,11 +74,17 @@ class GitHubAnnotationsBuilder extends CommentBuilder {
 
     @Override
     @SuppressWarnings("checkstyle:ParameterNumber")
-    protected boolean createComment(final CommentType commentType, final String relativePath,
-            final int lineStart, final int lineEnd,
-            final String message, final String title,
-            final int columnStart, final int columnEnd,
-            final String details, final String markDownDetails) {
+    protected boolean createComment(
+            final CommentType commentType,
+            final String relativePath,
+            final int lineStart,
+            final int lineEnd,
+            final String message,
+            final String title,
+            final int columnStart,
+            final int columnEnd,
+            final String details,
+            final String markDownDetails) {
         if (!isPartOfChangedFiles(relativePath, lineStart, lineEnd) && commentType != CommentType.WARNING) {
             return false; // do not create coverage comments for lines that are not part of the diff
         }
@@ -96,13 +102,12 @@ class GitHubAnnotationsBuilder extends CommentBuilder {
         if (lineStart == 0) {
             actualLineStart = 1;
             actualLineEnd = 1;
-        }
-        else {
+        } else {
             actualLineStart = lineStart;
             actualLineEnd = lineEnd;
         }
-        var annotation = new Annotation(relativePath,
-                actualLineStart, actualLineEnd, AnnotationLevel.WARNING, message).withTitle(title);
+        var annotation = new Annotation(relativePath, actualLineStart, actualLineEnd, AnnotationLevel.WARNING, message)
+                .withTitle(title);
 
         if (lineStart == lineEnd) {
             annotation.withStartColumn(columnStart).withEndColumn(columnEnd);

@@ -1,15 +1,13 @@
 package edu.hm.hafner.grading.github;
 
-import org.junit.jupiter.api.Test;
+import static edu.hm.hafner.grading.github.QualityMonitor.REFERENCE_REPORTS;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import edu.hm.hafner.util.FilteredLog;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-
-import static edu.hm.hafner.grading.github.QualityMonitor.*;
-import static org.assertj.core.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 class QualityMonitorTest {
     @Test

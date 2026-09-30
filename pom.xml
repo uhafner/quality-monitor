@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
     <groupId>edu.hm.hafner</groupId>
     <artifactId>codingstyle-pom</artifactId>
-    <version>6.18.0</version>
-    <relativePath/>
+    <version>7.0.0</version>
+    <relativePath />
   </parent>
 
   <groupId>edu.hm.hafner</groupId>
@@ -17,18 +15,16 @@
   <packaging>jar</packaging>
 
   <name>Quality Monitor GitHub Action</name>
-  <description>
-    Automated quality monitoring for GitHub pull requests and branch pipelines.
+  <description>Automated quality monitoring for GitHub pull requests and branch pipelines.
     The action aggregates test results, code and mutation coverage, static analysis findings,
     and software metrics, then posts a structured pull request comment and GitHub Checks summary.
-    When enabled, it also adds inline line comments for warnings, missed or mutated lines.
-  </description>
+    When enabled, it also adds inline line comments for warnings, missed or mutated lines.</description>
 
   <scm>
     <connection>scm:git:https://github.com/uhafner/quality-monitor.git</connection>
     <developerConnection>scm:git:git@github.com:uhafner/quality-monitor.git</developerConnection>
-    <url>https://github.com/uhafner/quality-monitor</url>
     <tag>HEAD</tag>
+    <url>https://github.com/uhafner/quality-monitor</url>
   </scm>
 
   <properties>
@@ -61,28 +57,28 @@
       <version>${autograding-model.version}</version>
       <exclusions>
         <exclusion>
-          <groupId>com.google.errorprone</groupId>
-          <artifactId>error_prone_annotations</artifactId>
-        </exclusion>
-        <exclusion>
           <groupId>com.github.spotbugs</groupId>
           <artifactId>spotbugs-annotations</artifactId>
         </exclusion>
         <exclusion>
-          <groupId>org.apache.commons</groupId>
-          <artifactId>commons-lang3</artifactId>
+          <groupId>com.google.errorprone</groupId>
+          <artifactId>error_prone_annotations</artifactId>
         </exclusion>
         <exclusion>
           <groupId>commons-io</groupId>
           <artifactId>commons-io</artifactId>
         </exclusion>
         <exclusion>
-          <artifactId>codingstyle</artifactId>
           <groupId>edu.hm.hafner</groupId>
+          <artifactId>codingstyle</artifactId>
         </exclusion>
         <exclusion>
-          <artifactId>streamex</artifactId>
           <groupId>one.util</groupId>
+          <artifactId>streamex</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.commons</groupId>
+          <artifactId>commons-lang3</artifactId>
         </exclusion>
       </exclusions>
     </dependency>
@@ -93,12 +89,12 @@
       <version>${github-api.version}</version>
       <exclusions>
         <exclusion>
-          <groupId>org.apache.commons</groupId>
-          <artifactId>commons-lang3</artifactId>
-        </exclusion>
-        <exclusion>
           <groupId>commons-io</groupId>
           <artifactId>commons-io</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.commons</groupId>
+          <artifactId>commons-lang3</artifactId>
         </exclusion>
       </exclusions>
     </dependency>
@@ -110,8 +106,8 @@
       <scope>test</scope>
       <exclusions>
         <exclusion>
-          <artifactId>jackson-annotations</artifactId>
           <groupId>com.fasterxml.jackson.core</groupId>
+          <artifactId>jackson-annotations</artifactId>
         </exclusion>
         <exclusion>
           <groupId>com.fasterxml.jackson.core</groupId>
@@ -123,6 +119,19 @@
 
   <build>
     <finalName>${project.artifactId}</finalName>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.openrewrite.maven</groupId>
+          <artifactId>rewrite-maven-plugin</artifactId>
+          <configuration>
+            <activeRecipes combine.children="append">
+              <recipe>org.openrewrite.java.migrate.UpgradeToJava25</recipe>
+            </activeRecipes>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -135,22 +144,6 @@
         <groupId>com.google.cloud.tools</groupId>
         <artifactId>jib-maven-plugin</artifactId>
         <version>${jib-maven-plugin.version}</version>
-        <executions>
-          <execution>
-            <id>local-docker</id>
-            <phase>pre-integration-test</phase>
-            <goals>
-              <goal>dockerBuild</goal>
-            </goals>
-          </execution>
-          <execution>
-            <id>docker-io</id>
-            <phase>install</phase>
-            <goals>
-              <goal>build</goal>
-            </goals>
-          </execution>
-        </executions>
         <configuration>
           <to>
             <image>docker.io/uhafner/quality-monitor</image>
@@ -177,6 +170,22 @@
             </platforms>
           </from>
         </configuration>
+        <executions>
+          <execution>
+            <id>local-docker</id>
+            <goals>
+              <goal>dockerBuild</goal>
+            </goals>
+            <phase>pre-integration-test</phase>
+          </execution>
+          <execution>
+            <id>docker-io</id>
+            <goals>
+              <goal>build</goal>
+            </goals>
+            <phase>install</phase>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <groupId>org.revapi</groupId>
@@ -186,19 +195,6 @@
         </configuration>
       </plugin>
     </plugins>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.openrewrite.maven</groupId>
-          <artifactId>rewrite-maven-plugin</artifactId>
-          <configuration>
-            <activeRecipes combine.children="append">
-              <recipe>org.openrewrite.java.migrate.UpgradeToJava25</recipe>
-            </activeRecipes>
-          </configuration>
-        </plugin>
-      </plugins>
-    </pluginManagement>
   </build>
 
 </project>
