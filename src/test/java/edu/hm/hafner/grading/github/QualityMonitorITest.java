@@ -1,18 +1,16 @@
 package edu.hm.hafner.grading.github;
 
-import org.junit.jupiter.api.Test;
-import org.junitpioneer.jupiter.SetEnvironmentVariable;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import edu.hm.hafner.util.ResourceTest;
-
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
-
-import static org.assertj.core.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+import org.junitpioneer.jupiter.SetEnvironmentVariable;
 
 /**
- * Integration test for the grading action.  Runs the action locally in the filesystem.
+ * Integration test for the grading action. Runs the action locally in the filesystem.
  *
  * @author Ullrich Hafner
  */
@@ -242,8 +240,10 @@ class QualityMonitorITest extends ResourceTest {
     @Test
     void shouldMonitorQualityWithDefaultConfiguration() {
         assertThat(runAutoGrading())
-                .contains("No configuration provided (environment variable CONFIG not set), using default configuration")
-                .contains("Processing 1 test configuration(s)",
+                .contains(
+                        "No configuration provided (environment variable CONFIG not set), using default configuration")
+                .contains(
+                        "Processing 1 test configuration(s)",
                         "\"maxScore\" : 0,",
                         "\"successRateImpact\" : 0,",
                         "\"failureRateImpact\" : 0,",
@@ -262,7 +262,8 @@ class QualityMonitorITest extends ResourceTest {
     void shouldGradeWithConfigurationFromEnvironment() {
         assertThat(runAutoGrading())
                 .contains("Obtaining configuration from environment variable CONFIG")
-                .contains("Processing 1 test configuration(s)",
+                .contains(
+                        "Processing 1 test configuration(s)",
                         "-> Number of Tests Total: 37 [Whole Project]",
                         "=> Tests: 64.86% successful (13 failed, 24 passed) [Whole Project]",
                         "Processing 2 coverage configuration(s)",
@@ -282,9 +283,9 @@ class QualityMonitorITest extends ResourceTest {
                         "=> Cognitive Complexity: 172 (total) [Whole Project]",
                         "=> Non Commenting Source Statements: 1200 (total) [Whole Project]",
                         "=> N-Path Complexity: 432 (total) [Whole Project]")
-                .contains("Environment variable 'QUALITY_GATES' not found or empty",
-                        "No quality gates to evaluate")
-                .contains("loc=0",
+                .contains("Environment variable 'QUALITY_GATES' not found or empty", "No quality gates to evaluate")
+                .contains(
+                        "loc=0",
                         "line=10.93",
                         "pmd=41",
                         "ncss=1200",
@@ -308,10 +309,12 @@ class QualityMonitorITest extends ResourceTest {
     @SetEnvironmentVariable(key = "QUALITY_GATES", value = QUALITY_GATES_NOK)
     void shouldGradeWithFailedQualityGate() {
         assertThat(runAutoGrading())
-                .contains("Processing 1 test configuration(s)",
+                .contains(
+                        "Processing 1 test configuration(s)",
                         "Processing 2 coverage configuration(s)",
                         "Processing 2 static analysis configuration(s)")
-                .contains("Quality Gates Quality Monitor",
+                .contains(
+                        "Quality Gates Quality Monitor",
                         "Found quality gates configuration in environment variable 'QUALITY_GATES'",
                         "Parsed 1 quality gate(s) from JSON configuration",
                         "Quality gates evaluation completed: ❌ FAILURE",
@@ -324,10 +327,12 @@ class QualityMonitorITest extends ResourceTest {
     @SetEnvironmentVariable(key = "QUALITY_GATES", value = QUALITY_GATES_OK)
     void shouldGradeWithSuccessfulQualityGate() {
         assertThat(runAutoGrading())
-                .contains("Processing 1 test configuration(s)",
+                .contains(
+                        "Processing 1 test configuration(s)",
                         "Processing 2 coverage configuration(s)",
                         "Processing 2 static analysis configuration(s)")
-                .contains("Found quality gates configuration in environment variable 'QUALITY_GATES'",
+                .contains(
+                        "Found quality gates configuration in environment variable 'QUALITY_GATES'",
                         "Parsing quality gates from JSON configuration using QualityGatesConfiguration",
                         "Parsed 1 quality gate(s) from JSON configuration",
                         "Evaluating 1 quality gate(s)",
@@ -341,7 +346,8 @@ class QualityMonitorITest extends ResourceTest {
     @SetEnvironmentVariable(key = "CONFIG", value = CONFIGURATION_WRONG_PATHS)
     void shouldShowErrors() {
         assertThat(runAutoGrading())
-                .contains("Processing 1 test configuration(s)",
+                .contains(
+                        "Processing 1 test configuration(s)",
                         "=> JUnit Score: 100 of 100",
                         "Configuration error for 'Unittests'?",
                         "JUnit Score: 100 of 100",

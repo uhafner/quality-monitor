@@ -1,8 +1,5 @@
 package edu.hm.hafner.grading.github;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.Strings;
-
 import edu.hm.hafner.analysis.registry.ParserRegistry;
 import edu.hm.hafner.coverage.Metric;
 import edu.hm.hafner.grading.AggregatedScore;
@@ -12,7 +9,6 @@ import edu.hm.hafner.grading.QualityGateResult;
 import edu.hm.hafner.grading.Scope;
 import edu.hm.hafner.util.FilteredLog;
 import edu.hm.hafner.util.VisibleForTesting;
-
 import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.file.Files;
@@ -23,7 +19,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.kohsuke.github.GHCheckRun.Conclusion;
 import org.kohsuke.github.GHCheckRun.Status;
 import org.kohsuke.github.GHCheckRunBuilder;
@@ -49,16 +46,12 @@ public class QualityMonitor extends AutoGradingRunner {
     private static final boolean SHOW_HEADERS_IN_CHECKS_DETAILS = false;
     static final String REFERENCE_REPORTS = "reference-reports";
 
-    /**
-     * The public entry point for the action in the docker container simply calls the quality monitor.
-     */
+    /** The public entry point for the action in the docker container simply calls the quality monitor. */
     void main() {
         new QualityMonitor().run();
     }
 
-    /**
-     * Creates a new instance of {@link QualityMonitor}.
-     */
+    /** Creates a new instance of {@link QualityMonitor}. */
     public QualityMonitor() {
         super();
     }
@@ -79,19 +72,24 @@ public class QualityMonitor extends AutoGradingRunner {
     }
 
     @Override
-    protected void publishGradingResult(final AggregatedScore score, final QualityGateResult qualityGateResult,
-            final FilteredLog log) {
+    protected void publishGradingResult(
+            final AggregatedScore score, final QualityGateResult qualityGateResult, final FilteredLog log) {
         var errors = createErrorMessageMarkdown(log);
         var conclusion = determineConclusion(errors, qualityGateResult, log);
         var qualityGateDetails = qualityGateResult.createMarkdownSummary();
         var showHeaders = StringUtils.isNotBlank(getEnv("SHOW_HEADERS"));
         var results = new GradingReport();
-        addComment(score,
+        addComment(
+                score,
                 results.getTextSummary(score, getChecksName()),
                 results.getMarkdownDetails(score, getChecksName()) + errors + qualityGateDetails,
-                results.getSubScoreDetails(score, SHOW_HEADERS_IN_CHECKS_DETAILS).toString() + errors + qualityGateDetails,
+                results.getSubScoreDetails(score, SHOW_HEADERS_IN_CHECKS_DETAILS)
+                                .toString()
+                        + errors
+                        + qualityGateDetails,
                 results.getMarkdownSummary(score, getChecksName(), showHeaders) + errors + qualityGateDetails,
-                conclusion, log);
+                conclusion,
+                log);
 
         writeMetrics(score, log);
 
@@ -102,8 +100,7 @@ public class QualityMonitor extends AutoGradingRunner {
         try {
             var metrics = extractAllMetrics(score, log);
             Files.writeString(Path.of("metrics.env"), metrics);
-        }
-        catch (IOException exception) {
+        } catch (IOException exception) {
             log.logException(exception, "Can't write metrics to 'metrics.env'");
         }
     }
@@ -113,13 +110,24 @@ public class QualityMonitor extends AutoGradingRunner {
         var results = new GradingReport();
 
         var markdownErrors = results.getMarkdownErrors(score, exception);
-        addComment(score, results.getTextSummary(score, getChecksName()),
-                markdownErrors, markdownErrors, markdownErrors, Conclusion.FAILURE, log);
+        addComment(
+                score,
+                results.getTextSummary(score, getChecksName()),
+                markdownErrors,
+                markdownErrors,
+                markdownErrors,
+                Conclusion.FAILURE,
+                log);
     }
 
-    private void addComment(final AggregatedScore score, final String textSummary,
-            final String markdownDetails, final String markdownSummary, final String prSummary,
-            final Conclusion conclusion, final FilteredLog log) {
+    private void addComment(
+            final AggregatedScore score,
+            final String textSummary,
+            final String markdownDetails,
+            final String markdownSummary,
+            final String prSummary,
+            final Conclusion conclusion,
+            final FilteredLog log) {
         try {
             var repository = getEnv("GITHUB_REPOSITORY");
             if (repository.isBlank()) {
@@ -156,22 +164,26 @@ public class QualityMonitor extends AutoGradingRunner {
             var checksResult = createChecksRun(log, check);
 
             commentPullRequest(prSummary, checksResult, repository, github, log);
-        }
-        catch (IOException exception) {
+        } catch (IOException exception) {
             logException(log, exception, "Could create GitHub comments");
         }
     }
 
     private void attachAnnotations(final AggregatedScore score, final Output output, final FilteredLog log) {
         if (getEnv("SKIP_ANNOTATIONS").isEmpty()) {
-            var annotationBuilder = new GitHubAnnotationsBuilder(getModifiedFilesAndLines(), output,
-                    computeAbsolutePathPrefixToRemove(), log);
+            var annotationBuilder = new GitHubAnnotationsBuilder(
+                    getModifiedFilesAndLines(), output, computeAbsolutePathPrefixToRemove(), log);
             annotationBuilder.createAnnotations(score);
         }
     }
 
-    private void commentPullRequest(final String prSummary, final String checksResult, final String repository,
-            final GitHub github, final FilteredLog log) throws IOException {
+    private void commentPullRequest(
+            final String prSummary,
+            final String checksResult,
+            final String repository,
+            final GitHub github,
+            final FilteredLog log)
+            throws IOException {
         var prNumber = getEnv("PR_NUMBER");
         if (prNumber.isBlank()) {
             return;
@@ -180,8 +192,7 @@ public class QualityMonitor extends AutoGradingRunner {
         var strategy = getEnv("COMMENTS_STRATEGY");
         var previousComment = findPreviousComment(github, repository, prNumber);
 
-        if ((Strings.CI.equals(strategy, "REMOVE") || StringUtils.isEmpty(strategy))
-                && previousComment.isPresent()) {
+        if ((Strings.CI.equals(strategy, "REMOVE") || StringUtils.isEmpty(strategy)) && previousComment.isPresent()) {
             previousComment.get().delete();
             log.logInfo("Successfully deleted previous comment for PR#" + prNumber);
         }
@@ -204,8 +215,8 @@ public class QualityMonitor extends AutoGradingRunner {
         return COMMENT_MARKER + "\n\n" + prSummary + "\n\n<hr />\n\n" + footer + "\n";
     }
 
-    private Optional<GHIssueComment> findPreviousComment(final GitHub github,
-            final String repository, final String prNumber) throws IOException {
+    private Optional<GHIssueComment> findPreviousComment(
+            final GitHub github, final String repository, final String prNumber) throws IOException {
         var comments = github.getRepository(repository)
                 .getPullRequest(Integer.parseInt(prNumber))
                 .listComments();
@@ -222,10 +233,9 @@ public class QualityMonitor extends AutoGradingRunner {
             var run = check.create();
             log.logInfo("Successfully created check " + run);
 
-            return "More details are shown in the [GitHub Checks Result](%s).".formatted(
-                    run.getDetailsUrl().toString());
-        }
-        catch (IOException exception) {
+            return "More details are shown in the [GitHub Checks Result](%s)."
+                    .formatted(run.getDetailsUrl().toString());
+        } catch (IOException exception) {
             logException(log, exception, "Could not create check");
 
             return "A detailed GitHub Checks Result could not be created, see error log.";
@@ -236,8 +246,7 @@ public class QualityMonitor extends AutoGradingRunner {
         String errorMessage;
         if (exception instanceof HttpException responseException) {
             errorMessage = StringUtils.defaultIfBlank(responseException.getResponseMessage(), exception.getMessage());
-        }
-        else {
+        } else {
             errorMessage = exception.getMessage();
         }
         log.logError("%s: %s", message, StringUtils.defaultIfBlank(errorMessage, "no error message available"));
@@ -252,8 +261,8 @@ public class QualityMonitor extends AutoGradingRunner {
 
     String extractAllMetrics(final AggregatedScore score, final FilteredLog log) {
         var metrics = new StringBuilder();
-        score.getRoundedMetrics().forEach((metric, value) ->
-                metrics.append(String.format(Locale.ENGLISH, "%s=%s%n", metric, value)));
+        score.getRoundedMetrics()
+                .forEach((metric, value) -> metrics.append(String.format(Locale.ENGLISH, "%s=%s%n", metric, value)));
         log.logInfo("---------------");
         log.logInfo("Metrics Summary");
         log.logInfo("---------------");
@@ -266,8 +275,8 @@ public class QualityMonitor extends AutoGradingRunner {
     }
 
     private String computeAbsolutePathPrefixToRemove() {
-        return "%s/%s/".formatted(getEnv("RUNNER_WORKSPACE"),
-                StringUtils.substringAfter(getEnv("GITHUB_REPOSITORY"), "/"));
+        return "%s/%s/"
+                .formatted(getEnv("RUNNER_WORKSPACE"), StringUtils.substringAfter(getEnv("GITHUB_REPOSITORY"), "/"));
     }
 
     private String getEnv(final String key) {
@@ -278,9 +287,7 @@ public class QualityMonitor extends AutoGradingRunner {
      * Gets the SHA to use for the quality monitor check. First checks for a custom SHA (SHA) which takes precedence
      * over the default GITHUB_SHA. This allows workflows to override the SHA used for quality monitoring when needed.
      *
-     * @param log
-     *         the logger
-     *
+     * @param log the logger
      * @return the SHA to use for the check
      */
     private String getCustomSha(final FilteredLog log) {
@@ -298,17 +305,13 @@ public class QualityMonitor extends AutoGradingRunner {
     /**
      * Determines the GitHub check conclusion based on errors and quality gate results.
      *
-     * @param errors
-     *         the error messages
-     * @param qualityGateResult
-     *         the quality gate evaluation result
-     * @param log
-     *         the logger
-     *
+     * @param errors the error messages
+     * @param qualityGateResult the quality gate evaluation result
+     * @param log the logger
      * @return the conclusion
      */
-    private Conclusion determineConclusion(final String errors, final QualityGateResult qualityGateResult,
-            final FilteredLog log) {
+    private Conclusion determineConclusion(
+            final String errors, final QualityGateResult qualityGateResult, final FilteredLog log) {
         if (!errors.isBlank()) {
             log.logInfo("Setting conclusion to FAILURE due to errors in log");
             return Conclusion.FAILURE;
@@ -333,20 +336,15 @@ public class QualityMonitor extends AutoGradingRunner {
     /**
      * Creates a title based on the metrics.
      *
-     * @param score
-     *         the aggregated score
-     * @param conclusion
-     *         the conclusion
-     * @param log
-     *         the logger
-     *
+     * @param score the aggregated score
+     * @param conclusion the conclusion
+     * @param log the logger
      * @return the title
      */
-    private String createMetricsBasedTitle(final AggregatedScore score, final Conclusion conclusion,
-            final FilteredLog log) {
-        var titleMetric = StringUtils.defaultIfBlank(
-                StringUtils.lowerCase(getEnv("TITLE_METRIC")),
-                DEFAULT_TITLE_METRIC);
+    private String createMetricsBasedTitle(
+            final AggregatedScore score, final Conclusion conclusion, final FilteredLog log) {
+        var titleMetric =
+                StringUtils.defaultIfBlank(StringUtils.lowerCase(getEnv("TITLE_METRIC")), DEFAULT_TITLE_METRIC);
 
         if (NO_TITLE.equals(titleMetric)) {
             return createDefaultTitle(conclusion, log);
@@ -364,17 +362,23 @@ public class QualityMonitor extends AutoGradingRunner {
         if (metrics.containsKey(titleMetric)) {
             var value = metrics.get(titleMetric);
             if (PARSER_REGISTRY.contains(titleMetric)) {
-                return String.format(Locale.ENGLISH, "%s - %s: %f", getChecksName(),
-                        PARSER_REGISTRY.get(titleMetric).getName(), value);
+                return String.format(
+                        Locale.ENGLISH,
+                        "%s - %s: %f",
+                        getChecksName(),
+                        PARSER_REGISTRY.get(titleMetric).getName(),
+                        value);
             }
             try {
                 var metric = Metric.fromName(titleMetric);
-                return String.format(Locale.ENGLISH, "%s - %s: %s", getChecksName(),
-                        metric.getDisplayName(), metric.format(Locale.ENGLISH, value));
-            }
-            catch (IllegalArgumentException _) {
-                return String.format(Locale.ENGLISH, "%s - %s: %f", getChecksName(),
-                        titleMetric, value);
+                return String.format(
+                        Locale.ENGLISH,
+                        "%s - %s: %s",
+                        getChecksName(),
+                        metric.getDisplayName(),
+                        metric.format(Locale.ENGLISH, value));
+            } catch (IllegalArgumentException _) {
+                return String.format(Locale.ENGLISH, "%s - %s: %f", getChecksName(), titleMetric, value);
             }
         }
         log.logInfo("Requested title metric '%s' not found in metrics: %s", titleMetric, metrics.keySet());

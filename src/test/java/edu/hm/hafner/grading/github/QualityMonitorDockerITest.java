@@ -1,19 +1,18 @@
 package edu.hm.hafner.grading.github;
 
-import org.junit.jupiter.api.Test;
-import org.testcontainers.containers.GenericContainer;
-import org.testcontainers.containers.output.ToStringConsumer;
-import org.testcontainers.containers.output.WaitingConsumer;
-import org.testcontainers.utility.DockerImageName;
-import org.testcontainers.utility.MountableFile;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-
-import static org.assertj.core.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+import org.testcontainers.containers.GenericContainer;
+import org.testcontainers.containers.output.ToStringConsumer;
+import org.testcontainers.containers.output.WaitingConsumer;
+import org.testcontainers.utility.DockerImageName;
+import org.testcontainers.utility.MountableFile;
 
 /**
  * Integration test for the quality monitor action. Starts the container and checks if the action runs as expected.
@@ -134,27 +133,28 @@ class QualityMonitorDockerITest {
             container.withEnv("CONFIG", CONFIGURATION);
             startContainerWithAllFiles(container);
 
-            var metrics = new String[]{
-                    "tests=1",
-                    "line=10.93",
-                    "branch=9.52",
-                    "mutation=7.86",
-                    "bugs=1",
-                    "spotbugs=1",
-                    "style=2",
-                    "pmd=1",
-                    "checkstyle=1",
-                    "ncss=1200",
-                    "npath-complexity=432",
-                    "cognitive-complexity=172",
-                    "cyclomatic-complexity=355",
-                    "test-success-rate=100.00"
+            var metrics = new String[] {
+                "tests=1",
+                "line=10.93",
+                "branch=9.52",
+                "mutation=7.86",
+                "bugs=1",
+                "spotbugs=1",
+                "style=2",
+                "pmd=1",
+                "checkstyle=1",
+                "ncss=1200",
+                "npath-complexity=432",
+                "cognitive-complexity=172",
+                "cyclomatic-complexity=355",
+                "test-success-rate=100.00"
             };
 
             assertThat(readStandardOut(container))
                     .contains("Obtaining configuration from environment variable CONFIG")
                     .contains(metrics)
-                    .contains("Processing 1 test configuration(s)",
+                    .contains(
+                            "Processing 1 test configuration(s)",
                             "-> Unittests Total: 1",
                             "=> Unittests: 100.00% successful (1 passed) [Whole Project]",
                             "=> JUnit: 100.00% successful (1 passed) [Whole Project]",
@@ -179,8 +179,7 @@ class QualityMonitorDockerITest {
                             "=> N-Path Complexity: 432 (total) [Whole Project]");
 
             container.copyFileFromContainer("/github/workspace/metrics.env", LOCAL_METRICS_FILE);
-            assertThat(Files.readString(Path.of(LOCAL_METRICS_FILE)))
-                    .contains(metrics);
+            assertThat(Files.readString(Path.of(LOCAL_METRICS_FILE))).contains(metrics);
         }
     }
 
@@ -192,7 +191,8 @@ class QualityMonitorDockerITest {
             assertThat(readStandardOut(container))
                     .contains(
                             "No configuration provided (environment variable CONFIG not set), using default configuration")
-                    .contains("Processing 1 test configuration(s)",
+                    .contains(
+                            "Processing 1 test configuration(s)",
                             "-> JUnit Tests Total: 1 [Whole Project]",
                             "=> Tests: 100.00% successful (1 passed) [Whole Project]",
                             "Processing 2 coverage configuration(s)",
@@ -215,7 +215,8 @@ class QualityMonitorDockerITest {
         try (var container = createContainer()) {
             container.withWorkingDirectory("/github/workspace").start();
             assertThat(readStandardOut(container))
-                    .contains("Processing 1 test configuration(s)",
+                    .contains(
+                            "Processing 1 test configuration(s)",
                             "=> JUnit Tests: No test results available",
                             "=> Tests: No test results available",
                             "Configuration error for 'JUnit Tests'?",
@@ -249,17 +250,19 @@ class QualityMonitorDockerITest {
 
         var composedConsumer = toStringConsumer.andThen(waitingConsumer);
         container.followOutput(composedConsumer);
-        waitingConsumer.waitUntil(frame -> frame.getUtf8String().contains("End " + QualityMonitor.QUALITY_MONITOR), 60,
-                TimeUnit.SECONDS);
+        waitingConsumer.waitUntil(
+                frame -> frame.getUtf8String().contains("End " + QualityMonitor.QUALITY_MONITOR), 60, TimeUnit.SECONDS);
 
         return toStringConsumer.toUtf8String();
     }
 
     private void startContainerWithAllFiles(final GenericContainer<?> container) {
-        container.withWorkingDirectory("/github/workspace")
+        container
+                .withWorkingDirectory("/github/workspace")
                 .withCopyFileToContainer(read("checkstyle/checkstyle.xml"), WS + "checkstyle-result.xml")
                 .withCopyFileToContainer(read("jacoco/jacoco.xml"), WS + "site/jacoco/jacoco.xml")
-                .withCopyFileToContainer(read("junit/TEST-edu.hm.hafner.grading.AutoGradingActionTest.xml"),
+                .withCopyFileToContainer(
+                        read("junit/TEST-edu.hm.hafner.grading.AutoGradingActionTest.xml"),
                         WS + "surefire-reports/TEST-Aufgabe3Test.xml")
                 .withCopyFileToContainer(read("pit/mutations.xml"), WS + "pit-reports/mutations.xml")
                 .withCopyFileToContainer(read("pmd/pmd.xml"), WS + "pmd-java/pmd.xml")
