@@ -1,18 +1,19 @@
 package edu.hm.hafner.grading.github;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.output.ToStringConsumer;
 import org.testcontainers.containers.output.WaitingConsumer;
 import org.testcontainers.utility.DockerImageName;
 import org.testcontainers.utility.MountableFile;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Integration test for the quality monitor action. Starts the container and checks if the action runs as expected.
@@ -240,7 +241,7 @@ class QualityMonitorDockerITest {
     }
 
     private GenericContainer<?> createContainer() {
-        return new GenericContainer<>(DockerImageName.parse("uhafner/quality-monitor:4.16.0"));
+        return new GenericContainer<>(DockerImageName.parse("uhafner/quality-monitor:4.17.0-SNAPSHOT"));
     }
 
     private String readStandardOut(final GenericContainer<? extends GenericContainer<?>> container)
