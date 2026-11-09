@@ -40,7 +40,7 @@ rectangle "jsoup\n\n1.23.2" as org_jsoup_jsoup_jar
 rectangle "slf4j-api\n\n2.0.20" as org_slf4j_slf4j_api_jar
 rectangle "violations-lib\n\n3.0.2" as se_bjurr_violations_violations_lib_jar
 rectangle "violations-lib-sarif\n\n3.0.2" as se_bjurr_violations_violations_lib_sarif_jar
-rectangle "jackson-annotations\n\n2.22" as com_fasterxml_jackson_core_jackson_annotations_jar
+rectangle "jackson-annotations\n\n2.23" as com_fasterxml_jackson_core_jackson_annotations_jar
 rectangle "jackson-core\n\n3.2.3" as tools_jackson_core_jackson_core_jar
 rectangle "xercesImpl\n\n2.12.2" as xerces_xercesImpl_jar
 rectangle "xml-apis\n\n1.4.01" as xml_apis_xml_apis_jar
