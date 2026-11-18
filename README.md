@@ -93,7 +93,7 @@ jobs:
         uses: jwalton/gh-find-current-pr@v1
         id: pr
       - name: Run Quality Monitor
-        uses: uhafner/quality-monitor@v3
+        uses: uhafner/quality-monitor@v4.17.0
         with:
           pr-number: ${{ steps.pr.outputs.number }}
           config: >
@@ -194,7 +194,7 @@ Use `comments-strategy` to control behavior:
   id: pr
 
 - name: Run Quality Monitor
-  uses: uhafner/quality-monitor@v3
+  uses: uhafner/quality-monitor@v4.17.0
   with:
     pr-number: ${{ steps.pr.outputs.number }}
     comments-strategy: UPDATE
@@ -216,7 +216,7 @@ The following snippet shows how to create several badges for your project. The f
 ```yaml
 [...]
 - name: Run Quality Monitor # Creates the file metrics.env
-  uses: uhafner/quality-monitor@v3
+  uses: uhafner/quality-monitor@v4.17.0
 - name: Write metrics to GitHub output
   id: metrics
   run: |
